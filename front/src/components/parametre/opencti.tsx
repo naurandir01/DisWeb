@@ -7,7 +7,7 @@ export default function OpenCti(){
 
     return(
         <Accordion>
-            <AccordionSummary expandIcon={<ExpandMore/>}>OpenCTI Paramétres</AccordionSummary>
+            <AccordionSummary expandIcon={<ExpandMore/>}>OpenCTI</AccordionSummary>
             <AccordionDetails>
                 <Grid container spacing={3}>
                     <Grid>

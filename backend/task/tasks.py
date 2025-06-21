@@ -13,6 +13,7 @@ from artefact.views import add_artefact,add_timeline,add_registry
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.dispatch import receiver
+from celery.exceptions import Ignore
 import ast
 import datetime
 import json
@@ -31,8 +32,8 @@ class CustomTask(CeleryTask):
                 task_case=task_case,
                 task_type=params['task_type'],
             )
-            return ValueError(f"Task with ID {existing_task.id_task} already exists.")
-        except ObjectDoesNotExist:
+            raise Ignore(f"Task with ID {existing_task.id_task} already exists.")
+        except Task.DoesNotExist:
             Task(
                 id_task=task_id,  
                 task_src=task_src,
@@ -72,7 +73,7 @@ def source_hayabusa(self, params):
     Returns:
         UUID: L'id de la tache
     """
-    task_src = Source.objects.get(id_source=params['task_src'])
+    task_src = Source.objects.get(id_source=params['task_source'])
     task_case = Case.objects.get(id_case=params['task_case'])
     
     disk = DissectEngine(task_src)
@@ -109,7 +110,7 @@ def source_timeline(self,params):
     Returns:
         UUID: L'id de la tache
     """
-    task_src = Source.objects.get(id_source=params['task_src'])
+    task_src = Source.objects.get(id_source=params['task_source'])
     task_case = Case.objects.get(id_case=params['task_case'])
 
     disk = DissectEngine(task_src)
@@ -167,7 +168,7 @@ def remove_last_segment(path):
 
 @shared_task(bind=True,base=CustomTask)
 def source_regf(self,params):
-    task_src = Source.objects.get(id_source=params['task_src'])
+    task_src = Source.objects.get(id_source=params['task_source'])
     task_case = Case.objects.get(id_case=params['task_case'])
 
     disk = DissectEngine(task_src)
@@ -242,7 +243,7 @@ def source_yara(self,params):
     Returns:
         UUID: L'id de la tache
     """
-    task_src = Source.objects.get(id_source=params['task_src'])
+    task_src = Source.objects.get(id_source=params['task_source'])
     task_case = Case.objects.get(id_case=params['task_case'])
     task_yara = YaraRule.objects.get(id_yararule=params['yara_rule'])
 
@@ -261,7 +262,7 @@ def source_yara(self,params):
 
 @shared_task(bind=True,base=CustomTask)
 def source_directory(self,params):
-    task_src = Source.objects.get(id_source=params['task_src'])
+    task_src = Source.objects.get(id_source=params['task_source'])
     task_case = Case.objects.get(id_case=params['task_case'])
 
     directory = params['directory']

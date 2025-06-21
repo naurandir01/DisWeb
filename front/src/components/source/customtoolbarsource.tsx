@@ -18,7 +18,7 @@ function CasDialog({open,onClose= () => {}}:DialogProps){
         try {
             const bodyformData = new FormData()
             bodyformData.append('src_case',currentCas || '')
-            bodyformData.append('source_path',sourceToLink)
+            bodyformData.append('src_path',sourceToLink)
             bodyformData.append('crypt_key_type',key_type)
             bodyformData.append('crypt_key_value',key_value)
             const res = await API.post('/api/sources/',bodyformData,{headers:{'Content-Type':'multipart/form-data'}})

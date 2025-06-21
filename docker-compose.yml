@@ -1,23 +1,23 @@
 services:
-  pafdd-rabbitmq:
+  disweb-rabbitmq:
     image: rabbitmq:3-management
-    container_name: pafdd_rabbitmq
+    container_name: disweb_rabbitmq
     ports:
       - '5672:5672'
       - '15672:15672'
 
-  pafdd-redis:
+  disweb-redis:
     image: redis
-    container_name: pafdd-redis
+    container_name: disweb-redis
     ports:
     - '6379:6379'
 
-  pafdd-back:
+  disweb-back:
     build:
       context: backend
-    container_name: pafdd_backend
-    image: pafdd_backend:v3.5
-    command: gunicorn back.wsgi --bind 0.0.0.0:5002 --timeout 10000 --worker-connections 1000 -w 4 -n pafdd-back --log-level=info
+    container_name: disweb_backend
+    image: disweb_backend:v1.0.0
+    command: gunicorn back.wsgi --bind 0.0.0.0:5002 --timeout 10000 --worker-connections 1000 -w 4 -n disweb-back --log-level=info
     env_file:
       - .env
     ports:
@@ -37,12 +37,12 @@ services:
       - REDIS_HOST
       - REDIS_PORT
     depends_on:
-      - pafdd-worker
-      - pafdd-psql
-      - pafdd-redis
+      - disweb-worker
+      - disweb-psql
+      - disweb-redis
   
-  pafdd-worker:
-    image: pafdd_backend:v3.5
+  disweb-worker:
+    image: disweb_backend:v1.0.0
     build:
       context: backend
     command:  celery -A back.celery worker -l INFO --concurrency=5
@@ -60,13 +60,13 @@ services:
       - $CASE_DIR:/mnt/disk:rw
       - "./backend/external:/backend/external:rw"
     depends_on:
-      - pafdd-rabbitmq
+      - disweb-rabbitmq
     deploy:
       mode: replicated
-      replicas: 1
-  pafdd-psql:
+      replicas: 2
+  disweb-psql:
     image: postgres:16-alpine
-    container_name: pafdd_db
+    container_name: disweb_db
     command: postgres -c config_file=/etc/postgresql/postgresql.conf
     ports:
       - "5432:5432"
@@ -78,20 +78,20 @@ services:
       - POSTGRES_DB
       - POSTGRES_HOST_AUTH_METHOD
     volumes:
-      - pafdd_data:/var/lib/postgresql/data
+      - disweb_data:/var/lib/postgresql/data
       - "./database/postgresql.conf:/etc/postgresql/postgresql.conf"
 
-  pafdd-front:
-    image: pafdd_frontend:v3.5
+  disweb-front:
+    image: disweb_frontend:v1.0.0
     build:
       context: front
-    container_name: pafdd_frontend
+    container_name: disweb_frontend
     volumes:
       - "./front/nginx.conf:/etc/nginx/conf.d/default.conf"
     ports:
       - 3000:3000
     depends_on:
-      - pafdd-back
+      - disweb-back
 
 volumes:
-  pafdd_data:
+  disweb_data:

@@ -31,9 +31,9 @@ function AddIOC({open,onClose= ()=>{}}:DialogProps){
 
     return(
         <Dialog fullWidth open={open} onClose={()=>onClose({},'backdropClick')}>
-            <DialogTitle>Ajouter un type d&apos;IOC</DialogTitle>
+            <DialogTitle>Add IOC TYPE</DialogTitle>
             <DialogContent>
-                <TextField label="Nouveau type" fullWidth variant='standard' value={newType} onChange={(event: any)=>setNewType(event.currentTarget.value)}/>
+                <TextField label="New Type" fullWidth variant='standard' value={newType} onChange={(event: any)=>setNewType(event.currentTarget.value)}/>
                 <TextField label="Description" fullWidth variant='standard' value={newTypeDescription} onChange={(event: any)=>setNewTypeDescription(event.currentTarget.value)}/>
             </DialogContent>
             <DialogActions>
@@ -84,7 +84,7 @@ export default function IocTypes(props: any){
 
     return(
         <Accordion>
-            <AccordionSummary expandIcon={<ExpandMore/>}> Type d&apos;IOC</AccordionSummary>
+            <AccordionSummary expandIcon={<ExpandMore/>}> IOC TYPE</AccordionSummary>
             <AccordionDetails>
                 <DataGrid 
                     columns={columns} 
@@ -96,7 +96,7 @@ export default function IocTypes(props: any){
                 />
             </AccordionDetails>
             <AccordionActions>
-                <Button onClick={async ()=>{ await dialog.open(AddIOC)}}>Ajouter un type d&apos;IOC</Button>
+                <Button onClick={async ()=>{ await dialog.open(AddIOC)}}>Add new IOC TYPE</Button>
             </AccordionActions>
         </Accordion>
     )

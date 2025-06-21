@@ -83,7 +83,7 @@ class SourceDirectoryContent(TemplateView):
         task_params = {
             'volume': volume,
             'directory': directory,
-            'task_src': src.id_source,
+            'task_source': src.id_source,
             'task_case':src.source_case.id_case,
             'task_type': 'directory_'+volume+'_'+directory,
             'tast_status': 'PENDING',

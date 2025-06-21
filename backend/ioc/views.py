@@ -13,7 +13,7 @@ class IocsView(TemplateView):
     def post(self,request):
         ioc_type = IOCType.objects.get(ioctype_value=request.POST['ioc_type'])
         ioc_case = Case.objects.get(id_case=request.POST['ioc_case'])
-        ioc_src = Case.objects.get(id_source=request.POST['ioc_source'])
+        ioc_src = Source.objects.get(id_source=request.POST['ioc_src'])
         ioc = IOC(
             ioc_case = ioc_case,
             ioc_src = ioc_src,
@@ -26,7 +26,7 @@ class IocsView(TemplateView):
 class IocCaseView(TemplateView):
     def get(self,request,id_case):
         #query = IOC.objects.all().filter(ioc_case=id_case).values()
-        query = IOC.objects.filter(ioc_case=id_case).select_related('ioc_type').all().values('id_ioc', 'ioc_value', 'ioc_type__ioctype_value', 'ioc_source', 'ioc_case','ioc_type')
+        query = IOC.objects.filter(ioc_case=id_case).select_related('ioc_type').all().values('id_ioc', 'ioc_value', 'ioc_type__ioctype_value', 'ioc_src', 'ioc_case','ioc_type')
         return JsonResponse(list(query),safe=False)
 
 class IocView(TemplateView):

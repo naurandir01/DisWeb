@@ -4,7 +4,8 @@ DisWeb is a digital forensic & incident response plateform to analyse forensic a
 
 # Capacity
 - Display the file systeme of a disk;
-- Utilise DISSECT pour récupérer une liste d'artefact
+- Use DISSECT to get forensic artefact;
+- Run YARA rules on a disk;
 
 # Disk supported
 ## OS
@@ -28,12 +29,10 @@ DisWeb is a digital forensic & incident response plateform to analyse forensic a
 - Type *make pull* to create the image and then *make up* ou directly *make up*
 - Navigate to http://<IP/FQDN>:3000
 
-# Utilisation
-
-
+# Use CASE
 ## Connexion
 
-![image](/docs/connexion.png)
+![image](/docs/login.png)
 
 By default the users are user@local.com et admin@local.com with credential password.
 
@@ -46,9 +45,9 @@ Go to User et and change the password.
 1. Before create a case, go to the directory that contain the CASE and create a sub directory that will be the name of the CASE. Exemple: $ mkdir /mnt/CASES/TEST
 2. Click on Case then on  **NEW CASE**. Enter the name of the directory created.
 
-![image](/docs/cases.png)
+![image](/docs/case.png)
 
-![image](/docs/case_creation.png)
+![image](/docs/add_case.png)
 
 4. To select a CASE, click on the line. At the top right corner will be CASE: TEST
 
@@ -65,7 +64,9 @@ This is what the arbirescence must look like for a CASE
 
 Once the disk copy, go to SOURCE and click on **ADD SOURCE** and then select in the list the disk.
 
-![image](/docs/prelevements.png)
+![image](/docs/add_source.png)
+
+![image](/docs/add_source_2.png)
 
 ## Exécuter un plugin sur un prélèvement
 
@@ -82,7 +83,7 @@ For Linux:
 ## File systéme
 Click File System a the left to use the file systéme of a disk
 
-![image](/docs/filesystem.png)
+![image](/docs/file_system.png)
 
 ## Artefacts
 Click on Artefact a the left to display the result from dissect plugin
@@ -96,7 +97,7 @@ To see the result of plugin REGISTRY on the source, click on the REGF the ARTEFA
 
 ## IOC
 
-![image](/docs/ioc.png)
+![image](/docs/iocs.png)
 
 To add an IOC, click on the icon ![image](/docs/ioc_icone.png) at the top right.
 
@@ -106,5 +107,16 @@ To add an IOC, click on the icon ![image](/docs/ioc_icone.png) at the top right.
 
 ![image](/docs/chronologie.png)
 
+## YARA
+
+![image](/docs/chronologie.png)
+
+## PARAMETRES
+### IOC TYPE
+
+### YARA RULES
+![image](/docs/yara_rules.png)
+
+
 # Copyright and License
-- Dissect est la propriété de FOX-IT (https://www.fox-it.com/) membre de NCC Group Plc (https://www.nccgroup.com/). 
+- Dissect is released as open source by Fox-IT (https://www.fox-it.com) part of NCC Group Plc (https://www.nccgroup.com).

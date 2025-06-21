@@ -7,7 +7,7 @@ export default function IrisWeb(){
 
     return(
         <Accordion>
-            <AccordionSummary expandIcon={<ExpandMore/>}>Iris-Web Paramétres</AccordionSummary>
+            <AccordionSummary expandIcon={<ExpandMore/>}>Iris-Web</AccordionSummary>
             <AccordionDetails>
                 <Grid container spacing={3}>
                     <Grid>
