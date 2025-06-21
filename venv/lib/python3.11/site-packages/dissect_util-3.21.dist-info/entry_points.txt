@@ -1,0 +1,2 @@
+[console_scripts]
+dump-nskeyedarchiver = dissect.util.tools.dump_nskeyedarchiver:main

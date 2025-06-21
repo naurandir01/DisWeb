@@ -1,0 +1,6 @@
+/**
+ * Returns the latest non-null, non-undefined value that has been passed to it.
+ */
+declare function useLatest<T>(value: T): T;
+declare function useLatest<T>(value: T | null | undefined): T | null | undefined;
+export default useLatest;

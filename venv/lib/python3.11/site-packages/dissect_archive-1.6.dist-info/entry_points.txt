@@ -1,0 +1,4 @@
+[console_scripts]
+backup-extract = dissect.archive.tools.backup:main
+vbk-extract = dissect.archive.tools.backup:main
+vma-extract = dissect.archive.tools.backup:main

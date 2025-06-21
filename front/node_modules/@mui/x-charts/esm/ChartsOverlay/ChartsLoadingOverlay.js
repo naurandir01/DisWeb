@@ -1,0 +1,40 @@
+'use client';
+
+import _objectWithoutPropertiesLoose from "@babel/runtime/helpers/esm/objectWithoutPropertiesLoose";
+import _extends from "@babel/runtime/helpers/esm/extends";
+const _excluded = ["message"];
+import * as React from 'react';
+import { styled } from '@mui/material/styles';
+import { useDrawingArea } from "../hooks/useDrawingArea.js";
+import { useChartsLocalization } from "../hooks/useChartsLocalization.js";
+import { jsx as _jsx } from "react/jsx-runtime";
+const StyledText = styled('text')(({
+  theme
+}) => _extends({}, theme.typography.body2, {
+  stroke: 'none',
+  fill: (theme.vars || theme).palette.text.primary,
+  shapeRendering: 'crispEdges',
+  textAnchor: 'middle',
+  dominantBaseline: 'middle'
+}));
+export function ChartsLoadingOverlay(props) {
+  const {
+      message
+    } = props,
+    other = _objectWithoutPropertiesLoose(props, _excluded);
+  const {
+    top,
+    left,
+    height,
+    width
+  } = useDrawingArea();
+  const {
+    localeText
+  } = useChartsLocalization();
+  return /*#__PURE__*/_jsx(StyledText, _extends({
+    x: left + width / 2,
+    y: top + height / 2
+  }, other, {
+    children: message ?? localeText.loading
+  }));
+}

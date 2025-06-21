@@ -1,0 +1,1862 @@
+{
+  "AD": {
+    "bban_spec": "4!n4!n12!c",
+    "iban_spec": "AD2!n4!n4!n12!c",
+    "bban_length": 20,
+    "iban_length": 24,
+    "positions": {
+      "account_code": [
+        8,
+        20
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        8
+      ]
+    }
+  },
+  "AE": {
+    "bban_spec": "3!n16!n",
+    "iban_spec": "AE2!n3!n16!n",
+    "bban_length": 19,
+    "iban_length": 23,
+    "positions": {
+      "account_code": [
+        3,
+        19
+      ],
+      "bank_code": [
+        0,
+        3
+      ],
+      "branch_code": [
+        3,
+        3
+      ]
+    }
+  },
+  "AL": {
+    "bban_spec": "8!n16!c",
+    "iban_spec": "AL2!n8!n16!c",
+    "bban_length": 24,
+    "iban_length": 28,
+    "positions": {
+      "account_code": [
+        8,
+        24
+      ],
+      "bank_code": [
+        0,
+        3
+      ],
+      "branch_code": [
+        3,
+        8
+      ]
+    }
+  },
+  "AT": {
+    "bban_spec": "5!n11!n",
+    "iban_spec": "AT2!n5!n11!n",
+    "bban_length": 16,
+    "iban_length": 20,
+    "positions": {
+      "account_code": [
+        5,
+        16
+      ],
+      "bank_code": [
+        0,
+        5
+      ],
+      "branch_code": [
+        5,
+        5
+      ]
+    }
+  },
+  "AZ": {
+    "bban_spec": "4!a20!c",
+    "iban_spec": "AZ2!n4!a20!c",
+    "bban_length": 24,
+    "iban_length": 28,
+    "positions": {
+      "account_code": [
+        4,
+        24
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        4
+      ]
+    }
+  },
+  "BA": {
+    "bban_spec": "3!n3!n8!n2!n",
+    "iban_spec": "BA2!n3!n3!n8!n2!n",
+    "bban_length": 16,
+    "iban_length": 20,
+    "positions": {
+      "account_code": [
+        6,
+        16
+      ],
+      "bank_code": [
+        0,
+        3
+      ],
+      "branch_code": [
+        3,
+        6
+      ]
+    }
+  },
+  "BE": {
+    "bban_spec": "3!n7!n2!n",
+    "iban_spec": "BE2!n3!n7!n2!n",
+    "bban_length": 12,
+    "iban_length": 16,
+    "positions": {
+      "account_code": [
+        3,
+        12
+      ],
+      "bank_code": [
+        0,
+        3
+      ],
+      "branch_code": [
+        3,
+        3
+      ]
+    }
+  },
+  "BG": {
+    "bban_spec": "4!a4!n2!n8!c",
+    "iban_spec": "BG2!n4!a4!n2!n8!c",
+    "bban_length": 18,
+    "iban_length": 22,
+    "positions": {
+      "account_code": [
+        8,
+        18
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        8
+      ]
+    }
+  },
+  "BH": {
+    "bban_spec": "4!a14!c",
+    "iban_spec": "BH2!n4!a14!c",
+    "bban_length": 18,
+    "iban_length": 22,
+    "positions": {
+      "account_code": [
+        4,
+        18
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        4
+      ]
+    }
+  },
+  "BR": {
+    "bban_spec": "8!n5!n10!n1!a1!c",
+    "iban_spec": "BR2!n8!n5!n10!n1!a1!c",
+    "bban_length": 25,
+    "iban_length": 29,
+    "positions": {
+      "account_code": [
+        13,
+        25
+      ],
+      "bank_code": [
+        0,
+        8
+      ],
+      "branch_code": [
+        8,
+        13
+      ]
+    }
+  },
+  "BY": {
+    "bban_spec": "4!c4!n16!c",
+    "iban_spec": "BY2!n4!c4!n16!c",
+    "bban_length": 24,
+    "iban_length": 28,
+    "positions": {
+      "account_code": [
+        4,
+        24
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        4
+      ]
+    }
+  },
+  "CH": {
+    "bban_spec": "5!n12!c",
+    "iban_spec": "CH2!n5!n12!c",
+    "bban_length": 17,
+    "iban_length": 21,
+    "positions": {
+      "account_code": [
+        5,
+        17
+      ],
+      "bank_code": [
+        0,
+        5
+      ],
+      "branch_code": [
+        5,
+        5
+      ]
+    }
+  },
+  "CR": {
+    "bban_spec": "4!n14!n",
+    "iban_spec": "CR2!n4!n14!n",
+    "bban_length": 18,
+    "iban_length": 22,
+    "positions": {
+      "account_code": [
+        4,
+        18
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        4
+      ]
+    }
+  },
+  "CY": {
+    "bban_spec": "3!n5!n16!c",
+    "iban_spec": "CY2!n3!n5!n16!c",
+    "bban_length": 24,
+    "iban_length": 28,
+    "positions": {
+      "account_code": [
+        8,
+        24
+      ],
+      "bank_code": [
+        0,
+        3
+      ],
+      "branch_code": [
+        3,
+        8
+      ]
+    }
+  },
+  "CZ": {
+    "bban_spec": "4!n6!n10!n",
+    "iban_spec": "CZ2!n4!n6!n10!n",
+    "bban_length": 20,
+    "iban_length": 24,
+    "positions": {
+      "account_code": [
+        4,
+        20
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        4
+      ]
+    }
+  },
+  "DE": {
+    "bban_spec": "8!n10!n",
+    "iban_spec": "DE2!n8!n10!n",
+    "bban_length": 18,
+    "iban_length": 22,
+    "positions": {
+      "account_code": [
+        8,
+        18
+      ],
+      "bank_code": [
+        0,
+        8
+      ],
+      "branch_code": [
+        8,
+        8
+      ]
+    }
+  },
+  "DK": {
+    "bban_spec": "4!n9!n1!n",
+    "iban_spec": "DK2!n4!n9!n1!n",
+    "bban_length": 14,
+    "iban_length": 18,
+    "positions": {
+      "account_code": [
+        4,
+        14
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        4
+      ]
+    }
+  },
+  "DO": {
+    "bban_spec": "4!c20!n",
+    "iban_spec": "DO2!n4!c20!n",
+    "bban_length": 24,
+    "iban_length": 28,
+    "positions": {
+      "account_code": [
+        4,
+        24
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        4
+      ]
+    }
+  },
+  "EE": {
+    "bban_spec": "2!n2!n11!n1!n",
+    "iban_spec": "EE2!n2!n2!n11!n1!n",
+    "bban_length": 16,
+    "iban_length": 20,
+    "positions": {
+      "account_code": [
+        2,
+        16
+      ],
+      "bank_code": [
+        0,
+        2
+      ],
+      "branch_code": [
+        2,
+        2
+      ]
+    }
+  },
+  "EG": {
+    "bban_spec": "4!n4!n17!n",
+    "iban_spec": "EG2!n4!n4!n17!n",
+    "bban_length": 25,
+    "iban_length": 29,
+    "positions": {
+      "account_code": [
+        8,
+        25
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        8
+      ]
+    }
+  },
+  "ES": {
+    "bban_spec": "4!n4!n1!n1!n10!n",
+    "iban_spec": "ES2!n4!n4!n1!n1!n10!n",
+    "bban_length": 20,
+    "iban_length": 24,
+    "positions": {
+      "account_code": [
+        8,
+        20
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        8
+      ]
+    }
+  },
+  "FI": {
+    "bban_spec": "3!n11!n",
+    "iban_spec": "FI2!n3!n11!n",
+    "bban_length": 14,
+    "iban_length": 18,
+    "positions": {
+      "account_code": [
+        3,
+        14
+      ],
+      "bank_code": [
+        0,
+        3
+      ],
+      "branch_code": [
+        3,
+        3
+      ]
+    }
+  },
+  "AX": {
+    "bban_spec": "3!n11!n",
+    "iban_spec": "FI2!n3!n11!n",
+    "bban_length": 14,
+    "iban_length": 18,
+    "positions": {
+      "account_code": [
+        3,
+        14
+      ],
+      "bank_code": [
+        0,
+        3
+      ],
+      "branch_code": [
+        3,
+        3
+      ]
+    }
+  },
+  "FO": {
+    "bban_spec": "4!n9!n1!n",
+    "iban_spec": "FO2!n4!n9!n1!n",
+    "bban_length": 14,
+    "iban_length": 18,
+    "positions": {
+      "account_code": [
+        4,
+        14
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        4
+      ]
+    }
+  },
+  "FR": {
+    "bban_spec": "5!n5!n11!c2!n",
+    "iban_spec": "FR2!n5!n5!n11!c2!n",
+    "bban_length": 23,
+    "iban_length": 27,
+    "positions": {
+      "account_code": [
+        5,
+        23
+      ],
+      "bank_code": [
+        0,
+        5
+      ],
+      "branch_code": [
+        5,
+        5
+      ]
+    }
+  },
+  "GF": {
+    "bban_spec": "5!n5!n11!c2!n",
+    "iban_spec": "FR2!n5!n5!n11!c2!n",
+    "bban_length": 23,
+    "iban_length": 27,
+    "positions": {
+      "account_code": [
+        5,
+        23
+      ],
+      "bank_code": [
+        0,
+        5
+      ],
+      "branch_code": [
+        5,
+        5
+      ]
+    }
+  },
+  "GP": {
+    "bban_spec": "5!n5!n11!c2!n",
+    "iban_spec": "FR2!n5!n5!n11!c2!n",
+    "bban_length": 23,
+    "iban_length": 27,
+    "positions": {
+      "account_code": [
+        5,
+        23
+      ],
+      "bank_code": [
+        0,
+        5
+      ],
+      "branch_code": [
+        5,
+        5
+      ]
+    }
+  },
+  "MQ": {
+    "bban_spec": "5!n5!n11!c2!n",
+    "iban_spec": "FR2!n5!n5!n11!c2!n",
+    "bban_length": 23,
+    "iban_length": 27,
+    "positions": {
+      "account_code": [
+        5,
+        23
+      ],
+      "bank_code": [
+        0,
+        5
+      ],
+      "branch_code": [
+        5,
+        5
+      ]
+    }
+  },
+  "RE": {
+    "bban_spec": "5!n5!n11!c2!n",
+    "iban_spec": "FR2!n5!n5!n11!c2!n",
+    "bban_length": 23,
+    "iban_length": 27,
+    "positions": {
+      "account_code": [
+        5,
+        23
+      ],
+      "bank_code": [
+        0,
+        5
+      ],
+      "branch_code": [
+        5,
+        5
+      ]
+    }
+  },
+  "PF": {
+    "bban_spec": "5!n5!n11!c2!n",
+    "iban_spec": "FR2!n5!n5!n11!c2!n",
+    "bban_length": 23,
+    "iban_length": 27,
+    "positions": {
+      "account_code": [
+        5,
+        23
+      ],
+      "bank_code": [
+        0,
+        5
+      ],
+      "branch_code": [
+        5,
+        5
+      ]
+    }
+  },
+  "TF": {
+    "bban_spec": "5!n5!n11!c2!n",
+    "iban_spec": "FR2!n5!n5!n11!c2!n",
+    "bban_length": 23,
+    "iban_length": 27,
+    "positions": {
+      "account_code": [
+        5,
+        23
+      ],
+      "bank_code": [
+        0,
+        5
+      ],
+      "branch_code": [
+        5,
+        5
+      ]
+    }
+  },
+  "YT": {
+    "bban_spec": "5!n5!n11!c2!n",
+    "iban_spec": "FR2!n5!n5!n11!c2!n",
+    "bban_length": 23,
+    "iban_length": 27,
+    "positions": {
+      "account_code": [
+        5,
+        23
+      ],
+      "bank_code": [
+        0,
+        5
+      ],
+      "branch_code": [
+        5,
+        5
+      ]
+    }
+  },
+  "NC": {
+    "bban_spec": "5!n5!n11!c2!n",
+    "iban_spec": "FR2!n5!n5!n11!c2!n",
+    "bban_length": 23,
+    "iban_length": 27,
+    "positions": {
+      "account_code": [
+        5,
+        23
+      ],
+      "bank_code": [
+        0,
+        5
+      ],
+      "branch_code": [
+        5,
+        5
+      ]
+    }
+  },
+  "BL": {
+    "bban_spec": "5!n5!n11!c2!n",
+    "iban_spec": "FR2!n5!n5!n11!c2!n",
+    "bban_length": 23,
+    "iban_length": 27,
+    "positions": {
+      "account_code": [
+        5,
+        23
+      ],
+      "bank_code": [
+        0,
+        5
+      ],
+      "branch_code": [
+        5,
+        5
+      ]
+    }
+  },
+  "MF": {
+    "bban_spec": "5!n5!n11!c2!n",
+    "iban_spec": "FR2!n5!n5!n11!c2!n",
+    "bban_length": 23,
+    "iban_length": 27,
+    "positions": {
+      "account_code": [
+        5,
+        23
+      ],
+      "bank_code": [
+        0,
+        5
+      ],
+      "branch_code": [
+        5,
+        5
+      ]
+    }
+  },
+  "PM": {
+    "bban_spec": "5!n5!n11!c2!n",
+    "iban_spec": "FR2!n5!n5!n11!c2!n",
+    "bban_length": 23,
+    "iban_length": 27,
+    "positions": {
+      "account_code": [
+        5,
+        23
+      ],
+      "bank_code": [
+        0,
+        5
+      ],
+      "branch_code": [
+        5,
+        5
+      ]
+    }
+  },
+  "WF": {
+    "bban_spec": "5!n5!n11!c2!n",
+    "iban_spec": "FR2!n5!n5!n11!c2!n",
+    "bban_length": 23,
+    "iban_length": 27,
+    "positions": {
+      "account_code": [
+        5,
+        23
+      ],
+      "bank_code": [
+        0,
+        5
+      ],
+      "branch_code": [
+        5,
+        5
+      ]
+    }
+  },
+  "GB": {
+    "bban_spec": "4!a6!n8!n",
+    "iban_spec": "GB2!n4!a6!n8!n",
+    "bban_length": 18,
+    "iban_length": 22,
+    "positions": {
+      "account_code": [
+        10,
+        18
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        10
+      ]
+    }
+  },
+  "IM": {
+    "bban_spec": "4!a6!n8!n",
+    "iban_spec": "GB2!n4!a6!n8!n",
+    "bban_length": 18,
+    "iban_length": 22,
+    "positions": {
+      "account_code": [
+        10,
+        18
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        10
+      ]
+    }
+  },
+  "JE": {
+    "bban_spec": "4!a6!n8!n",
+    "iban_spec": "GB2!n4!a6!n8!n",
+    "bban_length": 18,
+    "iban_length": 22,
+    "positions": {
+      "account_code": [
+        10,
+        18
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        10
+      ]
+    }
+  },
+  "GG": {
+    "bban_spec": "4!a6!n8!n",
+    "iban_spec": "GB2!n4!a6!n8!n",
+    "bban_length": 18,
+    "iban_length": 22,
+    "positions": {
+      "account_code": [
+        10,
+        18
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        10
+      ]
+    }
+  },
+  "GE": {
+    "bban_spec": "2!a16!n",
+    "iban_spec": "GE2!n2!a16!n",
+    "bban_length": 18,
+    "iban_length": 22,
+    "positions": {
+      "account_code": [
+        2,
+        18
+      ],
+      "bank_code": [
+        0,
+        2
+      ],
+      "branch_code": [
+        2,
+        2
+      ]
+    }
+  },
+  "GI": {
+    "bban_spec": "4!a15!c",
+    "iban_spec": "GI2!n4!a15!c",
+    "bban_length": 19,
+    "iban_length": 23,
+    "positions": {
+      "account_code": [
+        4,
+        19
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        4
+      ]
+    }
+  },
+  "GL": {
+    "bban_spec": "4!n9!n1!n",
+    "iban_spec": "GL2!n4!n9!n1!n",
+    "bban_length": 14,
+    "iban_length": 18,
+    "positions": {
+      "account_code": [
+        4,
+        14
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        4
+      ]
+    }
+  },
+  "GR": {
+    "bban_spec": "3!n4!n16!c",
+    "iban_spec": "GR2!n3!n4!n16!c",
+    "bban_length": 23,
+    "iban_length": 27,
+    "positions": {
+      "account_code": [
+        7,
+        23
+      ],
+      "bank_code": [
+        0,
+        3
+      ],
+      "branch_code": [
+        3,
+        7
+      ]
+    }
+  },
+  "GT": {
+    "bban_spec": "4!c20!c",
+    "iban_spec": "GT2!n4!c20!c",
+    "bban_length": 24,
+    "iban_length": 28,
+    "positions": {
+      "account_code": [
+        4,
+        24
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        4
+      ]
+    }
+  },
+  "HR": {
+    "bban_spec": "7!n10!n",
+    "iban_spec": "HR2!n7!n10!n",
+    "bban_length": 17,
+    "iban_length": 21,
+    "positions": {
+      "account_code": [
+        7,
+        17
+      ],
+      "bank_code": [
+        0,
+        7
+      ],
+      "branch_code": [
+        7,
+        7
+      ]
+    }
+  },
+  "HU": {
+    "bban_spec": "3!n4!n1!n15!n1!n",
+    "iban_spec": "HU2!n3!n4!n1!n15!n1!n",
+    "bban_length": 24,
+    "iban_length": 28,
+    "positions": {
+      "account_code": [
+        7,
+        24
+      ],
+      "bank_code": [
+        0,
+        3
+      ],
+      "branch_code": [
+        3,
+        7
+      ]
+    }
+  },
+  "IE": {
+    "bban_spec": "4!a6!n8!n",
+    "iban_spec": "IE2!n4!a6!n8!n",
+    "bban_length": 18,
+    "iban_length": 22,
+    "positions": {
+      "account_code": [
+        10,
+        18
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        10
+      ]
+    }
+  },
+  "IL": {
+    "bban_spec": "3!n3!n13!n",
+    "iban_spec": "IL2!n3!n3!n13!n",
+    "bban_length": 19,
+    "iban_length": 23,
+    "positions": {
+      "account_code": [
+        6,
+        19
+      ],
+      "bank_code": [
+        0,
+        3
+      ],
+      "branch_code": [
+        3,
+        6
+      ]
+    }
+  },
+  "IQ": {
+    "bban_spec": "4!a3!n12!n",
+    "iban_spec": "IQ2!n4!a3!n12!n",
+    "bban_length": 19,
+    "iban_length": 23,
+    "positions": {
+      "account_code": [
+        7,
+        19
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        7
+      ]
+    }
+  },
+  "IS": {
+    "bban_spec": "4!n2!n6!n10!n",
+    "iban_spec": "IS2!n4!n2!n6!n10!n",
+    "bban_length": 22,
+    "iban_length": 26,
+    "positions": {
+      "account_code": [
+        4,
+        22
+      ],
+      "bank_code": [
+        0,
+        2
+      ],
+      "branch_code": [
+        2,
+        4
+      ]
+    }
+  },
+  "IT": {
+    "bban_spec": "1!a5!n5!n12!c",
+    "iban_spec": "IT2!n1!a5!n5!n12!c",
+    "bban_length": 23,
+    "iban_length": 27,
+    "positions": {
+      "account_code": [
+        11,
+        23
+      ],
+      "bank_code": [
+        1,
+        6
+      ],
+      "branch_code": [
+        6,
+        11
+      ]
+    }
+  },
+  "JO": {
+    "bban_spec": "4!a4!n18!c",
+    "iban_spec": "JO2!n4!a4!n18!c",
+    "bban_length": 26,
+    "iban_length": 30,
+    "positions": {
+      "account_code": [
+        8,
+        26
+      ],
+      "bank_code": [
+        4,
+        8
+      ],
+      "branch_code": [
+        4,
+        8
+      ]
+    }
+  },
+  "KW": {
+    "bban_spec": "4!a22!c",
+    "iban_spec": "KW2!n4!a22!c",
+    "bban_length": 26,
+    "iban_length": 30,
+    "positions": {
+      "account_code": [
+        4,
+        26
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        4
+      ]
+    }
+  },
+  "KZ": {
+    "bban_spec": "3!n13!c",
+    "iban_spec": "KZ2!n3!n13!c",
+    "bban_length": 16,
+    "iban_length": 20,
+    "positions": {
+      "account_code": [
+        3,
+        16
+      ],
+      "bank_code": [
+        0,
+        3
+      ],
+      "branch_code": [
+        3,
+        3
+      ]
+    }
+  },
+  "LB": {
+    "bban_spec": "4!n20!c",
+    "iban_spec": "LB2!n4!n20!c",
+    "bban_length": 24,
+    "iban_length": 28,
+    "positions": {
+      "account_code": [
+        4,
+        24
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        4
+      ]
+    }
+  },
+  "LC": {
+    "bban_spec": "4!a24!c",
+    "iban_spec": "LC2!n4!a24!c",
+    "bban_length": 28,
+    "iban_length": 32,
+    "positions": {
+      "account_code": [
+        4,
+        28
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        4
+      ]
+    }
+  },
+  "LI": {
+    "bban_spec": "5!n12!c",
+    "iban_spec": "LI2!n5!n12!c",
+    "bban_length": 17,
+    "iban_length": 21,
+    "positions": {
+      "account_code": [
+        5,
+        17
+      ],
+      "bank_code": [
+        0,
+        5
+      ],
+      "branch_code": [
+        5,
+        5
+      ]
+    }
+  },
+  "LT": {
+    "bban_spec": "5!n11!n",
+    "iban_spec": "LT2!n5!n11!n",
+    "bban_length": 16,
+    "iban_length": 20,
+    "positions": {
+      "account_code": [
+        5,
+        16
+      ],
+      "bank_code": [
+        0,
+        5
+      ],
+      "branch_code": [
+        5,
+        5
+      ]
+    }
+  },
+  "LU": {
+    "bban_spec": "3!n13!c",
+    "iban_spec": "LU2!n3!n13!c",
+    "bban_length": 16,
+    "iban_length": 20,
+    "positions": {
+      "account_code": [
+        3,
+        16
+      ],
+      "bank_code": [
+        0,
+        3
+      ],
+      "branch_code": [
+        3,
+        3
+      ]
+    }
+  },
+  "LV": {
+    "bban_spec": "4!a13!c",
+    "iban_spec": "LV2!n4!a13!c",
+    "bban_length": 17,
+    "iban_length": 21,
+    "positions": {
+      "account_code": [
+        4,
+        17
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        4
+      ]
+    }
+  },
+  "MC": {
+    "bban_spec": "5!n5!n11!c2!n",
+    "iban_spec": "MC2!n5!n5!n11!c2!n",
+    "bban_length": 23,
+    "iban_length": 27,
+    "positions": {
+      "account_code": [
+        10,
+        23
+      ],
+      "bank_code": [
+        0,
+        5
+      ],
+      "branch_code": [
+        5,
+        10
+      ]
+    }
+  },
+  "MD": {
+    "bban_spec": "2!c18!c",
+    "iban_spec": "MD2!n2!c18!c",
+    "bban_length": 20,
+    "iban_length": 24,
+    "positions": {
+      "account_code": [
+        2,
+        20
+      ],
+      "bank_code": [
+        0,
+        2
+      ],
+      "branch_code": [
+        2,
+        2
+      ]
+    }
+  },
+  "ME": {
+    "bban_spec": "3!n13!n2!n",
+    "iban_spec": "ME2!n3!n13!n2!n",
+    "bban_length": 18,
+    "iban_length": 22,
+    "positions": {
+      "account_code": [
+        3,
+        18
+      ],
+      "bank_code": [
+        0,
+        3
+      ],
+      "branch_code": [
+        3,
+        3
+      ]
+    }
+  },
+  "MK": {
+    "bban_spec": "3!n10!c2!n",
+    "iban_spec": "MK2!n3!n10!c2!n",
+    "bban_length": 15,
+    "iban_length": 19,
+    "positions": {
+      "account_code": [
+        3,
+        15
+      ],
+      "bank_code": [
+        0,
+        3
+      ],
+      "branch_code": [
+        3,
+        3
+      ]
+    }
+  },
+  "MR": {
+    "bban_spec": "5!n5!n11!n2!n",
+    "iban_spec": "MR2!n5!n5!n11!n2!n",
+    "bban_length": 23,
+    "iban_length": 27,
+    "positions": {
+      "account_code": [
+        10,
+        23
+      ],
+      "bank_code": [
+        0,
+        5
+      ],
+      "branch_code": [
+        5,
+        10
+      ]
+    }
+  },
+  "MT": {
+    "bban_spec": "4!a5!n18!c",
+    "iban_spec": "MT2!n4!a5!n18!c",
+    "bban_length": 27,
+    "iban_length": 31,
+    "positions": {
+      "account_code": [
+        9,
+        27
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        9
+      ]
+    }
+  },
+  "MU": {
+    "bban_spec": "4!a2!n2!n12!n3!n3!a",
+    "iban_spec": "MU2!n4!a2!n2!n12!n3!n3!a",
+    "bban_length": 26,
+    "iban_length": 30,
+    "positions": {
+      "account_code": [
+        8,
+        26
+      ],
+      "bank_code": [
+        0,
+        6
+      ],
+      "branch_code": [
+        6,
+        8
+      ]
+    }
+  },
+  "NL": {
+    "bban_spec": "4!a10!n",
+    "iban_spec": "NL2!n4!a10!n",
+    "bban_length": 14,
+    "iban_length": 18,
+    "positions": {
+      "account_code": [
+        4,
+        14
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        4
+      ]
+    }
+  },
+  "NO": {
+    "bban_spec": "4!n6!n1!n",
+    "iban_spec": "NO2!n4!n6!n1!n",
+    "bban_length": 11,
+    "iban_length": 15,
+    "positions": {
+      "account_code": [
+        4,
+        11
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        4
+      ]
+    }
+  },
+  "PK": {
+    "bban_spec": "4!a16!c",
+    "iban_spec": "PK2!n4!a16!c",
+    "bban_length": 20,
+    "iban_length": 24,
+    "positions": {
+      "account_code": [
+        4,
+        20
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        4
+      ]
+    }
+  },
+  "PL": {
+    "bban_spec": "8!n16!n",
+    "iban_spec": "PL2!n8!n16!n",
+    "bban_length": 24,
+    "iban_length": 28,
+    "positions": {
+      "account_code": [
+        8,
+        24
+      ],
+      "bank_code": [
+        0,
+        0
+      ],
+      "branch_code": [
+        0,
+        8
+      ]
+    }
+  },
+  "PS": {
+    "bban_spec": "4!a21!c",
+    "iban_spec": "PS2!n4!a21!c",
+    "bban_length": 25,
+    "iban_length": 29,
+    "positions": {
+      "account_code": [
+        4,
+        25
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        4
+      ]
+    }
+  },
+  "PT": {
+    "bban_spec": "4!n4!n11!n2!n",
+    "iban_spec": "PT2!n4!n4!n11!n2!n",
+    "bban_length": 21,
+    "iban_length": 25,
+    "positions": {
+      "account_code": [
+        4,
+        21
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        4
+      ]
+    }
+  },
+  "QA": {
+    "bban_spec": "4!a21!c",
+    "iban_spec": "QA2!n4!a21!c",
+    "bban_length": 25,
+    "iban_length": 29,
+    "positions": {
+      "account_code": [
+        4,
+        25
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        4
+      ]
+    }
+  },
+  "RO": {
+    "bban_spec": "4!a16!c",
+    "iban_spec": "RO2!n4!a16!c",
+    "bban_length": 20,
+    "iban_length": 24,
+    "positions": {
+      "account_code": [
+        4,
+        20
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        4
+      ]
+    }
+  },
+  "RS": {
+    "bban_spec": "3!n13!n2!n",
+    "iban_spec": "RS2!n3!n13!n2!n",
+    "bban_length": 18,
+    "iban_length": 22,
+    "positions": {
+      "account_code": [
+        3,
+        18
+      ],
+      "bank_code": [
+        0,
+        3
+      ],
+      "branch_code": [
+        3,
+        3
+      ]
+    }
+  },
+  "SA": {
+    "bban_spec": "2!n18!c",
+    "iban_spec": "SA2!n2!n18!c",
+    "bban_length": 20,
+    "iban_length": 24,
+    "positions": {
+      "account_code": [
+        2,
+        20
+      ],
+      "bank_code": [
+        0,
+        2
+      ],
+      "branch_code": [
+        2,
+        2
+      ]
+    }
+  },
+  "SC": {
+    "bban_spec": "4!a2!n2!n16!n3!a",
+    "iban_spec": "SC2!n4!a2!n2!n16!n3!a",
+    "bban_length": 27,
+    "iban_length": 31,
+    "positions": {
+      "account_code": [
+        8,
+        27
+      ],
+      "bank_code": [
+        0,
+        6
+      ],
+      "branch_code": [
+        6,
+        8
+      ]
+    }
+  },
+  "SE": {
+    "bban_spec": "3!n16!n1!n",
+    "iban_spec": "SE2!n3!n16!n1!n",
+    "bban_length": 20,
+    "iban_length": 24,
+    "positions": {
+      "account_code": [
+        3,
+        20
+      ],
+      "bank_code": [
+        0,
+        3
+      ],
+      "branch_code": [
+        3,
+        3
+      ]
+    }
+  },
+  "SI": {
+    "bban_spec": "5!n8!n2!n",
+    "iban_spec": "SI2!n5!n8!n2!n",
+    "bban_length": 15,
+    "iban_length": 19,
+    "positions": {
+      "account_code": [
+        5,
+        15
+      ],
+      "bank_code": [
+        0,
+        5
+      ],
+      "branch_code": [
+        5,
+        5
+      ]
+    }
+  },
+  "SK": {
+    "bban_spec": "4!n6!n10!n",
+    "iban_spec": "SK2!n4!n6!n10!n",
+    "bban_length": 20,
+    "iban_length": 24,
+    "positions": {
+      "account_code": [
+        4,
+        20
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        4
+      ]
+    }
+  },
+  "SM": {
+    "bban_spec": "1!a5!n5!n12!c",
+    "iban_spec": "SM2!n1!a5!n5!n12!c",
+    "bban_length": 23,
+    "iban_length": 27,
+    "positions": {
+      "account_code": [
+        11,
+        23
+      ],
+      "bank_code": [
+        1,
+        6
+      ],
+      "branch_code": [
+        6,
+        11
+      ]
+    }
+  },
+  "ST": {
+    "bban_spec": "4!n4!n11!n2!n",
+    "iban_spec": "ST2!n4!n4!n11!n2!n",
+    "bban_length": 21,
+    "iban_length": 25,
+    "positions": {
+      "account_code": [
+        8,
+        21
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        8
+      ]
+    }
+  },
+  "SV": {
+    "bban_spec": "4!a20!n",
+    "iban_spec": "SV2!n4!a20!n",
+    "bban_length": 24,
+    "iban_length": 28,
+    "positions": {
+      "account_code": [
+        4,
+        24
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        4
+      ]
+    }
+  },
+  "TL": {
+    "bban_spec": "3!n14!n2!n",
+    "iban_spec": "TL2!n3!n14!n2!n",
+    "bban_length": 19,
+    "iban_length": 23,
+    "positions": {
+      "account_code": [
+        3,
+        19
+      ],
+      "bank_code": [
+        0,
+        3
+      ],
+      "branch_code": [
+        3,
+        3
+      ]
+    }
+  },
+  "TN": {
+    "bban_spec": "2!n3!n13!n2!n",
+    "iban_spec": "TN2!n2!n3!n13!n2!n",
+    "bban_length": 20,
+    "iban_length": 24,
+    "positions": {
+      "account_code": [
+        5,
+        20
+      ],
+      "bank_code": [
+        0,
+        2
+      ],
+      "branch_code": [
+        2,
+        5
+      ]
+    }
+  },
+  "TR": {
+    "bban_spec": "5!n1!n16!c",
+    "iban_spec": "TR2!n5!n1!n16!c",
+    "bban_length": 22,
+    "iban_length": 26,
+    "positions": {
+      "account_code": [
+        5,
+        22
+      ],
+      "bank_code": [
+        0,
+        5
+      ],
+      "branch_code": [
+        5,
+        5
+      ]
+    }
+  },
+  "UA": {
+    "bban_spec": "6!n19!c",
+    "iban_spec": "UA2!n6!n19!c",
+    "bban_length": 25,
+    "iban_length": 29,
+    "positions": {
+      "account_code": [
+        6,
+        25
+      ],
+      "bank_code": [
+        0,
+        6
+      ],
+      "branch_code": [
+        6,
+        6
+      ]
+    }
+  },
+  "VA": {
+    "bban_spec": "3!n15!n",
+    "iban_spec": "VA2!n3!n15!n",
+    "bban_length": 18,
+    "iban_length": 22,
+    "positions": {
+      "account_code": [
+        3,
+        18
+      ],
+      "bank_code": [
+        0,
+        3
+      ],
+      "branch_code": [
+        3,
+        3
+      ]
+    }
+  },
+  "VG": {
+    "bban_spec": "4!a16!n",
+    "iban_spec": "VG2!n4!a16!n",
+    "bban_length": 20,
+    "iban_length": 24,
+    "positions": {
+      "account_code": [
+        4,
+        20
+      ],
+      "bank_code": [
+        0,
+        4
+      ],
+      "branch_code": [
+        4,
+        4
+      ]
+    }
+  },
+  "XK": {
+    "bban_spec": "4!n10!n2!n",
+    "iban_spec": "XK2!n4!n10!n2!n",
+    "bban_length": 16,
+    "iban_length": 20,
+    "positions": {
+      "account_code": [
+        4,
+        16
+      ],
+      "bank_code": [
+        0,
+        2
+      ],
+      "branch_code": [
+        2,
+        4
+      ]
+    }
+  }
+}

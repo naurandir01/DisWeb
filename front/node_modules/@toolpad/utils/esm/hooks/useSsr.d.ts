@@ -1,0 +1,4 @@
+/**
+ * Returns true when serverside rendering, or when hydrating.
+ */
+export default function useSsr(): boolean;

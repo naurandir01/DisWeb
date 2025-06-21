@@ -1,0 +1,2 @@
+[console_scripts]
+fve-dd = dissect.fve.tools.dd:main

@@ -1,0 +1,97 @@
+services:
+  pafdd-rabbitmq:
+    image: rabbitmq:3-management
+    container_name: pafdd_rabbitmq
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+
+  pafdd-redis:
+    image: redis
+    container_name: pafdd-redis
+    ports:
+    - '6379:6379'
+
+  pafdd-back:
+    build:
+      context: backend
+    container_name: pafdd_backend
+    image: pafdd_backend:v3.5
+    command: gunicorn back.wsgi --bind 0.0.0.0:5002 --timeout 10000 --worker-connections 1000 -w 4 -n pafdd-back --log-level=info
+    env_file:
+      - .env
+    ports:
+      - "5002:5002"
+    volumes:
+      - $CASE_DIR:/mnt/disk:rw
+      - "./backend/external:/backend/external:rw"
+    environment:
+      - CELERY_BROKER_URL
+      - SQLALCHEMY_DATABASE_URI
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+      - POSTGRES_URL
+      - POSTGRES_PORT
+      - CASE_DIR
+      - REDIS_HOST
+      - REDIS_PORT
+    depends_on:
+      - pafdd-worker
+      - pafdd-psql
+      - pafdd-redis
+  
+  pafdd-worker:
+    image: pafdd_backend:v3.5
+    build:
+      context: backend
+    command:  celery -A back.celery worker -l INFO --concurrency=5
+    env_file:
+      - .env
+    environment:
+      - CELERY_BROKER_URL
+      - SQLALCHEMY_DATABASE_URI
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+      - POSTGRES_URL
+      - CASE_DIR
+    volumes:
+      - $CASE_DIR:/mnt/disk:rw
+      - "./backend/external:/backend/external:rw"
+    depends_on:
+      - pafdd-rabbitmq
+    deploy:
+      mode: replicated
+      replicas: 1
+  pafdd-psql:
+    image: postgres:16-alpine
+    container_name: pafdd_db
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+      - POSTGRES_HOST_AUTH_METHOD
+    volumes:
+      - pafdd_data:/var/lib/postgresql/data
+      - "./database/postgresql.conf:/etc/postgresql/postgresql.conf"
+
+  pafdd-front:
+    image: pafdd_frontend:v3.5
+    build:
+      context: front
+    container_name: pafdd_frontend
+    volumes:
+      - "./front/nginx.conf:/etc/nginx/conf.d/default.conf"
+    ports:
+      - 3000:3000
+    depends_on:
+      - pafdd-back
+
+volumes:
+  pafdd_data:

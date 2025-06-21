@@ -1,0 +1,1 @@
+export { ChartsLocalizationProvider } from "./ChartsLocalizationProvider.js";

@@ -1,0 +1,3 @@
+[console_scripts]
+envelope-decrypt = dissect.hypervisor.tools.envelope:main
+vmtar = dissect.hypervisor.tools.vmtar:main

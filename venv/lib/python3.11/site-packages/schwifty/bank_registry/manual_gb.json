@@ -1,0 +1,10 @@
+[
+  {
+    "primary": true,
+    "name": "HALIFAX (A TRADING NAME OF BANK OF SCOTLAND PLC)",
+    "short_name": "HALIFAX",
+    "bank_code": "HLFX",
+    "bic": "HLFXGB21N85",
+    "country_code": "GB"
+  }
+]
