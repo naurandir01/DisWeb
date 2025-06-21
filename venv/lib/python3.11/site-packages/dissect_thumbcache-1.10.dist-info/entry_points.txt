@@ -1,0 +1,3 @@
+[console_scripts]
+thumbcache-extract = dissect.thumbcache.tools.extract_images:main
+thumbcache-extract-indexed = dissect.thumbcache.tools.extract_with_index:main

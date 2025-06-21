@@ -1,0 +1,2 @@
+export declare function getExtension(filePath: string): string;
+export declare function hasImageExtension(pathName: string): boolean;

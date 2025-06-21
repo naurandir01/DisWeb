@@ -1,0 +1,2 @@
+[console_scripts]
+parse-lnk = dissect.shellitem.tools.lnk:main

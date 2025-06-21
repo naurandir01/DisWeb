@@ -1,0 +1,3 @@
+export type Replacer = (this: object, key: PropertyKey, value: unknown) => unknown;
+export declare function getCircularReplacer(): Replacer;
+export declare function replaceRecursive(obj: unknown, replacer: Replacer): unknown;

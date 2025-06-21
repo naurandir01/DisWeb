@@ -1,0 +1,122 @@
+[
+  {
+    "primary": true,
+    "name": "ING BANK, N.V. SUCURSAL EN ESPAÑA",
+    "short_name": "ING BANK ESPAÑA",
+    "bank_code": "1465",
+    "bic": "INGDESMMXXX",
+    "country_code": "ES"
+  },
+  {
+    "primary": true,
+    "name": "BANCO SANTANDER, S.A.",
+    "short_name": "BANCO SANTANDER",
+    "bank_code": "0049",
+    "bic": "BSCHESMM",
+    "country_code": "ES"
+  },
+  {
+    "primary": true,
+    "name": "BANCO SANTANDER, S.A.",
+    "short_name": "BANCO SANTANDER",
+    "bank_code": "0075",
+    "bic": "BSCHESMM",
+    "country_code": "ES"
+  },
+  {
+    "primary": true,
+    "name": "CAIXABANK, S.A.",
+    "short_name": "CAIXABANK",
+    "bank_code": "2100",
+    "bic": "CAIXESBBXXX",
+    "country_code": "ES"
+  },
+  {
+    "primary": true,
+    "name": "BANKINTER, S.A.",
+    "short_name": "BANKINTER",
+    "bank_code": "0128",
+    "bic": "BKBKESMMXXX",
+    "country_code": "ES"
+  },
+  {
+    "primary": true,
+    "name": "OPEN BANK, S.A.",
+    "short_name": "OPEN BANK",
+    "bank_code": "0073",
+    "bic": "OPENESMMXXX",
+    "country_code": "ES"
+  },
+  {
+    "primary": true,
+    "name": "BANCO DE SABADELL, S.A.",
+    "short_name": "BANCO DE SABADELL",
+    "bank_code": "0081",
+    "bic": "BSABESBBXXX",
+    "country_code": "ES"
+  },
+  {
+    "primary": true,
+    "name": "BANCO MEDIOLANUM, S.A.",
+    "short_name": "BANCO MEDIOLANUM",
+    "bank_code": "0186",
+    "bic": "BFIVESBBXXX",
+    "country_code": "ES"
+  },
+  {
+    "primary": true,
+    "name": "CAJA RURAL DEL SUR, S. COOP. DE CREDITO",
+    "short_name": "CAJA RURAL DEL SUR",
+    "bank_code": "3187",
+    "bic": "BCOEESMM187",
+    "country_code": "ES"
+  },
+  {
+    "primary": true,
+    "name": "EVO BANCO S.A.",
+    "short_name": "EVO BANCO",
+    "bank_code": "0239",
+    "bic": "EVOBESMMXXX",
+    "country_code": "ES"
+  },
+  {
+    "primary": true,
+    "name": "EVO BANCO S.A.",
+    "short_name": "EVO BANCO",
+    "bank_code": "0239",
+    "bic": "EVOBESMMXXX",
+    "country_code": "ES"
+  },
+  {
+    "primary": true,
+    "name": "BANCO BILBAO VIZCAYA ARGENTARIA, S.A.",
+    "short_name": "BBVA",
+    "bank_code": "0182",
+    "bic": "BBVAESMMXXX",
+    "country_code": "ES"
+  },
+  {
+    "primary": true,
+    "name": "KUTXABANK, S.A.",
+    "short_name": "KUTXABANK",
+    "bank_code": "2095",
+    "bic": "BASKES2BXXX",
+    "country_code": "ES"
+  },
+  {
+    "primary": true,
+    "name": "CAJA DE CREDITO DE LOS INGENIEROS,  S. COOP. DE CREDITO",
+    "short_name": "CAJA DE CREDITO DE INGENIEROS",
+    "bank_code": "3025",
+    "bic": "CDENESBBXXX",
+    "country_code": "ES"
+  },
+  {
+    "primary": true,
+    "name": "BANKIA, S.A.",
+    "short_name": "BANKIA",
+    "bank_code": "2038",
+    "bic": "CAHMESMMXXX",
+    "country_code": "ES"
+  }
+]

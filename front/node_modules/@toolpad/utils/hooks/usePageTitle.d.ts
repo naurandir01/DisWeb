@@ -1,0 +1,4 @@
+/**
+ * Sets the current document title.
+ */
+export default function usePageTitle(title: string): void;

@@ -1,0 +1,3 @@
+import type express from 'express';
+export declare function encodeRequestBody(req: express.Request): any;
+export declare function adaptRequestFromExpressToFetch(req: express.Request): Request;

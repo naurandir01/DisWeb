@@ -1,0 +1,1197 @@
+user input: /home/naurandir/PAFDD/backend/external/hayabusa/hayabusa json-timeline --no-wizard -d /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa -A -D -n -u -C -o /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa.json
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Storage-Storport%4Operational.evtx
+Error: Failed to parse chunk number 4
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Storage-Storport%4Operational.evtx
+Error: Failed to parse chunk number 5
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Storage-Storport%4Operational.evtx
+Error: Failed to parse chunk number 6
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Storage-Storport%4Operational.evtx
+Error: Failed to parse chunk number 7
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Storage-Storport%4Operational.evtx
+Error: Failed to parse chunk number 8
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Storage-Storport%4Operational.evtx
+Error: Failed to parse chunk number 9
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Storage-Storport%4Operational.evtx
+Error: Failed to parse chunk number 10
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Storage-Storport%4Operational.evtx
+Error: Failed to parse chunk number 11
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Storage-Storport%4Operational.evtx
+Error: Failed to parse chunk number 12
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Storage-Storport%4Operational.evtx
+Error: Failed to parse chunk number 13
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Storage-Storport%4Operational.evtx
+Error: Failed to parse chunk number 14
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Storage-Storport%4Operational.evtx
+Error: Failed to parse chunk number 15
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Storage-Storport%4Operational.evtx
+Error: Failed to parse chunk number 16
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Application.evtx
+Error: Failed to parse chunk number 11
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Application.evtx
+Error: Failed to parse chunk number 12
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Application.evtx
+Error: Failed to parse chunk number 13
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Application.evtx
+Error: Failed to parse chunk number 14
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Application.evtx
+Error: Failed to parse chunk number 15
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Application.evtx
+Error: Failed to parse chunk number 16
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-RemoteDesktopServices-RdpCoreTS%4Operational.evtx
+Error: Failed to parse chunk number 2
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-RemoteDesktopServices-RdpCoreTS%4Operational.evtx
+Error: Failed to parse chunk number 3
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-RemoteDesktopServices-RdpCoreTS%4Operational.evtx
+Error: Failed to parse chunk number 4
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-RemoteDesktopServices-RdpCoreTS%4Operational.evtx
+Error: Failed to parse chunk number 5
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-RemoteDesktopServices-RdpCoreTS%4Operational.evtx
+Error: Failed to parse chunk number 6
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-RemoteDesktopServices-RdpCoreTS%4Operational.evtx
+Error: Failed to parse chunk number 7
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-RemoteDesktopServices-RdpCoreTS%4Operational.evtx
+Error: Failed to parse chunk number 8
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-RemoteDesktopServices-RdpCoreTS%4Operational.evtx
+Error: Failed to parse chunk number 9
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-RemoteDesktopServices-RdpCoreTS%4Operational.evtx
+Error: Failed to parse chunk number 10
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-RemoteDesktopServices-RdpCoreTS%4Operational.evtx
+Error: Failed to parse chunk number 11
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-RemoteDesktopServices-RdpCoreTS%4Operational.evtx
+Error: Failed to parse chunk number 12
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-RemoteDesktopServices-RdpCoreTS%4Operational.evtx
+Error: Failed to parse chunk number 13
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-RemoteDesktopServices-RdpCoreTS%4Operational.evtx
+Error: Failed to parse chunk number 14
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-RemoteDesktopServices-RdpCoreTS%4Operational.evtx
+Error: Failed to parse chunk number 15
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Bits-Client%4Operational.evtx
+Error: Failed to parse chunk number 2
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Bits-Client%4Operational.evtx
+Error: Failed to parse chunk number 3
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Bits-Client%4Operational.evtx
+Error: Failed to parse chunk number 4
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Bits-Client%4Operational.evtx
+Error: Failed to parse chunk number 5
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Bits-Client%4Operational.evtx
+Error: Failed to parse chunk number 6
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Bits-Client%4Operational.evtx
+Error: Failed to parse chunk number 7
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Bits-Client%4Operational.evtx
+Error: Failed to parse chunk number 8
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Bits-Client%4Operational.evtx
+Error: Failed to parse chunk number 9
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Bits-Client%4Operational.evtx
+Error: Failed to parse chunk number 10
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Bits-Client%4Operational.evtx
+Error: Failed to parse chunk number 11
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Bits-Client%4Operational.evtx
+Error: Failed to parse chunk number 12
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Bits-Client%4Operational.evtx
+Error: Failed to parse chunk number 13
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Bits-Client%4Operational.evtx
+Error: Failed to parse chunk number 14
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Bits-Client%4Operational.evtx
+Error: Failed to parse chunk number 15
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Hyper-V-VmSwitch-Operational.evtx
+Error: Failed to parse chunk number 15
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-User Profile Service%4Operational.evtx
+Error: Failed to parse chunk number 5
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-User Profile Service%4Operational.evtx
+Error: Failed to parse chunk number 10
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-User Profile Service%4Operational.evtx
+Error: Failed to parse chunk number 13
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-User Profile Service%4Operational.evtx
+Error: Failed to parse chunk number 14
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-GroupPolicy%4Operational.evtx
+Error: Failed to parse chunk number 9
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-GroupPolicy%4Operational.evtx
+Error: Failed to parse chunk number 10
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-GroupPolicy%4Operational.evtx
+Error: Failed to parse chunk number 11
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-GroupPolicy%4Operational.evtx
+Error: Failed to parse chunk number 12
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-GroupPolicy%4Operational.evtx
+Error: Failed to parse chunk number 13
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-GroupPolicy%4Operational.evtx
+Error: Failed to parse chunk number 14
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-GroupPolicy%4Operational.evtx
+Error: Failed to parse chunk number 15
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-GroupPolicy%4Operational.evtx
+Error: Failed to parse chunk number 16
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-WMI-Activity%4Operational.evtx
+Error: Failed to parse chunk number 6
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-WMI-Activity%4Operational.evtx
+Error: Failed to parse chunk number 7
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-WMI-Activity%4Operational.evtx
+Error: Failed to parse chunk number 8
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-WMI-Activity%4Operational.evtx
+Error: Failed to parse chunk number 9
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-WMI-Activity%4Operational.evtx
+Error: Failed to parse chunk number 10
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-WMI-Activity%4Operational.evtx
+Error: Failed to parse chunk number 11
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-WMI-Activity%4Operational.evtx
+Error: Failed to parse chunk number 12
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-WMI-Activity%4Operational.evtx
+Error: Failed to parse chunk number 13
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-WMI-Activity%4Operational.evtx
+Error: Failed to parse chunk number 14
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-WMI-Activity%4Operational.evtx
+Error: Failed to parse chunk number 15
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Wcmsvc%4Operational.evtx
+Error: Failed to parse chunk number 2
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Wcmsvc%4Operational.evtx
+Error: Failed to parse chunk number 3
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Wcmsvc%4Operational.evtx
+Error: Failed to parse chunk number 4
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Wcmsvc%4Operational.evtx
+Error: Failed to parse chunk number 5
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Wcmsvc%4Operational.evtx
+Error: Failed to parse chunk number 6
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Wcmsvc%4Operational.evtx
+Error: Failed to parse chunk number 7
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Wcmsvc%4Operational.evtx
+Error: Failed to parse chunk number 8
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Wcmsvc%4Operational.evtx
+Error: Failed to parse chunk number 9
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Wcmsvc%4Operational.evtx
+Error: Failed to parse chunk number 10
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Wcmsvc%4Operational.evtx
+Error: Failed to parse chunk number 11
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Wcmsvc%4Operational.evtx
+Error: Failed to parse chunk number 12
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Wcmsvc%4Operational.evtx
+Error: Failed to parse chunk number 13
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Wcmsvc%4Operational.evtx
+Error: Failed to parse chunk number 14
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Wcmsvc%4Operational.evtx
+Error: Failed to parse chunk number 15
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-SettingSync%4Debug.evtx
+Error: Failed to parse chunk number 2
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-SettingSync%4Debug.evtx
+Error: Failed to parse chunk number 3
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-SettingSync%4Debug.evtx
+Error: Failed to parse chunk number 4
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-SettingSync%4Debug.evtx
+Error: Failed to parse chunk number 5
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-SettingSync%4Debug.evtx
+Error: Failed to parse chunk number 6
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-SettingSync%4Debug.evtx
+Error: Failed to parse chunk number 7
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-SettingSync%4Debug.evtx
+Error: Failed to parse chunk number 8
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-SettingSync%4Debug.evtx
+Error: Failed to parse chunk number 9
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-SettingSync%4Debug.evtx
+Error: Failed to parse chunk number 10
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-SettingSync%4Debug.evtx
+Error: Failed to parse chunk number 11
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-SettingSync%4Debug.evtx
+Error: Failed to parse chunk number 12
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-SettingSync%4Debug.evtx
+Error: Failed to parse chunk number 13
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-SettingSync%4Debug.evtx
+Error: Failed to parse chunk number 14
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-SettingSync%4Debug.evtx
+Error: Failed to parse chunk number 15
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Diagnosis-DPS%4Operational.evtx
+Error: Failed to parse chunk number 2
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Diagnosis-DPS%4Operational.evtx
+Error: Failed to parse chunk number 3
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Diagnosis-DPS%4Operational.evtx
+Error: Failed to parse chunk number 4
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Diagnosis-DPS%4Operational.evtx
+Error: Failed to parse chunk number 5
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Diagnosis-DPS%4Operational.evtx
+Error: Failed to parse chunk number 6
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Diagnosis-DPS%4Operational.evtx
+Error: Failed to parse chunk number 7
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Diagnosis-DPS%4Operational.evtx
+Error: Failed to parse chunk number 8
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Diagnosis-DPS%4Operational.evtx
+Error: Failed to parse chunk number 9
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Diagnosis-DPS%4Operational.evtx
+Error: Failed to parse chunk number 10
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Diagnosis-DPS%4Operational.evtx
+Error: Failed to parse chunk number 11
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Diagnosis-DPS%4Operational.evtx
+Error: Failed to parse chunk number 12
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Diagnosis-DPS%4Operational.evtx
+Error: Failed to parse chunk number 13
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Diagnosis-DPS%4Operational.evtx
+Error: Failed to parse chunk number 14
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Diagnosis-DPS%4Operational.evtx
+Error: Failed to parse chunk number 15
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-PowerShell%4Operational.evtx
+Error: Failed to parse chunk number 3
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-PowerShell%4Operational.evtx
+Error: Failed to parse chunk number 4
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-PowerShell%4Operational.evtx
+Error: Failed to parse chunk number 5
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-PowerShell%4Operational.evtx
+Error: Failed to parse chunk number 6
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-PowerShell%4Operational.evtx
+Error: Failed to parse chunk number 7
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-PowerShell%4Operational.evtx
+Error: Failed to parse chunk number 8
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-PowerShell%4Operational.evtx
+Error: Failed to parse chunk number 9
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-PowerShell%4Operational.evtx
+Error: Failed to parse chunk number 10
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-PowerShell%4Operational.evtx
+Error: Failed to parse chunk number 11
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-PowerShell%4Operational.evtx
+Error: Failed to parse chunk number 12
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-PowerShell%4Operational.evtx
+Error: Failed to parse chunk number 13
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-PowerShell%4Operational.evtx
+Error: Failed to parse chunk number 14
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-PowerShell%4Operational.evtx
+Error: Failed to parse chunk number 15
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-PowerShell%4Operational.evtx
+Error: Failed to parse chunk number 16
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-AppXDeploymentServer%4Operational.evtx
+Error: Failed to parse chunk number 13
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-AppXDeploymentServer%4Operational.evtx
+Error: Failed to parse chunk number 14
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-AppXDeploymentServer%4Operational.evtx
+Error: Failed to parse chunk number 15
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-AppXDeploymentServer%4Operational.evtx
+Error: Failed to parse chunk number 16
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Windows Defender%4Operational.evtx
+Error: Failed to parse chunk number 4
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Windows Defender%4Operational.evtx
+Error: Failed to parse chunk number 5
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Windows Defender%4Operational.evtx
+Error: Failed to parse chunk number 6
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Windows Defender%4Operational.evtx
+Error: Failed to parse chunk number 7
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Windows Defender%4Operational.evtx
+Error: Failed to parse chunk number 8
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Windows Defender%4Operational.evtx
+Error: Failed to parse chunk number 9
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Windows Defender%4Operational.evtx
+Error: Failed to parse chunk number 10
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Windows Defender%4Operational.evtx
+Error: Failed to parse chunk number 11
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Windows Defender%4Operational.evtx
+Error: Failed to parse chunk number 12
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Windows Defender%4Operational.evtx
+Error: Failed to parse chunk number 13
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Windows Defender%4Operational.evtx
+Error: Failed to parse chunk number 14
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Windows Defender%4Operational.evtx
+Error: Failed to parse chunk number 15
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-CloudStore%4Operational.evtx
+Error: Failed to parse chunk number 2
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-CloudStore%4Operational.evtx
+Error: Failed to parse chunk number 3
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-CloudStore%4Operational.evtx
+Error: Failed to parse chunk number 4
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-CloudStore%4Operational.evtx
+Error: Failed to parse chunk number 5
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-CloudStore%4Operational.evtx
+Error: Failed to parse chunk number 6
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-CloudStore%4Operational.evtx
+Error: Failed to parse chunk number 7
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-CloudStore%4Operational.evtx
+Error: Failed to parse chunk number 8
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-CloudStore%4Operational.evtx
+Error: Failed to parse chunk number 9
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-CloudStore%4Operational.evtx
+Error: Failed to parse chunk number 10
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-CloudStore%4Operational.evtx
+Error: Failed to parse chunk number 11
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-CloudStore%4Operational.evtx
+Error: Failed to parse chunk number 12
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-CloudStore%4Operational.evtx
+Error: Failed to parse chunk number 13
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-CloudStore%4Operational.evtx
+Error: Failed to parse chunk number 14
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-CloudStore%4Operational.evtx
+Error: Failed to parse chunk number 15
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-SmbClient%4Connectivity.evtx
+Error: Failed to parse chunk number 2
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-SmbClient%4Connectivity.evtx
+Error: Failed to parse chunk number 3
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-SmbClient%4Connectivity.evtx
+Error: Failed to parse chunk number 4
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-SmbClient%4Connectivity.evtx
+Error: Failed to parse chunk number 5
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-SmbClient%4Connectivity.evtx
+Error: Failed to parse chunk number 6
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-SmbClient%4Connectivity.evtx
+Error: Failed to parse chunk number 7
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-SmbClient%4Connectivity.evtx
+Error: Failed to parse chunk number 8
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-SmbClient%4Connectivity.evtx
+Error: Failed to parse chunk number 9
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-SmbClient%4Connectivity.evtx
+Error: Failed to parse chunk number 10
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-SmbClient%4Connectivity.evtx
+Error: Failed to parse chunk number 11
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-SmbClient%4Connectivity.evtx
+Error: Failed to parse chunk number 12
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-SmbClient%4Connectivity.evtx
+Error: Failed to parse chunk number 13
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-SmbClient%4Connectivity.evtx
+Error: Failed to parse chunk number 14
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-SmbClient%4Connectivity.evtx
+Error: Failed to parse chunk number 15
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-SmbClient%4Connectivity.evtx
+Error: Failed to parse chunk number 16
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-VolumeSnapshot-Driver%4Operational.evtx
+Error: Failed to parse chunk number 2
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-VolumeSnapshot-Driver%4Operational.evtx
+Error: Failed to parse chunk number 3
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-VolumeSnapshot-Driver%4Operational.evtx
+Error: Failed to parse chunk number 4
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-VolumeSnapshot-Driver%4Operational.evtx
+Error: Failed to parse chunk number 5
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-VolumeSnapshot-Driver%4Operational.evtx
+Error: Failed to parse chunk number 6
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-VolumeSnapshot-Driver%4Operational.evtx
+Error: Failed to parse chunk number 7
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-VolumeSnapshot-Driver%4Operational.evtx
+Error: Failed to parse chunk number 8
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-VolumeSnapshot-Driver%4Operational.evtx
+Error: Failed to parse chunk number 9
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-VolumeSnapshot-Driver%4Operational.evtx
+Error: Failed to parse chunk number 10
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-VolumeSnapshot-Driver%4Operational.evtx
+Error: Failed to parse chunk number 11
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-VolumeSnapshot-Driver%4Operational.evtx
+Error: Failed to parse chunk number 12
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-VolumeSnapshot-Driver%4Operational.evtx
+Error: Failed to parse chunk number 13
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-VolumeSnapshot-Driver%4Operational.evtx
+Error: Failed to parse chunk number 14
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-VolumeSnapshot-Driver%4Operational.evtx
+Error: Failed to parse chunk number 15
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-StateRepository%4Operational.evtx
+Error: Failed to parse chunk number 3
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-StateRepository%4Operational.evtx
+Error: Failed to parse chunk number 4
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-StateRepository%4Operational.evtx
+Error: Failed to parse chunk number 5
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-StateRepository%4Operational.evtx
+Error: Failed to parse chunk number 6
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-StateRepository%4Operational.evtx
+Error: Failed to parse chunk number 7
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-StateRepository%4Operational.evtx
+Error: Failed to parse chunk number 8
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-StateRepository%4Operational.evtx
+Error: Failed to parse chunk number 9
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-StateRepository%4Operational.evtx
+Error: Failed to parse chunk number 10
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-StateRepository%4Operational.evtx
+Error: Failed to parse chunk number 11
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-StateRepository%4Operational.evtx
+Error: Failed to parse chunk number 12
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-StateRepository%4Operational.evtx
+Error: Failed to parse chunk number 13
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-StateRepository%4Operational.evtx
+Error: Failed to parse chunk number 14
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-StateRepository%4Operational.evtx
+Error: Failed to parse chunk number 15
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-StateRepository%4Operational.evtx
+Error: Failed to parse chunk number 16
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Security.evtx
+Error: Failed to parse chunk number 67
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Security.evtx
+Error: Failed to parse chunk number 68
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Security.evtx
+Error: Failed to parse chunk number 69
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Security.evtx
+Error: Failed to parse chunk number 70
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Security.evtx
+Error: Failed to parse chunk number 71
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Security.evtx
+Error: Failed to parse chunk number 72
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Security.evtx
+Error: Failed to parse chunk number 73
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Security.evtx
+Error: Failed to parse chunk number 74
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Security.evtx
+Error: Failed to parse chunk number 75
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Security.evtx
+Error: Failed to parse chunk number 76
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Security.evtx
+Error: Failed to parse chunk number 77
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Security.evtx
+Error: Failed to parse chunk number 78
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Security.evtx
+Error: Failed to parse chunk number 79
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Security.evtx
+Error: Failed to parse chunk number 80
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-UniversalTelemetryClient%4Operational.evtx
+Error: Failed to parse chunk number 2
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-UniversalTelemetryClient%4Operational.evtx
+Error: Failed to parse chunk number 3
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-UniversalTelemetryClient%4Operational.evtx
+Error: Failed to parse chunk number 4
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-UniversalTelemetryClient%4Operational.evtx
+Error: Failed to parse chunk number 5
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-UniversalTelemetryClient%4Operational.evtx
+Error: Failed to parse chunk number 6
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-UniversalTelemetryClient%4Operational.evtx
+Error: Failed to parse chunk number 7
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-UniversalTelemetryClient%4Operational.evtx
+Error: Failed to parse chunk number 8
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-UniversalTelemetryClient%4Operational.evtx
+Error: Failed to parse chunk number 9
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-UniversalTelemetryClient%4Operational.evtx
+Error: Failed to parse chunk number 10
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-UniversalTelemetryClient%4Operational.evtx
+Error: Failed to parse chunk number 11
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-UniversalTelemetryClient%4Operational.evtx
+Error: Failed to parse chunk number 12
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-UniversalTelemetryClient%4Operational.evtx
+Error: Failed to parse chunk number 13
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-UniversalTelemetryClient%4Operational.evtx
+Error: Failed to parse chunk number 14
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-UniversalTelemetryClient%4Operational.evtx
+Error: Failed to parse chunk number 15
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-DeviceSetupManager%4Admin.evtx
+Error: Failed to parse chunk number 2
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-DeviceSetupManager%4Admin.evtx
+Error: Failed to parse chunk number 3
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-DeviceSetupManager%4Admin.evtx
+Error: Failed to parse chunk number 4
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-DeviceSetupManager%4Admin.evtx
+Error: Failed to parse chunk number 5
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-DeviceSetupManager%4Admin.evtx
+Error: Failed to parse chunk number 6
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-DeviceSetupManager%4Admin.evtx
+Error: Failed to parse chunk number 7
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-DeviceSetupManager%4Admin.evtx
+Error: Failed to parse chunk number 8
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-DeviceSetupManager%4Admin.evtx
+Error: Failed to parse chunk number 9
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-DeviceSetupManager%4Admin.evtx
+Error: Failed to parse chunk number 10
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-DeviceSetupManager%4Admin.evtx
+Error: Failed to parse chunk number 11
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-DeviceSetupManager%4Admin.evtx
+Error: Failed to parse chunk number 12
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-DeviceSetupManager%4Admin.evtx
+Error: Failed to parse chunk number 13
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-DeviceSetupManager%4Admin.evtx
+Error: Failed to parse chunk number 14
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-DeviceSetupManager%4Admin.evtx
+Error: Failed to parse chunk number 15
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Partition%4Diagnostic.evtx
+Error: Failed to parse chunk number 2
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Partition%4Diagnostic.evtx
+Error: Failed to parse chunk number 3
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Partition%4Diagnostic.evtx
+Error: Failed to parse chunk number 4
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Partition%4Diagnostic.evtx
+Error: Failed to parse chunk number 5
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Partition%4Diagnostic.evtx
+Error: Failed to parse chunk number 6
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Partition%4Diagnostic.evtx
+Error: Failed to parse chunk number 7
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Partition%4Diagnostic.evtx
+Error: Failed to parse chunk number 8
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Partition%4Diagnostic.evtx
+Error: Failed to parse chunk number 9
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Partition%4Diagnostic.evtx
+Error: Failed to parse chunk number 10
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Partition%4Diagnostic.evtx
+Error: Failed to parse chunk number 11
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Partition%4Diagnostic.evtx
+Error: Failed to parse chunk number 12
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Partition%4Diagnostic.evtx
+Error: Failed to parse chunk number 13
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Partition%4Diagnostic.evtx
+Error: Failed to parse chunk number 14
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Partition%4Diagnostic.evtx
+Error: Failed to parse chunk number 15
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-Partition%4Diagnostic.evtx
+Error: Failed to parse chunk number 16
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-TerminalServices-LocalSessionManager%4Operational.evtx
+Error: Failed to parse chunk number 2
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-TerminalServices-LocalSessionManager%4Operational.evtx
+Error: Failed to parse chunk number 3
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-TerminalServices-LocalSessionManager%4Operational.evtx
+Error: Failed to parse chunk number 4
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-TerminalServices-LocalSessionManager%4Operational.evtx
+Error: Failed to parse chunk number 5
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-TerminalServices-LocalSessionManager%4Operational.evtx
+Error: Failed to parse chunk number 6
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-TerminalServices-LocalSessionManager%4Operational.evtx
+Error: Failed to parse chunk number 7
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-TerminalServices-LocalSessionManager%4Operational.evtx
+Error: Failed to parse chunk number 8
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-TerminalServices-LocalSessionManager%4Operational.evtx
+Error: Failed to parse chunk number 9
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-TerminalServices-LocalSessionManager%4Operational.evtx
+Error: Failed to parse chunk number 10
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-TerminalServices-LocalSessionManager%4Operational.evtx
+Error: Failed to parse chunk number 11
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-TerminalServices-LocalSessionManager%4Operational.evtx
+Error: Failed to parse chunk number 12
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-TerminalServices-LocalSessionManager%4Operational.evtx
+Error: Failed to parse chunk number 13
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-TerminalServices-LocalSessionManager%4Operational.evtx
+Error: Failed to parse chunk number 14
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-TerminalServices-LocalSessionManager%4Operational.evtx
+Error: Failed to parse chunk number 15
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-TerminalServices-RemoteConnectionManager%4Operational.evtx
+Error: Failed to parse chunk number 2
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-TerminalServices-RemoteConnectionManager%4Operational.evtx
+Error: Failed to parse chunk number 3
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-TerminalServices-RemoteConnectionManager%4Operational.evtx
+Error: Failed to parse chunk number 4
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-TerminalServices-RemoteConnectionManager%4Operational.evtx
+Error: Failed to parse chunk number 5
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-TerminalServices-RemoteConnectionManager%4Operational.evtx
+Error: Failed to parse chunk number 6
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-TerminalServices-RemoteConnectionManager%4Operational.evtx
+Error: Failed to parse chunk number 7
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-TerminalServices-RemoteConnectionManager%4Operational.evtx
+Error: Failed to parse chunk number 8
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-TerminalServices-RemoteConnectionManager%4Operational.evtx
+Error: Failed to parse chunk number 9
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-TerminalServices-RemoteConnectionManager%4Operational.evtx
+Error: Failed to parse chunk number 10
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-TerminalServices-RemoteConnectionManager%4Operational.evtx
+Error: Failed to parse chunk number 11
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-TerminalServices-RemoteConnectionManager%4Operational.evtx
+Error: Failed to parse chunk number 12
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-TerminalServices-RemoteConnectionManager%4Operational.evtx
+Error: Failed to parse chunk number 13
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-TerminalServices-RemoteConnectionManager%4Operational.evtx
+Error: Failed to parse chunk number 14
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Microsoft-Windows-TerminalServices-RemoteConnectionManager%4Operational.evtx
+Error: Failed to parse chunk number 15
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Windows PowerShell.evtx
+Error: Failed to parse chunk number 2
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Windows PowerShell.evtx
+Error: Failed to parse chunk number 3
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Windows PowerShell.evtx
+Error: Failed to parse chunk number 4
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Windows PowerShell.evtx
+Error: Failed to parse chunk number 5
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Windows PowerShell.evtx
+Error: Failed to parse chunk number 6
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Windows PowerShell.evtx
+Error: Failed to parse chunk number 7
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Windows PowerShell.evtx
+Error: Failed to parse chunk number 8
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Windows PowerShell.evtx
+Error: Failed to parse chunk number 9
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Windows PowerShell.evtx
+Error: Failed to parse chunk number 10
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Windows PowerShell.evtx
+Error: Failed to parse chunk number 11
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Windows PowerShell.evtx
+Error: Failed to parse chunk number 12
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Windows PowerShell.evtx
+Error: Failed to parse chunk number 13
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Windows PowerShell.evtx
+Error: Failed to parse chunk number 14
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Windows PowerShell.evtx
+Error: Failed to parse chunk number 15
+
+[ERROR] Failed to parse event file.
+EventFile: /mnt/disk/GIC_2024_01_TEST/c-drive/c-drive.vmdk_hayabusa/Windows PowerShell.evtx
+Error: Failed to parse chunk number 16
+

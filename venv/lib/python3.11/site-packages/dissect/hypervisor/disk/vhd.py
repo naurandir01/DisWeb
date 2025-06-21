@@ -1,0 +1,121 @@
+from __future__ import annotations
+
+import io
+import struct
+from functools import lru_cache
+from typing import BinaryIO
+
+from dissect.util.stream import AlignedStream
+
+from dissect.hypervisor.disk.c_vhd import SECTOR_SIZE, c_vhd
+
+
+def read_footer(fh: BinaryIO) -> c_vhd.footer:
+    fh.seek(-512, io.SEEK_END)
+    footer = c_vhd.footer(fh)
+    if not footer.features & 0x00000002:
+        # Versions previous to Microsoft Virtual PC 2004 can have a 511 byte footer
+        fh.seek(-511, io.SEEK_END)
+        footer = c_vhd.footer(fh)
+    return footer
+
+
+class VHD(AlignedStream):
+    # Note: split VHD files are currently unsupported.
+    def __init__(self, fh: BinaryIO):
+        self.fh = fh
+
+        footer = read_footer(fh)
+        if footer.data_offset == 0xFFFFFFFFFFFFFFFF:
+            # Fixed size, data starts at 0
+            self.disk = FixedDisk(fh, footer)
+        else:
+            self.disk = DynamicDisk(fh, footer)
+
+        super().__init__(self.disk.size)
+
+    def _read(self, offset: int, length: int) -> bytes:
+        sector = offset // SECTOR_SIZE
+        count = (length + SECTOR_SIZE - 1) // SECTOR_SIZE
+
+        return self.disk.read_sectors(sector, count)
+
+
+class Disk:
+    def __init__(self, fh: BinaryIO, footer: c_vhd.footer | None = None):
+        self.fh = fh
+        self.footer = footer if footer else read_footer(fh)
+        self.size = self.footer.current_size
+
+    def read_sectors(self, sector: int, count: int) -> bytes:
+        raise NotImplementedError
+
+
+class FixedDisk(Disk):
+    def read_sectors(self, sector: int, count: int) -> bytes:
+        self.fh.seek(sector * SECTOR_SIZE)
+        return self.fh.read(count * SECTOR_SIZE)
+
+
+class DynamicDisk(Disk):
+    def __init__(self, fh: BinaryIO, footer: c_vhd.footer | None = None):
+        super().__init__(fh, footer)
+        fh.seek(self.footer.data_offset)
+        self.header = c_vhd.dynamic_header(fh)
+        self.bat = BlockAllocationTable(fh, self.header.table_offset, self.header.max_table_entries)
+
+        self._sectors_per_block = self.header.block_size // SECTOR_SIZE
+        # Sector bitmaps are padded to SECTOR_SIZE boundaries
+        # Save bitmap size in sectors
+        self._sector_bitmap_size = ((self._sectors_per_block // 8) + SECTOR_SIZE - 1) // SECTOR_SIZE
+
+    def read_sectors(self, sector: int, count: int) -> bytes:
+        result = []
+        while count > 0:
+            block, offset = divmod(sector, self._sectors_per_block)
+            block_remaining = self._sectors_per_block - offset
+
+            read_count = min(count, block_remaining)
+
+            sector_offset = self.bat[block]
+            if sector_offset:
+                self.fh.seek((sector_offset + self._sector_bitmap_size + offset) * SECTOR_SIZE)
+                result.append(self.fh.read(read_count * SECTOR_SIZE))
+            else:
+                # Sparse
+                result.append((b"\x00" * SECTOR_SIZE) * read_count)
+
+            sector += read_count
+            count -= read_count
+
+        return b"".join(result)
+
+
+class BlockAllocationTable:
+    """Implementation of the BAT.
+
+    Entries are uint32 sector offsets to blocks in the file.
+    """
+
+    ENTRY = struct.Struct(">I")
+
+    def __init__(self, fh: BinaryIO, offset: int, max_entries: int):
+        self.fh = fh
+        self.offset = offset
+        self.max_entries = max_entries
+
+        self.get = lru_cache(4096)(self.get)
+
+    def get(self, block: int) -> int | None:
+        # This could be improved by caching the entire BAT (or chunks if too large)
+        if block + 1 > self.max_entries:
+            raise ValueError(f"Invalid block {block} (max block is {self.max_entries - 1})")
+
+        self.fh.seek(self.offset + block * 4)
+        sector_offset = self.ENTRY.unpack(self.fh.read(4))[0]
+        if sector_offset == 0xFFFFFFFF:
+            sector_offset = None
+        return sector_offset
+
+    def __getitem__(self, block: int) -> int | None:
+        return self.get(block)

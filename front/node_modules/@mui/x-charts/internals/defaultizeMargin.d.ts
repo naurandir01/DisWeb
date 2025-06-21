@@ -1,0 +1,3 @@
+import type { ChartMargin, UseChartDimensionsParameters } from "./plugins/corePlugins/useChartDimensions/useChartDimensions.types.js";
+export declare function defaultizeMargin(input: UseChartDimensionsParameters['margin'], defaultMargin: ChartMargin): ChartMargin;
+export declare function defaultizeMargin(input: UseChartDimensionsParameters['margin'], defaultMargin?: ChartMargin): Partial<ChartMargin> | undefined;

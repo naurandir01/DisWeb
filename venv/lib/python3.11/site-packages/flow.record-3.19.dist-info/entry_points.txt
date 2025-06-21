@@ -1,0 +1,3 @@
+[console_scripts]
+rdump = flow.record.tools.rdump:main
+rgeoip = flow.record.tools.geoip:main

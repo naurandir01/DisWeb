@@ -1,0 +1,4 @@
+[console_scripts]
+vdbbin = vdb.vdbbin:main
+vivbin = vivisect.vivbin:main
+vivserver = vivisect.remote.server:main
