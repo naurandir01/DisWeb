@@ -102,7 +102,7 @@ export default function YaraRules(props: any){
         {field:'action',type:'actions',getActions: (params: any)=>[
             <GridActionsCellItem
                 icon={<Delete/>}
-                label='Supprimer'
+                label='Delete'
                 onClick={onDeleteYaraRule(params.id)}
                 key={'delete-ioc_type'}
             />,
@@ -144,6 +144,7 @@ export default function YaraRules(props: any){
                     initialState={{
                         pagination: {paginationModel:{pageSize:25}}
                     }}
+                    showToolbar
                 />
             </AccordionDetails>
             <AccordionActions>

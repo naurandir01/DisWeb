@@ -6,12 +6,12 @@ import TaskButton from './taskButton';
 import {DialogProps } from '@toolpad/core/useDialogs';
 
 export default function Plugins({payload,open,onClose}:DialogProps<any>){ {
-  const [listTasksWindows] = React.useState([{'type':'hayabusa','name':'Hayabusa'},{'type':'regf','name':'Registre'},{'type':'timeline','name':'Chronologie'}])
-  const [listTasksLinux] = React.useState([{'type':'timeline','name':'CHRONOLOGIE'}])
+  const [listTasksWindows] = React.useState([{'type':'hayabusa','name':'Hayabusa'},{'type':'regf','name':'Registry'},{'type':'timeline','name':'Timeline'}])
+  const [listTasksLinux] = React.useState([{'type':'timeline','name':'Timeline'}])
 
   return(
     <Dialog fullWidth open={open} onClose={()=>onClose()}>
-      <DialogTitle>Liste des plugins</DialogTitle>
+      <DialogTitle>List of plugins</DialogTitle>
       <DialogContent>
         <Stack  sx={{ justifyContent: "flex-start", alignItems: "flex-start",}}>
           {
@@ -38,7 +38,7 @@ export default function Plugins({payload,open,onClose}:DialogProps<any>){ {
         </Stack>
       </DialogContent>
       <DialogActions>
-        <Button onClick={()=>onClose()}>Fermer</Button>
+        <Button onClick={()=>onClose()}>Close</Button>
       </DialogActions>
     </Dialog>
   )}}

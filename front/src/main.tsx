@@ -7,7 +7,7 @@ import DashboardPage from './pages';
 import CasPage from './pages/case';
 import SignInPage from './pages/signIn';
 import Sources from './pages/source';
-import SystemDeFichier from './pages/filesystem';
+import FileSystem from './pages/filesystem';
 import Artefacts from './pages/artefact';
 import IOC from './pages/ioc';
 import Parametres from './pages/parametre';
@@ -37,7 +37,7 @@ const router = createBrowserRouter([
           },
           {
             path: '/filesystem',
-            Component: SystemDeFichier,
+            Component: FileSystem,
           },
           {
             path: '/artefact',

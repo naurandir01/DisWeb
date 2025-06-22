@@ -6,23 +6,6 @@ import { useNavigate } from 'react-router';
 import { useSession } from '../SessionContext';
 import API from '../components/api/axios'
 
-const fakeAsyncGetSession = async (formData: any): Promise<Session> => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (formData.get('password') === 'password') {
-        resolve({
-          user: {
-            name: 'User',
-            email: formData.get('email') || '',
-            image: 'https://avatars.githubusercontent.com/u/19550456',
-          },
-        });
-      }
-      reject(new Error('Incorrect credentials.'));
-    }, 1000);
-  });
-};
-
 const GetSession = async (formData: any): Promise<Session> => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
@@ -37,7 +20,7 @@ const GetSession = async (formData: any): Promise<Session> => {
             user: {
               name: formData.get('email').split('@')[0],
               email: formData.get('email') || '',
-              image: 'https://avatars.githubusercontent.com/u/19550456',
+              
             },
           });
         }else{
@@ -56,7 +39,7 @@ export default function SignIn() {
     <SignInPage 
       providers={[{ id: 'credentials', name: 'Credentials' }]}
       signIn={async (provider, formData, callbackUrl) => {
-        // Demo session
+
         try {
           const session = await GetSession(formData);
           if (session) {

@@ -1,5 +1,5 @@
 from disk import Disque
-from backend.source.dissect_engine import DissectEngine
+from source.dissect_engine import DissectEngine
 from dissect.target.tools.utils import execute_function_on_target,find_functions,find_and_filter_plugins
 from dissect.target.plugins.scrape.qfind import QFindPlugin,progress
 from dissect.target import Target
@@ -11,7 +11,7 @@ def main():
     #v = d.getDisqueVolume()
     #d.plugin('authlog',[''])
     #print(d.getPlugins('authlog'))
-    sam = d.run_plugin({'name':'sam','params':['--json']})
+    qfind = d.run_plugin({'name':'qfind','params':['--needles','SANS']})
 
     print("hex")
    

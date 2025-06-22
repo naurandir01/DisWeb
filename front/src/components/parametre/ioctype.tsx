@@ -19,11 +19,11 @@ function AddIOC({open,onClose= ()=>{}}:DialogProps){
             bodyformData.append('ioc_type_value',newType)
             bodyformData.append('ioc_type_description',newTypeDescription)
             const res = await API.post('/api/iocs_types/',bodyformData,{headers:{'Content-Type':'multipart/form-data'}})
-            notification.show("Ajout d'un type d'ioc "+newType,{autoHideDuration:3000,severity:'success'})
+            notification.show("Adding a new IOC type "+newType,{autoHideDuration:3000,severity:'success'})
             const res_2 = await API.get('/api/iocs_types').then(res=>setListIocType(JSON.stringify(res.data)))
 
         } catch (error){
-            notification.show("Erreur dans l'ajout du type d'ioc"+newType,{autoHideDuration:3000,severity:'error'})
+            notification.show("Error when adding a new ioc type"+newType,{autoHideDuration:3000,severity:'error'})
         }
 
         onClose({},'backdropClick')
@@ -56,7 +56,7 @@ export default function IocTypes(props: any){
         {field:'action',type:'actions',getActions: (params: any)=>[
             <GridActionsCellItem
                 icon={<Delete/>}
-                label='Supprimer'
+                label='Delete'
                 onClick={onDeleteSource(params.id)}
                 key={'delete-ioc_type'}
             />
@@ -67,7 +67,7 @@ export default function IocTypes(props: any){
         (id:GridRowId)=> ()=>{
           API.delete('/api/iocs_types/'+id).then(
             res=>{
-                notification.show("Supprésion du type d'IOC",{autoHideDuration:3000,severity:'success'})  
+                notification.show("Deletion of the IOC Type",{autoHideDuration:3000,severity:'success'})  
               API.get('/api/iocs_types/').then(res=>{
                 setListIocType(JSON.stringify(res.data))
               }
@@ -84,16 +84,20 @@ export default function IocTypes(props: any){
 
     return(
         <Accordion>
-            <AccordionSummary expandIcon={<ExpandMore/>}> IOC TYPE</AccordionSummary>
+            <AccordionSummary expandIcon={<ExpandMore/>}> IoC Type</AccordionSummary>
             <AccordionDetails>
-                <DataGrid 
+                <div style={{height:'400px',width:'100%'}}>
+                    <DataGrid 
                     columns={columns} 
                     rows={JSON.parse(listIocType || '[]')} 
                     getRowId={rowsId}
                     initialState={{
                         pagination: {paginationModel:{pageSize:25}}
                     }}
+                    showToolbar
                 />
+                </div>
+                
             </AccordionDetails>
             <AccordionActions>
                 <Button onClick={async ()=>{ await dialog.open(AddIOC)}}>Add new IOC TYPE</Button>

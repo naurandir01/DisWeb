@@ -6,10 +6,6 @@ import API from "../components/api/axios"
 import {Delete } from '@mui/icons-material';
 import CustomToolBarSource from '../components/source/customtoolbarsource';
 import SourcePlugins from '../components/source/sourcePlugins';
-import { Card, CardContent, CardHeader } from '@mui/material';
-
-
-
 
 export default function Sources() {
   const [currentCas,setCurrentCas] = useSessionStorageState('cas','')
@@ -27,9 +23,9 @@ export default function Sources() {
     {field:'actions',type:'actions',getActions:(params:GridRowParams)=>[
       <GridActionsCellItem
         icon={<Delete/>}
-        label='Supprimer'
+        label='Delete'
         onClick={onDeleteSource(params.id)}
-        key={'supprimer-src'}
+        key={'delete-src'}
       />,
       <SourcePlugins source={params}/>,
     ]}
@@ -39,7 +35,7 @@ export default function Sources() {
     (id:GridRowId)=> ()=>{
       API.delete('/api/sources/'+id+'/').then(
         res=>{
-          notification.show('Supprésion du prélèvement ',{autoHideDuration:3000,severity:'success'})
+          notification.show('Deleted the source ',{autoHideDuration:3000,severity:'success'})
           API.get('/api/cases/'+JSON.parse(currentCas || "{id_case:''}").id_case+'/sources').then(res=>{
             setListSources(JSON.stringify(res.data))
           }

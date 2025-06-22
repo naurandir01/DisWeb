@@ -2,7 +2,9 @@ from dissect.target import Target
 from dissect.target.tools.utils import execute_function_on_target,find_functions,keychain
 from dissect.target.helpers.keychain import KeyType
 from dissect.cstruct import hexdump
+import os
 import magic
+import subprocess
 
 class DissectEngine:
     """
@@ -27,12 +29,12 @@ class DissectEngine:
                 keychain.register_key(key_type=KeyType.RECOVERY_KEY,value=source.source_key['value'])
             self.target = Target.open(self.path)
         elif path is not None:
-            self.chemin = path
+            self.path = path
             if key_type == 'PASSPHRASE':
                 keychain.register_key(key_type=KeyType.PASSPHRASE,value=key_value)
             if key_type == 'RECOVERY_KEY':
                 keychain.register_key(key_type=KeyType.RECOVERY_KEY,value=key_value)
-            self.target = Target.open(path)
+            self.target = Target.open(self.path)
 
     def get_plugins(self)-> list:
         """
@@ -206,6 +208,25 @@ class DissectEngine:
                     return e
         return False
     
+    def get_file_no_open(self,file_path:str,volume:str):
+        """
+        Retrieves the content of a specified file on a given volume without opening it.
+        Args:
+            file_path (str): The path to the file.
+            volume (str): The name of the volume.
+        Returns:
+            str: The content of the file as a string.
+        """
+        fs = self.target.filesystems
+        for f in fs:
+            if f.volume.name == volume:
+                try:
+                    return f.get(file_path)
+                except Exception as e:
+                    return e
+        return False
+    
+    
     def get_volumes(self)->list:
         """
         Retrieves a list of volumes available in the target disk image.
@@ -221,7 +242,26 @@ class DissectEngine:
     def run_hayabusa(self):
         """
         Executes the Hayabusa plugin on the target disk image.
+
         Returns:
             str: The output of the Hayabusa plugin execution.
         """
+        volumes = self.get_volumes()
+        evt_path = "/Windows/System32/winevt/Logs/"
+        for volume in volumes:
+            evtx_folder = self.get_directory_content(evt_path,volume['name'])
+            for evtx in evtx_folder:
+                os.makedirs(self.path+'_hayabusa', exist_ok=True)
+                if len(evtx_folder) > 0:
+                    evtx_file = self.get_file_no_open(evt_path+'/'+evtx['name'],volume['name'])
+                    with open(self.path+'_hayabusa/'+evtx['name'], 'wb') as f:
+                        open_file = evtx_file.open()
+                        f.write(open_file.readall())
+            cmd ='/backend/external/hayabusa/hayabusa json-timeline --no-wizard -d '+self.path+'_hayabusa'+' -A -D -n -u -C -L -o '+self.path+'_hayabusa.json'
+            result = subprocess.check_output(cmd,shell=True)
+            result_json = []
+            with open(self.path+'_hayabusa.json', 'r') as f:
+                for line in f:
+                    result_json.append(line)
+            return result_json
         return []

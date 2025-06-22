@@ -92,10 +92,10 @@ export default function Registry(props: any){
     const [loading,setLoading] = React.useState(false)
     
     const registry_coulumn: GridColDef[] = [
-        {field:'reg_ts',headerName:'Temps',flex:1, filterable: false},
-        {field:'reg_path',headerName:'Chemin',flex:1, filterable: false},
-        {field:'reg_key',headerName:'Clé',flex:1, filterable: false},
-        {field:'reg_value',headerName:'Valeur',flex:1},
+        {field:'reg_ts',headerName:'Timestamp',flex:1, filterable: false},
+        {field:'reg_path',headerName:'Path',flex:1, filterable: false},
+        {field:'reg_key',headerName:'Key',flex:1, filterable: false},
+        {field:'reg_value',headerName:'Value',flex:1},
     ]
 
 

@@ -15,7 +15,7 @@ export default function DashboardPage() {
         const res = await  API.get('/api/cases/')
         setListCas(JSON.stringify(res.data))
       } catch (error){
-        console.error("Erreur lors de la récupération de la liste des cas :", error)
+        console.error("Error when getting the list of case", error)
       }
     };
     fechData();
@@ -27,7 +27,7 @@ export default function DashboardPage() {
           const res = await  API.get('/api/iocs_types/')
           setListIocType(JSON.stringify(res.data))
         } catch (error){
-          console.error("Erreur lors de la récupération de la liste des types d'IOC :", error)
+          console.error("Error whyen getting the list of IOC Type :", error)
         }
       };
       fechData();
@@ -39,7 +39,7 @@ export default function DashboardPage() {
         const res = await  API.get('/api/yara/')
         setListYaraRules(JSON.stringify(res.data))
       } catch (error){
-        console.error("Erreur lors de la récupération de la liste des régles yaras :", error)
+        console.error("Error when getting the list of yara rule:", error)
       }
     };
     fechData();

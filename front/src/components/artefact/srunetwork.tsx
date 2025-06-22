@@ -81,7 +81,7 @@ export default function SruNetwork(props: any){
         <Box sx={{width:2000,height:820}}>
             <DataGrid columns={columns} rows={rows}
                 getRowHeight={()=>'auto'}
-                slots={{toolbar:GridToolbar}} 
+                showToolbar
                 loading={loading}
                 initialState={{
                     pagination: {paginationModel:{pageSize:25}}

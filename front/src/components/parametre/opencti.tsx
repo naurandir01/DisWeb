@@ -19,7 +19,7 @@ export default function OpenCti(){
                 </Grid>
             </AccordionDetails>
             <AccordionActions>
-                <Button>Mettre à jour</Button>
+                <Button>UPDATE</Button>
             </AccordionActions>
         </Accordion>
     )

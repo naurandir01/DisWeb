@@ -32,7 +32,7 @@ export default function YaraDataGrid(props: any){
                 setCurrentYaraRuleResults(res.data)
             
             } catch (error){
-                    console.error("error when getting yara results", error)
+                    console.error("Error when getting yara results", error)
                 }
             }
          

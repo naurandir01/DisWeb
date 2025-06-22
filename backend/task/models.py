@@ -5,6 +5,11 @@ from source.models import Source
 import uuid
 
 class Task(models.Model):
+    """
+    Task model to represent a task associated with a case and a source.
+    
+    Each task has a unique identifier, creation date, associated case, source, type, and status.
+    """
     id_task = models.UUIDField( primary_key = True, default = uuid.uuid4, editable = False) 
     create = models.DateTimeField("date published",null=True)
     task_case = models.ForeignKey(Case,editable=True,on_delete=models.CASCADE)

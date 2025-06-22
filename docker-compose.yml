@@ -16,7 +16,7 @@ services:
     build:
       context: backend
     container_name: disweb_backend
-    image: disweb_backend:v1.0.0
+    image: disweb_backend:${APP_VERSION}
     command: gunicorn back.wsgi --bind 0.0.0.0:5002 --timeout 10000 --worker-connections 1000 -w 4 -n disweb-back --log-level=info
     env_file:
       - .env
@@ -42,7 +42,7 @@ services:
       - disweb-redis
   
   disweb-worker:
-    image: disweb_backend:v1.0.0
+    image: disweb_backend:${APP_VERSION}
     build:
       context: backend
     command:  celery -A back.celery worker -l INFO --concurrency=5
@@ -82,7 +82,7 @@ services:
       - "./database/postgresql.conf:/etc/postgresql/postgresql.conf"
 
   disweb-front:
-    image: disweb_frontend:v1.0.0
+    image: disweb_frontend:${APP_VERSION}
     build:
       context: front
     container_name: disweb_frontend

@@ -4,7 +4,7 @@ import { useSessionStorageState } from '@toolpad/core';
 import API from '../api/axios'
 import { BarChart } from '@mui/x-charts';
 import { Grid, IconButton } from '@mui/material';
-import { NavigateBefore, Replay } from '@mui/icons-material';
+import {  Replay } from '@mui/icons-material';
 
 export default function ChronologieGraph(props: any){
     const [currentCas,setCurrentCas] = useSessionStorageState('cas','')

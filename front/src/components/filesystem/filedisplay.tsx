@@ -35,7 +35,7 @@ export default function FileDisplay(props: any){
                         (<XMLPDFDisplay file={convertToUrl(data)}/>):
                     fileExtension === 'db3' ? 
                         (<SQLiteDIsplay file={props.file}/>)
-                    : (<p>Fichier non supporté</p>)
+                    : (<p>File not supported for display, more will come</p>)
                 }
             </Box>
         </Card>

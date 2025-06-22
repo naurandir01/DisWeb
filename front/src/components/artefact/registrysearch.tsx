@@ -19,10 +19,10 @@ export default function RegistrySearch(props: any){
     const [sortModel,setSortModel] = React.useState<GridSortModel>([])
 
     const registry_coulumn: GridColDef[] = [
-        {field:'reg_ts',headerName:'Temps',flex:1 },
-        {field:'reg_path',headerName:'Chemin',flex:1 },
-        {field:'reg_key',headerName:'Clé',flex:1 },
-        {field:'reg_value',headerName:'Valeur',flex:1},
+        {field:'reg_ts',headerName:'Time',flex:1 },
+        {field:'reg_path',headerName:'Path',flex:1 },
+        {field:'reg_key',headerName:'Key',flex:1 },
+        {field:'reg_value',headerName:'Value',flex:1},
     ]
 
     function loadSourceRegistry(page: number,size: number,filter: any,sort:any): Promise<any> {
@@ -87,7 +87,6 @@ export default function RegistrySearch(props: any){
                 showToolbar
                 pagination
                 
-
                 pageSizeOptions={[100]}
                 rowCount={rowsCount}
 

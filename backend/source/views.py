@@ -160,7 +160,7 @@ class SourceHayabusa(TemplateView):
                     source_hayabusa.delay(params)
                     return JsonResponse({'pending':True},safe=False)
         else:
-            return HttpResponse('Non compatible')
+            return HttpResponse(status=400,content="Hayabusa is only available for Windows sources")
 
 class SourceTimeline(TemplateView):
     def get(self,request,id_source):
@@ -184,18 +184,17 @@ class SourceYara(TemplateView):
         src = Source.objects.get(id_source=id_source)
         task_yara = YaraRule.objects.get(id_yararule=rules)
         try:
-            artefact = Artefact.objects.get(artefact_src=src,artefact_type='yara',id_source=task_yara.yararule_name)
+            artefact = Artefact.objects.get(artefact_src=src,artefact_type='yara_'+task_yara.yararule_name)
             return JsonResponse(artefact.artefact_values,safe=False)
         except Artefact.DoesNotExist:
             params = {
-                'task_source':id_source,
+                'task_source':src.id_source,
                 'task_case':src.source_case.id_case,
                 'task_type':'yara_'+task_yara.yararule_name,
-                'task_subtype':'yara_'+task_yara.yararule_name,
                 'task_status':'PENDING',
                 'yara_rule':rules}
             try:
-                task = Task.objects.get(task_src=id_source,task_type='yara_'+task_yara.yararule_name)
+                task = Task.objects.get(task_src=src,task_type='yara_'+task_yara.yararule_name)
                 if task.task_status == 'PENDING':
                     return JsonResponse({'pending':True,'values':[]},safe=False)
                 elif task.task_status == 'FAILED':
@@ -217,9 +216,9 @@ class SourceYaras(TemplateView):
             return JsonResponse([],safe=False)
 
 class SourceRegistryRun(TemplateView):
-    def get(self,request,id_source,plugin):
+    def get(self,request,id_source):
         src = Source.objects.get(id_source=id_source)
-        params = {'task_source':id_source,'task_case':src.source_case.id_case,'task_type':'regf','task_status':'PENDING','task_subtype':plugin}
+        params = {'task_source':id_source,'task_case':src.source_case.id_case,'task_type':'regf','task_status':'PENDING'}
         try:
             task = Task.objects.get(task_src=id_source,task_type=params['task_type'])
             return JsonResponse([{'id':1,'value':task.task_status}],safe=False)

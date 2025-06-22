@@ -16,11 +16,13 @@ def create_task(params):
 
 class TasksView(TemplateView):
     def get(self,request):
+        """Retrieve all tasks."""
         tasks = Task.objects.all()
         return JsonResponse(list(tasks),safe=False)
 
 class TaskView(TemplateView):
     def get(self,request,id_task):
+        """Retrieve a specific task by its ID."""
         try:
             task = Task.objects.get(id_task=id_task)
             return JsonResponse(task.to_dict(),safe=False)

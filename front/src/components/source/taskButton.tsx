@@ -17,7 +17,7 @@ export default function TaskButton(props:any){
           console.log('res',res.data)
           setTaskStatus(res.data)
         } catch (error){
-          console.error("Erreur lors de la récupération de la tache "+props.task.type, error)
+          console.error("Error when geting the task status "+props.task.type, error)
         }
       };
       fechData();

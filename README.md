@@ -68,6 +68,10 @@ Once the disk copy, go to SOURCE and click on **ADD SOURCE** and then select in 
 
 ![image](/docs/add_source_2.png)
 
+For encrypted disk, 
+
+![image](/docs/add_source_crypt.png)
+
 ## Exécuter un plugin sur un prélèvement
 
 One a source link to a CASE, click on the icon ![image](/docs/plugins_icone.png).
@@ -86,7 +90,7 @@ Click File System a the left to use the file systéme of a disk
 ![image](/docs/file_system.png)
 
 ## Artefacts
-Click on Artefact a the left to display the result from dissect plugin
+Click on Artefact at the left to display the result from dissect plugin
 ![image](/docs/artefact.png)
 
 ### Registry
@@ -109,7 +113,7 @@ To add an IOC, click on the icon ![image](/docs/ioc_icone.png) at the top right.
 
 ## YARA
 
-![image](/docs/chronologie.png)
+![image](/docs/yara.png)
 
 ## PARAMETRES
 ### IOC TYPE

@@ -6,7 +6,7 @@ import Arboresence from '../components/filesystem/arborescense';
 import DirectoryContent from '../components/filesystem/directorycontent';
 import FileContent from '../components/filesystem/filecontent';
 
-export default function SystemDeFichier() {
+export default function FileSystem() {
   const [listSources,setListSources] = useSessionStorageState('listsources','[]')
   const [directoryContent,setDirectoryContent] = React.useState([])
   const [directoryLoading,setDirectoryLoading] = React.useState([])
@@ -31,7 +31,7 @@ export default function SystemDeFichier() {
 
 
   return (
-    <div  style={{flex:0,border:0,}} className='SystemDeFichier'>
+    <div  style={{flex:0,border:0,}} className='FileSystem'>
       <PageContainer>
          <Grid container spacing={1}>
             <Grid size={2} >

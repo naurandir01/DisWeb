@@ -1,10 +1,9 @@
 'use client'
 import { Download } from '@mui/icons-material';
 import { Button } from '@mui/material';
-import { DataGrid, GridActionsCellItem, GridRowsState } from '@mui/x-data-grid';
+import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import * as React from 'react';
 import API from '../api/axios'
-import CustomToolBarDirectoryContent from './customtoolbardirectorycontent';
 import { useNotifications } from '@toolpad/core';
 import JSZip from 'jszip'
 import { v4 as uuidv4 } from 'uuid';
@@ -13,21 +12,21 @@ export default function DirectoryContent(props: any){
     const notification = useNotifications()
 
     const columns: any = [
-        {field:'name',headerName:'Nom',flex:1,renderCell:(params: any)=>{
+        {field:'name',headerName:'Name',flex:1,renderCell:(params: any)=>{
             return <Button size='small' variant='text' onClick={()=>params.row.type === 'fls' ? props.onSetFile(params.row):null}>{params.row.name}</Button>
         }},
         {field:'type',headerName:'Type',width:60},
         {field:'subtype',headerName:'Extension',flex:1},
-        {field:'btime',headerName:'Création',flex:1, type: 'dateTime',valueGetter:(value: number)=> value && new Date(value/1000000)},
-        {field:'ctime',headerName:'Modification',flex:1, type: 'dateTime',valueGetter:(value: number)=> value && new Date(value/1000000)},
-        {field:'atime',headerName:'Accés',flex:1, type: 'dateTime',valueGetter:(value: number)=> value && new Date(value/1000000)},
-        {field:'mtime',headerName:'Metadata',flex:1,type: 'dateTime',valueGetter:(value: number)=> value && new Date(value/1000000)},
+        {field:'btime',headerName:'Creation (B)',flex:1, type: 'dateTime',valueGetter:(value: number)=> value && new Date(value/1000000)},
+        {field:'ctime',headerName:'Modification (M)',flex:1, type: 'dateTime',valueGetter:(value: number)=> value && new Date(value/1000000)},
+        {field:'atime',headerName:'Access (A)',flex:1, type: 'dateTime',valueGetter:(value: number)=> value && new Date(value/1000000)},
+        {field:'mtime',headerName:'Metadata (C)',flex:1,type: 'dateTime',valueGetter:(value: number)=> value && new Date(value/1000000)},
         {field:'sha256',headerName:'SHA 256',flex:1},
-        {field:'size',headerName:'Taille',flex:1},
+        {field:'size',headerName:'Size',flex:1},
         {field:'actions',type: 'actions',getActions:(params: any)=>[
             <GridActionsCellItem
                 icon={<Download/>}
-                label='Télécharger'
+                label='Download'
                 onClick={handleGetFile(params.row,props.id_source)}
                 key={'file-download'}
             />,
@@ -41,7 +40,7 @@ export default function DirectoryContent(props: any){
     const handleGetFile=React.useCallback(
         (row: any,id_source: any)=> ()=>{
             try{
-                notification.show("Télèchargement du fichier "+row.path,{autoHideDuration:3000,severity:'success'})
+                notification.show("Download of the file "+row.path,{autoHideDuration:3000,severity:'success'})
                 API.get('/api/sources/'+id_source+'/fs/get_file?volume='+row.volume+'&file_path='+row.path,{responseType:'blob'}).then(
                     async res=>{
                         const file_blob = new Blob([res.data], {type: res.headers['content-type']})
@@ -60,7 +59,7 @@ export default function DirectoryContent(props: any){
                     }
                 )
             } catch (error){
-                notification.show("Erreur dans la récupération du fichier",{autoHideDuration:3000,severity:'error'})
+                notification.show("Error when downloading the file",{autoHideDuration:3000,severity:'error'})
             }
         },[notification]
     )

@@ -1,20 +1,14 @@
 from celery import shared_task
 from celery import Task as CeleryTask
-from django_celery_results.models import TaskResult
 from case.models import Case
-from back.disk import Disque
 from source.dissect_engine import DissectEngine
 from artefact.models import Artefact
 from yaras.models import YaraRule
 from source.models import Source
 from .models import Task
-from .views import create_task
 from artefact.views import add_artefact,add_timeline,add_registry
 from django.core.exceptions import ObjectDoesNotExist
-from django.db import models
-from django.dispatch import receiver
 from celery.exceptions import Ignore
-import ast
 import datetime
 import json
 import uuid
@@ -22,23 +16,31 @@ import uuid
 
 class CustomTask(CeleryTask):
     def before_start(self, task_id, args, kwargs):
+        """Check if the task already exists before starting it.
+        If it exists, raise an Ignore exception to prevent the task from running again.
+        Args:
+            task_id (str): The ID of the task.
+            args (tuple): The positional arguments passed to the task.
+            kwargs (dict): The keyword arguments passed to the task.
+        """
         params = args[0]
         task_src = Source.objects.get(id_source=params['task_source'])
         task_case = Case.objects.get(id_case=params['task_case'])
         # Check if an task with the same parameters already exists
         try:
-            existing_task = Task.objects.get(
+            Task.objects.get(
                 task_src=task_src,
                 task_case=task_case,
                 task_type=params['task_type'],
             )
-            raise Ignore(f"Task with ID {existing_task.id_task} already exists.")
+            raise Ignore(f"Task with ID {task_id} already exists.")
         except Task.DoesNotExist:
             Task(
                 id_task=task_id,  
                 task_src=task_src,
                 task_case=task_case,
                 task_type=params['task_type'],
+                task_status="PENDING",  # Set the initial status to PENDING
             ).save()
             return super().before_start(task_id, args, kwargs)
     
@@ -65,13 +67,13 @@ class CustomTask(CeleryTask):
     
 @shared_task(bind=True,base=CustomTask)
 def source_hayabusa(self, params):
-    """Permet d'executer l'outil hayabusa sur un prelevement windows.
+    """Run the tools hayabusa on the disk.
 
     Args:
-        params (json): les paramétres de la tache.
+        params (json): the parameters of the task.
 
     Returns:
-        UUID: L'id de la tache
+        UUID: id of the task
     """
     task_src = Source.objects.get(id_source=params['task_source'])
     task_case = Case.objects.get(id_case=params['task_case'])
@@ -97,18 +99,16 @@ def source_photorec(self,params):
 
 @shared_task(bind=True,base=CustomTask)
 def source_timeline(self,params):
-    """Permet d'éxécuter un plugin sur le prelevement de stocker dans la table Artefacts le résultat du plugin pour créer une timeline.
+    """Run a plugin to create the timeline.
 
     Args:
-        params (json): les parmétres de la tache: 
-            task_src: L'id du prelevement, 
-            task_case: L'id du cas,
-            task_type: le nom du plugin à executer, 
-            task_champ: la liste des champs à stocker dans la table Artefact
-                [{'champ_key:'btime',champ_type:'fs_btime'}]
+        params (json): the parameters of the task: 
+            task_src: id of the source, 
+            task_case: id of the case,
+            task_type: the plugin name to execute, 
 
     Returns:
-        UUID: L'id de la tache
+        UUID: id of the task
     """
     task_src = Source.objects.get(id_source=params['task_source'])
     task_case = Case.objects.get(id_case=params['task_case'])
@@ -168,8 +168,17 @@ def remove_last_segment(path):
 
 @shared_task(bind=True,base=CustomTask)
 def source_regf(self,params):
+    """
+    Run the regf plugin on a disk and store the result in the table Registry.
+    
+    Args:
+        params (json): the parameters of the task: 
+            task_source: id of the source,      
+    
+    Returns:
+        UUID: id of the task
+    """
     task_src = Source.objects.get(id_source=params['task_source'])
-    task_case = Case.objects.get(id_case=params['task_case'])
 
     disk = DissectEngine(task_src)
     regf_res = disk.run_plugin('regf','')
@@ -201,16 +210,16 @@ def source_regf(self,params):
 
 @shared_task(bind=True,base=CustomTask)
 def source_plugin(self,params):
-    """Permet d'éxécuter un plugin sur le prelevement de stocker dans la table Artefacts le résultat du plugin.
+    """Run a plugin on a disk and store the result in the table Artefact.
 
     Args:
-        params (json): les parmétres de la tache: 
-            task_src: L'id du prelevement, 
-            task_case: L'id du cas,
-            task_type: le nom du plugin à executer, 
+        params (json): the parameters of the task: 
+            task_src: id of the source, 
+            task_case: id of the case,
+            task_type:the plugin name to execute, 
 
     Returns:
-        UUID: L'id de la tache
+        UUID: id of the task
     """
     task_src = Source.objects.get(id_source=params['task_source'])
     task_case = Case.objects.get(id_case=params['task_case'])
@@ -231,32 +240,37 @@ def source_plugin(self,params):
 
 @shared_task(bind=True,base=CustomTask)
 def source_yara(self,params):
-    """Permet d'éxécuter un fichier de régle yara sur le prelevement.
+    """Run a yara rule on a disk.
 
     Args:
         params (json): les parmétres de la tache: 
-            task_src: L'id du prelevement, 
-            task_case: L'id du cas,
-            task_type: le nom du plugin à executer, 
-            yara_rule: l'id de la regle yara,
+            task_src: id of the source, 
+            task_case: id of the case,
+            task_type: the name of the task, 
+            yara_rule: id of the yara rule to execute,
 
     Returns:
-        UUID: L'id de la tache
+        UUID: id of the task
     """
     task_src = Source.objects.get(id_source=params['task_source'])
     task_case = Case.objects.get(id_case=params['task_case'])
     task_yara = YaraRule.objects.get(id_yararule=params['yara_rule'])
 
-    disk = DissectEngine(task_src)
+    disk = DissectEngine(source=task_src)
+
     res = disk.run_plugin({'name':'yara','params':['-r',task_yara.yararule_path,'-m','9999999999999']})
+
     artefact_params = {
-        'artefact_type':'yara_'+params['task_subtype'],
+        'artefact_type':params['task_type'],
         'artefact_ts':datetime.datetime.now(),
         'artefact_case':task_case,
         'artefact_src':task_src,
         'artefact_values':res
     }
-    add_artefact(artefact_params)
+    try:
+        add_artefact(artefact_params)
+    except Exception as e:
+        print(f"Error when saving the yara rule results: {artefact_params['artefact_type']} : {e}")
     return self.request.id
  
 

@@ -15,17 +15,17 @@ export default function IOC() {
 
   const ioc_column: any = [
     {field:'ioc_type__ioctype_value',headerName:'Type',flex: 1,},
-    {field:'ioc_value',headerName:'Valeur',flex: 1},
+    {field:'ioc_value',headerName:'Value',flex: 1},
     {field:'actions',type:'actions',getActions:(params: any)=>[
         <GridActionsCellItem
           icon={<Delete/>}
-          label='Supprimer'
+          label='Delete'
           onClick={onDeleteIoc(params.id)}
           key={'delete-iod'}
         />,
         <GridActionsCellItem
           icon={<ManageSearchIcon/>}
-          label='Recherche'
+          label='Modify'
           key={'rechercher-ioc'}
         />
       ]}
@@ -35,7 +35,7 @@ export default function IOC() {
     (id:GridRowId)=>()=>{
       API.delete('/api/iocs/'+id).then(
         res => {
-          notification.show("Supprésion de l'ioc",{autoHideDuration:3000,severity:'success'})
+          notification.show("Delete of the IOC",{autoHideDuration:3000,severity:'success'})
           API.get('/api/cases/'+JSON.parse(currentCas|| '{}').id_case+'/iocs').then(res=>{setIOCs(res.data)})
         }
       )
@@ -48,7 +48,7 @@ export default function IOC() {
           const res = await API.get('/api/cases/'+JSON.parse(currentCas|| '{}').id_case+'/iocs')
           setIOCs(res.data)
       } catch (error){
-        console.error("Erreur dans la récuperation des iocs:",error)
+        console.error("Error when getting the list of IOC",error)
       }
     };fetchData()
   },[currentCas])

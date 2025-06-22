@@ -15,11 +15,10 @@ export default function CasPage() {
 
   const case_colummn: any = [
     {field:'case_name',headerName:'Nom',flex: 1},
-    {field:'created',headerName:'Création',flex: 1},
     {field:'actions',type:'actions',getActions:(params: any)=>[
       <GridActionsCellItem
         icon={<Delete/>}
-        label='Supprimer'
+        label='Delete'
         onClick={deleteCas(params.id)}
         key={'delete-cas'}
       />

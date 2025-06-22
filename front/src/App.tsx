@@ -1,10 +1,9 @@
 import * as React from 'react';
-import DashboardIcon from '@mui/icons-material/Dashboard';
 import { ReactRouterAppProvider } from '@toolpad/core/react-router';
 import { Outlet, useNavigate } from 'react-router';
 import type { Navigation, Session } from '@toolpad/core/AppProvider';
 import { SessionContext } from './SessionContext';
-import { BugReport, Computer, Extension, Settings, Timeline, Topic,DataObject } from '@mui/icons-material';
+import { BugReport, Extension, Settings, Timeline, Topic,DataObject, Cases, FolderCopy, AccountTree } from '@mui/icons-material';
 
 const NAVIGATION: Navigation = [
   {
@@ -14,17 +13,17 @@ const NAVIGATION: Navigation = [
   {
     segment: 'case',
     title: 'Case',
-    icon: <DashboardIcon />,
+    icon: <Cases/>,
   },
   {
     segment: 'source',
     title: 'Sources',
-    icon: <Computer/>
+    icon: <FolderCopy/>
   },
   {
     segment: 'filesystem',
     title: 'File System',
-    icon: <Topic/>
+    icon: <AccountTree/>
   },
   {
     segment: 'artefact',
@@ -33,12 +32,12 @@ const NAVIGATION: Navigation = [
   },
   {
     segment: 'ioc',
-    title: 'IOC',
+    title: 'IoCs',
     icon: <BugReport/>
   },
   {
     segment: 'timeline',
-    title: 'Chronologie',
+    title: 'Timeline',
     icon: <Timeline/>
   },
   {

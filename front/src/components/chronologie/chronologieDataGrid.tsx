@@ -1,7 +1,7 @@
 "use client"
 import * as React from 'react';
 import { useSessionStorageState } from '@toolpad/core';
-import { DataGrid, GridColDef, GridFilterModel, GridPaginationModel, GridRowModel, GridSortModel, GridToolbar} from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridFilterModel, GridPaginationModel, GridRowModel, GridSortModel} from '@mui/x-data-grid';
 import API from '../api/axios'
 import { Box, Typography } from '@mui/material';
 
@@ -22,9 +22,9 @@ export default function ChronologieDataGrid(props: any){
     const chronologie_coulumn: GridColDef[] = [
         {field:'timeline_src_id',headerName:'Source',flex:1,
             renderCell:(params:any)=>{return <Typography>{JSON.parse(listSources || '[]').find((item: any)=>item.id_source === params.value).source_name}</Typography>}},
-        {field:'timeline_ts',headerName:'Date',flex:1,type:'dateTime',valueGetter:(value: string)=>new Date(value)},
+        {field:'timeline_ts',headerName:'Timestamp',flex:1,type:'dateTime',valueGetter:(value: string)=>new Date(value)},
         {field:'timeline_type',headerName:'Type',flex:1},
-        {field:'timeline_value',headerName:'Valeur',flex:1},
+        {field:'timeline_value',headerName:'Value',flex:1},
         
     ]
 
@@ -98,7 +98,7 @@ export default function ChronologieDataGrid(props: any){
                 columns={chronologie_coulumn}
                 rows={rows}
                 loading={isLoading}
-                slots={{toolbar:GridToolbar}}
+                showToolbar
                 pagination
                 
                 pageSizeOptions={[100]}

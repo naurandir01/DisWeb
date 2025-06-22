@@ -14,13 +14,13 @@ export default function Hayabusa(props: any){
     const {data,error,isLoading} = useSWR('/api/sources/'+source.id_source+'/artefacts/hayabusa',fetcher)
 
     const columns = [
-        {field:'Timestamp',headerName:'Date',flex:1},
-        {field:'RuleTitle',headerName:'Regle',flex:1},
-        {field:'Level',headerName:'Niveau',flex:1},
-        {field:'Channel',headerName:'Chaine',flex:1},
-        {field:'EventID',headerName:'ID Evenement',flex:1},
-        {field:'RecordID',headerName:'ID Enregistrement',flex:1},
-        {field:'Details',headerName:'Detail',flex:1,renderCell: (params: any)=>{
+        {field:'Timestamp',headerName:'Timestamp',flex:1},
+        {field:'RuleTitle',headerName:'RuleTitle',flex:1},
+        {field:'Level',headerName:'Level',flex:1},
+        {field:'Channel',headerName:'Channel',flex:1},
+        {field:'EventID',headerName:'EventID',flex:1},
+        {field:'RecordID',headerName:'RecordID',flex:1},
+        {field:'Details',headerName:'Details',flex:1,renderCell: (params: any)=>{
             return(
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMore/>}>Details</AccordionSummary>
@@ -44,7 +44,7 @@ export default function Hayabusa(props: any){
             !isLoading ? 
                 <DataGrid
                     columns={columns}
-                    rows={data}
+                    rows={data.values}
                     loading={isLoading}
                     getRowId={()=> v4()}
                     initialState={{
