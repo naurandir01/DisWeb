@@ -2,6 +2,8 @@
 
 DisWeb is a digital forensic & incident response plateform to analyse forensic artefact from disk. It use Fox-IT Dissect tools to extract forensic artefacts
 
+:exclamation: The project is still in progress :exclamation:
+
 # Capacity
 - Display the file systeme of a disk;
 - Use DISSECT to get forensic artefact;
@@ -72,13 +74,13 @@ For encrypted disk,
 
 ![image](/docs/add_source_crypt.png)
 
-## Exécuter un plugin sur un prélèvement
+## Generic plugin
 
 One a source link to a CASE, click on the icon ![image](/docs/plugins_icone.png).
 
 For WINDOWS, 
-- REGISTRE to recontruc the registry hive.
-- HAYABUSA to execute hayabusa on the evtx
+- REGISTRE to recontruc the registry hive. Work in progress
+- HAYABUSA to execute hayabusa on the evtx. Add the rule in the ./backend/external/hayabusa/rule
 - TIMELINE to a timeline. ( EVTX, USB, SHELLBAG, MFT, TASK, SAM et NAVIGATEUR). Work in progress
 
 For Linux:

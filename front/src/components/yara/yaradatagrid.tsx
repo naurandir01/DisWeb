@@ -67,7 +67,7 @@ export default function YaraDataGrid(props: any){
             {/* <YaraButton source={source} data={data}/> */}
             <Grid container sx={{justifyContent: "flex-start",alignItems: "center",}}>
                 <Grid size={4}>
-                    <TextField id="select-yara-rules" select label="Select Yara Rule" >
+                    <TextField id="select-yara-rules" select label="Select Yara Rule"  sx={{minWidth:200}}>
                         {JSON.parse(listYaraRules || '[]').map((rule: any) => 
                             <MenuItem key={rule.id_yararule} value={rule.id_yararule} onClick={()=>setCurrentYaraRule(rule)} >
                                 {rule.yararule_name}
