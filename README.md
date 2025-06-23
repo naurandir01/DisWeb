@@ -44,7 +44,7 @@ Go to User et and change the password.
 
 ## Create a CASE
 
-1. Before create a case, go to the directory that contain the CASE and create a sub directory that will be the name of the CASE. Exemple: $ mkdir /mnt/CASES/TEST
+1. Before creating a case, go to the directory that contain the CASE and create a sub directory whose will be the name of the CASE. Exemple: $ mkdir /mnt/CASES/TEST
 2. Click on Case then on  **NEW CASE**. Enter the name of the directory created.
 
 ![image](/docs/case.png)
@@ -55,7 +55,7 @@ Go to User et and change the password.
 
 ## Add a source to a CASE
 
-In the directory that you have create for the case, create a sub directory with the name of the disk. Copy the disk in this directory
+In the directory that you have created for the case, create a sub directory with the name of the disk. Copy the disk in this directory
 
 This is what the arbirescence must look like for a CASE
 
@@ -64,7 +64,7 @@ This is what the arbirescence must look like for a CASE
             |-> PREV_1
                 |-> prev_1.vmdk
 
-Once the disk copy, go to SOURCE and click on **ADD SOURCE** and then select in the list the disk.
+Once the disk is copy, go to SOURCE and click on **ADD SOURCE** and then select the disk in the list.
 
 ![image](/docs/add_source.png)
 
@@ -76,7 +76,7 @@ For encrypted disk,
 
 ## Generic plugin
 
-One a source link to a CASE, click on the icon ![image](/docs/plugins_icone.png).
+Once a source link to a CASE, click on the icon ![image](/docs/plugins_icone.png) to start some plugin that will ease some
 
 For WINDOWS, 
 - REGISTRE to recontruc the registry hive. Work in progress
@@ -87,7 +87,7 @@ For Linux:
 - Work in progress
 
 ## File systéme
-Click File System a the left to use the file systéme of a disk
+Click File System at the left to use the file system of a disk
 
 ![image](/docs/file_system.png)
 
@@ -99,7 +99,7 @@ Click on Artefact at the left to display the result from dissect plugin
 To see the result of plugin REGISTRY on the source, click on the REGF the ARTEFACT TAB.
 ![image](/docs/regf.png)
 
-:exclamation: Il se peut que le plugin REGISTRE n'est pas finit d'indexer toutes les ruches Pour voir si la tâche est finit ou non revenir sur Prélèvements et recliquer sur l'icône des plugins ![image](/docs/plugins_icone.png). Si le plugin s'est terminé avec succès, une icône vert sera afficher.
+:exclamation: To see if the task to create thge registry is finish, go back to SOURCE and click on the plugin icon ![image](/docs/plugins_icone.png).
 
 ## IOC
 
@@ -115,10 +115,11 @@ To add an IOC, click on the icon ![image](/docs/ioc_icone.png) at the top right.
 
 ## YARA
 
-![image](/docs/yara.png)
+![image](/docs/yara_run.png)
 
 ## PARAMETRES
 ### IOC TYPE
+![image](/docs/ioc_type.png)
 
 ### YARA RULES
 ![image](/docs/yara_rules.png)
