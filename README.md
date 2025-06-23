@@ -86,7 +86,7 @@ For WINDOWS,
 For Linux:
 - Work in progress
 
-## File systéme
+## File System
 Click File System at the left to use the file system of a disk
 
 ![image](/docs/file_system.png)
