@@ -12,7 +12,7 @@ def main():
     #v = d.getDisqueVolume()
     #d.plugin('authlog',[''])
     #print(d.getPlugins('authlog'))
-    hayabusa = d.run_hayabusa()
+    plugins = d.run_plugin({'name':'prefetch','params':['--grouped']})
 
     print("hex")
    

@@ -5,6 +5,8 @@ import { useSessionStorageState,useNotifications, PageContainer} from '@toolpad/
 import API from "../components/api/axios"
 import { Delete } from '@mui/icons-material';
 import CustomToolBar from '../components/case/customtoolbarcase'
+import { Card, CardHeader, Grid } from '@mui/material';
+import { FaLinux, FaWindows } from 'react-icons/fa';
 
 export default function CasPage() {
   const [listCas,setListCas] = useSessionStorageState('listeCas','[]')
@@ -55,6 +57,23 @@ export default function CasPage() {
               onRowClick={onSelectCas} 
               showToolbar
             /> 
+            <Grid container rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{marginTop:2}}>
+              {
+                JSON.parse(listSources || '[]').map((src:any)=>{
+                  return(
+                    <Grid size={2}>
+                      <Card>
+                        <CardHeader
+                          avatar={src.source_os === 'linux' ? <FaLinux size={30}/>: <FaWindows size={30}/>}
+                          title={src.source_name} 
+                          subheader={src.source_version}
+                        />
+                      </Card>
+                    </Grid>
+                  )
+                })
+              }
+            </Grid>
         </PageContainer>
          
       </div>

@@ -5,11 +5,19 @@ import { DataGrid,GridActionsCellItem, GridRowId, GridRowParams } from '@mui/x-d
 import API from "../components/api/axios"
 import {Delete } from '@mui/icons-material';
 import CustomToolBarSource from '../components/source/customtoolbarsource';
+import SourceCustomPlugins from '../components/source/sourceCustomPlugins';
 import SourcePlugins from '../components/source/sourcePlugins';
+
+const plugins_not_to_show_list = [
+    'mft_timeline','yara','mft','activity','os','ips','hostname','version','architecture',
+    'example_yield','example_none','example_record','example','loaders','plugins','walkfs',
+    'timezone','language','ntversion','domain','keys','pathenvironment','qfind',"_dpapi_keyprovider_keychain.keys",
+    "_dpapi_keyprovider_lsa_defaultpassword.keys","_dpapi_keyprovider_credhist.keys","_dpapi_keyprovider_empty.keys",'regf'
+]
 
 export default function Sources() {
   const [currentCas,setCurrentCas] = useSessionStorageState('cas','')
-  const [currentSrc,setCurrentSrc] = useSessionStorageState('current_source','')
+  const [currentSrc,setCurrentSrc] = React.useState({source_plugins:[]})
   const [listSources,setListSources] = useSessionStorageState('listsources','[]')
   const [openDialog,setOpenDialog] = React.useState(false)
   const dialog = useDialogs()
@@ -27,7 +35,8 @@ export default function Sources() {
         onClick={onDeleteSource(params.id)}
         key={'delete-src'}
       />,
-      <SourcePlugins source={params}/>,
+      <SourceCustomPlugins source={params}/>,
+      <SourcePlugins source={params}/>
     ]}
   ]
 
@@ -46,7 +55,7 @@ export default function Sources() {
   )
 
   const onSelectSrc=(event: any)=>{
-    setCurrentSrc(event.id)
+    setCurrentSrc(JSON.parse(listSources || '[]').find((src: any) => src.id_source === event.id) || {})
   }
   
     return (

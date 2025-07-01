@@ -64,9 +64,8 @@ export default function YaraDataGrid(props: any){
 
     return(
         <Box sx={{height:830,width:'inherit',flex:1,display:'flex',flexDirection:'column'}}>
-            {/* <YaraButton source={source} data={data}/> */}
             <Grid container sx={{justifyContent: "flex-start",alignItems: "center",}}>
-                <Grid size={4}>
+                <Grid size={11}>
                     <TextField id="select-yara-rules" select label="Select Yara Rule"  sx={{minWidth:200}}>
                         {JSON.parse(listYaraRules || '[]').map((rule: any) => 
                             <MenuItem key={rule.id_yararule} value={rule.id_yararule} onClick={()=>setCurrentYaraRule(rule)} >
@@ -75,7 +74,7 @@ export default function YaraDataGrid(props: any){
                         )}
                     </TextField>
                 </Grid>
-                <Grid size={4}>
+                <Grid size={1}>
                     <Box>
                         <Button disabled={currentYaraRuleStatus.task_status === 'SUCCESS'} onClick={handleStartYaraRule}> Run Yara Rule {currentYaraRule.yararule_name}</Button> 
                         {
@@ -100,6 +99,7 @@ export default function YaraDataGrid(props: any){
                             //loading={isLoading}
                             rows={currentYaraRuleResults}
                             columns={columns}
+                            showToolbar
                             
                         />
                     </Box>  

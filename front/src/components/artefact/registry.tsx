@@ -77,7 +77,7 @@ export default function Registry(props: any){
     function RegistrySearchDialog({open,onClose= () => {}}:DialogProps){
         return(
             <Dialog fullWidth={true} open={open} onClose={()=>onClose({},'backdropClick')}maxWidth={'xl'}>
-                <DialogTitle> Recherche dans les registres</DialogTitle>
+                <DialogTitle> Search in registry</DialogTitle>
                 <DialogContent>
                     <RegistrySearch source={props.source}/>
                 </DialogContent>

@@ -1,44 +1,43 @@
 
 "use client"
 import * as React from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Stack } from '@mui/material';
-import TaskButton from './taskButton';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid } from '@mui/material';
 import {DialogProps } from '@toolpad/core/useDialogs';
+import Plugin from './plugin';
+import { useSessionStorageState, useNotifications } from '@toolpad/core';
+
+const plugins_not_to_show_list = [
+    'mft_timeline','yara','mft','activity','os','ips','hostname','version','architecture',
+    'example_yield','example_none','example_record','example','loaders','plugins','walkfs',
+    'timezone','language','ntversion','domain','keys','pathenvironment','qfind',"_dpapi_keyprovider_keychain.keys",
+    "_dpapi_keyprovider_lsa_defaultpassword.keys","_dpapi_keyprovider_credhist.keys","_dpapi_keyprovider_empty.keys",'regf'
+]
 
 export default function Plugins({payload,open,onClose}:DialogProps<any>){ {
-  const [listTasksWindows] = React.useState([{'type':'hayabusa','name':'Hayabusa'},{'type':'regf','name':'Registry'},{'type':'timeline','name':'Timeline'}])
-  const [listTasksLinux] = React.useState([{'type':'timeline','name':'Timeline'}])
-
+      const [listSources,setListSources] = useSessionStorageState('listsources','[]')
   return(
-    <Dialog fullWidth open={open} onClose={()=>onClose()}>
+    <Dialog fullWidth open={open} onClose={()=>onClose()} maxWidth='xl'>
       <DialogTitle>List of plugins</DialogTitle>
       <DialogContent>
-        <Stack  sx={{ justifyContent: "flex-start", alignItems: "flex-start",}}>
-          {
-            payload.src.row.source_os === 'windows' ? (
-                <Grid container direction="column" spacing={2} >
-                  {
-                    listTasksWindows.map((task:any)=>{
-                      return(
-                        <TaskButton task={task} id={payload.src.id}/>
-                      )
-                    })
-                  }
-                </Grid>
-              
-            ): 
-                <Grid container direction="column" spacing={2} >
-                {
-                  listTasksLinux.map((task:any)=>{
-                    return(<TaskButton task={task} id={payload.src.id}/>)
-                  })
-                }
-              </Grid>
-          }
-        </Stack>
+         <Grid container rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+             {
+                          JSON.parse(listSources || '[]').find((src:any)=> src.id_source === payload.src.row.id_source).source_plugins
+                          .filter((plugin: any) =>!plugins_not_to_show_list.includes(plugin.name))
+                          .sort((a:any,b:any)=>a.name.localeCompare(b.name,undefined,{sensivity:'base'}))
+                          .map((plugin:any)=>{
+                            return(
+                              <Grid size={4}>
+                                <Plugin source={payload.src.row} plugin={plugin}/>
+                              </Grid>
+                            )
+                          })
+                        }
+         </Grid>
+        
       </DialogContent>
       <DialogActions>
         <Button onClick={()=>onClose()}>Close</Button>
       </DialogActions>
     </Dialog>
-  )}}
+  )
+}}

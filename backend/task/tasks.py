@@ -181,7 +181,7 @@ def source_regf(self,params):
     task_src = Source.objects.get(id_source=params['task_source'])
 
     disk = DissectEngine(task_src)
-    regf_res = disk.run_plugin('regf','')
+    regf_res = disk.run_plugin({'name':'regf','params':['']})
 
     for reg in regf_res:
         path = reg['path']

@@ -46,7 +46,7 @@ class DissectEngine:
         list_plugins=[]
         for plugin in source_plugins[0]:
             name = plugin.name
-            pg = {'name':name,'output':plugin.output}
+            pg = {'name':name,'output':plugin.output,'doc':plugin.cls.__doc__}
             if name not in list_plugins:
                 list_plugins.append(pg)
         return list_plugins
@@ -251,16 +251,17 @@ class DissectEngine:
         for volume in volumes:
             evtx_folder = self.get_directory_content(evt_path,volume['name'])
             for evtx in evtx_folder:
-                os.makedirs(self.path+'_hayabusa', exist_ok=True)
+                os.removedirs('/tmp/hayabusa', ignore_errors=True)
+                os.makedirs('/tmp/hayabusa', exist_ok=True)
                 if len(evtx_folder) > 0:
                     evtx_file = self.get_file_no_open(evt_path+'/'+evtx['name'],volume['name'])
-                    with open(self.path+'_hayabusa/'+evtx['name'], 'wb') as f:
+                    with open('/tmp/hayabusa/'+evtx['name'], 'wb') as f:
                         open_file = evtx_file.open()
                         f.write(open_file.readall())
-            cmd ='/backend/external/hayabusa/hayabusa json-timeline --no-wizard -d '+self.path+'_hayabusa'+' -A -D -n -u -C -L -o '+self.path+'_hayabusa.json'
+            cmd ='/backend/external/hayabusa/hayabusa json-timeline --no-wizard -d /tmp/hayabusa -A -D -n -u -C -L -o /tmp/hayabusa.json'
             result = subprocess.check_output(cmd,shell=True)
             result_json = []
-            with open(self.path+'_hayabusa.json', 'r') as f:
+            with open('/tmp/hayabusa.json', 'r') as f:
                 for line in f:
                     result_json.append(line)
             return result_json

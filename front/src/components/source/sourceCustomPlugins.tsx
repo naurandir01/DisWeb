@@ -3,8 +3,7 @@ import * as React from 'react';
 import { useDialogs, useNotifications } from '@toolpad/core';
 import { IconButton } from '@mui/material';
 import SendTimeExtensionIcon from '@mui/icons-material/SendTimeExtension';
-import Plugins from './plugins';
-import { Biotech } from '@mui/icons-material';
+import CustomPlugins from './customPlugins';
 
 export default function SourcePlugins(props: any){
     const [source,setSource] = React.useState(props.source)
@@ -15,9 +14,9 @@ export default function SourcePlugins(props: any){
     return(
       <div>
         <IconButton onClick={async ()=>{
-          await dialog.open(Plugins,{src:source})
+          await dialog.open(CustomPlugins,{src:source})
         }}>
-          <Biotech/>
+          <SendTimeExtensionIcon/>
         </IconButton>
       </div>
     )
