@@ -251,8 +251,12 @@ class DissectEngine:
         for volume in volumes:
             evtx_folder = self.get_directory_content(evt_path,volume['name'])
             for evtx in evtx_folder:
-                os.removedirs('/tmp/hayabusa', ignore_errors=True)
+                try:
+                    os.rmdir('/tmp/hayabusa')
+                except OSError:
+                    pass
                 os.makedirs('/tmp/hayabusa', exist_ok=True)
+                
                 if len(evtx_folder) > 0:
                     evtx_file = self.get_file_no_open(evt_path+'/'+evtx['name'],volume['name'])
                     with open('/tmp/hayabusa/'+evtx['name'], 'wb') as f:

@@ -268,7 +268,7 @@ class SourceRegistry(TemplateView):
         sort_field = request.GET.get('sortingmodel[0][field]')
         sort_order = request.GET.get('sortingmodel[0][sort]')
 
-        queryset = Registry.objects.filter(reg_src=src)
+        queryset = Registry.objects.filter(reg_source=src)
         
         if filter_field:
             kwargs = {
@@ -294,7 +294,7 @@ class SourceRegistrySize(TemplateView):
         filter_operator = request.GET.get('filtermodel[0][operator]')
         filter_value = request.GET.get('filtermodel[0][value]')
 
-        queryset = Registry.objects.filter(reg_src=src)
+        queryset = Registry.objects.filter(reg_source=src)
         
         if filter_field:
             kwargs = {
@@ -309,7 +309,7 @@ class SourceRegistryPath(TemplateView):
     def get(self,request,id_source):
         src = Source.objects.get(id_source=id_source)
         path = request.GET.get('path')
-        queryset = Registry.objects.filter(reg_src=src,reg_parent=path).order_by('reg_path').distinct('reg_path')
+        queryset = Registry.objects.filter(reg_source=src,reg_parent=path).order_by('reg_path').distinct('reg_path')
         data = list(queryset.values())
         return JsonResponse(data,safe=False)
 
@@ -317,14 +317,21 @@ class SourceRegistryPathDataGrid(TemplateView):
     def get(self,request,id_source):
         src = Source.objects.get(id_source=id_source)
         path = request.GET.get('path')
-        queryset = Registry.objects.filter(reg_src=src,reg_parent=path)
+        queryset = Registry.objects.filter(reg_source=src,reg_parent=path)
         data = list(queryset.values())
         return JsonResponse(data,safe=False)
 
 class SourceTasks(TemplateView):
     def get(self,request,id_source):
-        #src = Source.objects.get(id_source=id_source)
-        tasks = TaskResult.objects.all()
+        src = Source.objects.get(id_source=id_source)
+        tasks = TaskResult.objects.filter(task_src=src)
+        data = list(tasks.values())
+        return JsonResponse(data,safe=False)
+
+class SourceTasksStatus(TemplateView):
+    def get(self,request,id_source,task_status):
+        src = Source.objects.get(id_source=id_source)
+        tasks = Task.objects.filter(task_src=src,task_status=task_status)
         data = list(tasks.values())
         return JsonResponse(data,safe=False)
 

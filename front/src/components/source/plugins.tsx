@@ -5,6 +5,8 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid } from 
 import {DialogProps } from '@toolpad/core/useDialogs';
 import Plugin from './plugin';
 import { useSessionStorageState, useNotifications } from '@toolpad/core';
+import API from '../api/axios'
+
 
 const plugins_not_to_show_list = [
     'mft_timeline','yara','mft','activity','os','ips','hostname','version','architecture',
@@ -15,6 +17,17 @@ const plugins_not_to_show_list = [
 
 export default function Plugins({payload,open,onClose}:DialogProps<any>){ {
       const [listSources,setListSources] = useSessionStorageState('listsources','[]')
+
+      const notification = useNotifications()
+
+      const onClickAllRun=()=>{
+          JSON.parse(listSources || '[]').find((src:any)=> src.id_source === payload.src.row.id_source).source_plugins
+          .filter((plugin: any) =>!plugins_not_to_show_list.includes(plugin.name))
+          .map((plugin:any)=>{
+            API.get('/api/sources/'+payload.src.row.id_source+'/artefacts/'+plugin.name)
+          })
+          notification.show('All plugins that have not been run have started',{autoHideDuration:3000,severity:'info'})
+      }
   return(
     <Dialog fullWidth open={open} onClose={()=>onClose()} maxWidth='xl'>
       <DialogTitle>List of plugins</DialogTitle>
@@ -36,6 +49,7 @@ export default function Plugins({payload,open,onClose}:DialogProps<any>){ {
         
       </DialogContent>
       <DialogActions>
+        <Button onClick={onClickAllRun}>RUN ALL</Button>
         <Button onClick={()=>onClose()}>Close</Button>
       </DialogActions>
     </Dialog>

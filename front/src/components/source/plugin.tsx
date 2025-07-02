@@ -4,18 +4,20 @@ import { Button, Tooltip } from '@mui/material';
 import * as React from 'react';
 import API from '../api/axios'
 import { CheckCircle,Error,NotStarted} from '@mui/icons-material';
-import {  CircularProgress} from '@mui/material';
+import { useNotifications } from '@toolpad/core';
 
 export default function Plugin(props:any){
     const [source,setSource] = React.useState(props.source)
     const [plugin,setPlugin] = React.useState(props.plugin)
     const [pluginStatus,setPluginStatus] = React.useState({task_status:'NOT FOUND'})
+    const notification = useNotifications()
 
     React.useEffect(()=>{
             const fechData = async () =>{
               try {
-                const res = await  API.get('/api/sources/'+source.id_source+'/tasks/'+plugin.name)
-                setPluginStatus(res.data)
+                pluginStatus.task_status !== 'SUCCESS' ? pluginStatus.task_status !== 'FAILED' ?
+                    API.get('/api/sources/'+source.id_source+'/tasks/'+plugin.name).then(res=>{setPluginStatus(res.data)})
+                :null:null
               } catch (error){
                 console.error("Erreur lors de la récupération de la tache "+plugin.name, error)
               }
@@ -39,9 +41,13 @@ export default function Plugin(props:any){
     const onClickNotRun=()=>{
         pluginStatus.task_status === 'NOT FOUND' ?
         API.get('/api/sources/'+source.id_source+'/artefacts/'+plugin.name)
-        .then(res=>API.get('/api/sources/'+source.id_source+'/tasks/'+plugin.name)
-            .then(res=>(setPluginStatus(res.data)))):null
+        .then(res=>{
+            notification.show('Plugin '+plugin.name+' has not been run, starting it now',{autoHideDuration:3000,severity:'info'})
+            API.get('/api/sources/'+source.id_source+'/tasks/'+plugin.name)
+            .then(res=>(setPluginStatus(res.data)))}):null
     }
+
+    
     
 
     return(

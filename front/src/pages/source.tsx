@@ -19,8 +19,6 @@ export default function Sources() {
   const [currentCas,setCurrentCas] = useSessionStorageState('cas','')
   const [currentSrc,setCurrentSrc] = React.useState({source_plugins:[]})
   const [listSources,setListSources] = useSessionStorageState('listsources','[]')
-  const [openDialog,setOpenDialog] = React.useState(false)
-  const dialog = useDialogs()
   const notification = useNotifications()
 
   const source_colummn: any = [
@@ -28,7 +26,7 @@ export default function Sources() {
     {field:'source_os',headerName:'OS',flex: 1},
     {field:'source_version',headerName:'Distribution',flex: 1},
     {field:'source_type',headerName:'Type',flex: 1},
-    {field:'actions',type:'actions',getActions:(params:GridRowParams)=>[
+    {field:'actions',type:'actions',width:250,getActions:(params:GridRowParams)=>[
       <GridActionsCellItem
         icon={<Delete/>}
         label='Delete'
