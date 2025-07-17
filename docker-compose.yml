@@ -45,7 +45,7 @@ services:
     image: disweb_backend:${APP_VERSION}
     build:
       context: backend
-    command:  celery -A back.celery worker -l INFO --concurrency=5
+    command:  celery -A back.celery worker -l INFO --concurrency=5 --max-memory-per-child=1000000 --max-tasks-per-child=10
     env_file:
       - .env
     environment:
@@ -63,7 +63,7 @@ services:
       - disweb-rabbitmq
     deploy:
       mode: replicated
-      replicas: 2
+      replicas: 1
   disweb-psql:
     image: postgres:16-alpine
     container_name: disweb_db

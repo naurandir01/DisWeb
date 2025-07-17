@@ -55,7 +55,7 @@ export default function Artefact(props: any){
                             .map((artefact: any)=>{
                                 return(
                                     <TabPanel value={artefact.name}  key={'columns-'+artefact.name} sx={{width:'95%'}}>
-                                        <ArtefactDataGrid source={props.source} id={artefact.name} columns={[]}/>
+                                        <ArtefactDataGrid source={props.source} id={artefact.name} columns={[]} artefact={artefact}/>
                                     </TabPanel>
                                 )
                             })

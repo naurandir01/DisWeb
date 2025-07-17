@@ -13,7 +13,7 @@ const fetcher = (url: string) => API.get(url).then(res => res.data)
 function CustomeTreeViews(props: any){
     const [item,setItem] = React.useState(props.item)
     const [children,setChildren] = React.useState([])
-    const {data,error,isLoading} = useSWR('/api/sources/'+props.src.id_source+'/fs/get_directory?volume='+props.volume.name+'&directory='+item.path,fetcher)
+    const {data,error,isLoading} = useSWR('/api/sources/'+props.src.id_source+'/fs/get_directory?volume='+props.volume.number+'&directory='+item.path,fetcher)
 
     const handleChildren=()=>{
         props.setDirectorySrc(props.src.id_source)
@@ -21,7 +21,7 @@ function CustomeTreeViews(props: any){
 
     return(
         <TreeItem 
-            itemId={'/api/sources/'+props.src.id_source+'/fs/get_directory?volume='+props.volume.name+'&directory='+item.path} 
+            itemId={'/api/sources/'+props.src.id_source+'/fs/get_directory?volume='+props.volume.number+'&directory='+item.path} 
             label={data !== undefined ? 
                     data.pending ? 
                         item.name

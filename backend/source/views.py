@@ -168,7 +168,7 @@ class SourceTimeline(TemplateView):
         if src.source_os == "windows":
             list_plugins = ['evtx','usb','tasks','browser.history','shellbags','sam','walkfs']
             for sub_plugin in list_plugins:
-                params = {'task_source':id_source,'task_case':src.source_case.id_case,'task_type':'timeline_'+sub_plugin,'task_subtype':sub_plugin,'task_status':'PENDING'}
+                params = {'task_source':id_source,'task_case':src.source_case.id_case,'task_type':'timeline_'+sub_plugin,'plugin':sub_plugin,'task_status':'PENDING'}
                 try:
                     task = Task.objects.get(task_src=id_source,task_type=params['task_type'])
                 except Task.DoesNotExist:

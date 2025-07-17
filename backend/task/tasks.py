@@ -97,6 +97,36 @@ def source_hayabusa(self, params):
 def source_photorec(self,params):
     return self.request.id
 
+
+def create_timeline_values(type,values):
+    values = []
+    match type:
+        case 'usb': 
+            for usb in values:
+                values.append({ 'timeline_ts':usb['firstinsert'],'timeline_value':f"Serie: {usb['serial']}; Produit: {usb['product']}",'timeline_type':'usb_firstinsert','id':str(uuid.uuid4())})
+                values.append({ 'timeline_ts':usb['lastinsert'],'timeline_value':f"Serie: {usb['serial']}; Produit: {usb['product']}",'timeline_type':'usb_lastinsert','id':str(uuid.uuid4())})
+        case 'walkfs':
+            for fs in values:
+                values.append({ 'timeline_ts':fs['atime'],'timeline_value':fs['path'],'timeline_type':'atime','id':str(uuid.uuid4())})
+                values.append({ 'timeline_ts':fs['btime'],'timeline_value':fs['path'],'timeline_type':'btime','id':str(uuid.uuid4())})
+                values.append({ 'timeline_ts':fs['ctime'],'timeline_value':fs['path'],'timeline_type':'ctime','id':str(uuid.uuid4())})
+                values.append({ 'timeline_ts':fs['mtime'],'timeline_value':fs['path'],'timeline_type':'mtime','id':str(uuid.uuid4())})
+        case 'tasks':
+            for task in values:
+                values.append({ 'timeline_ts':task['date'],'timeline_value':task['taskpath'],'timeline_type':params['task_subtype'],'id':str(uuid.uuid4())})
+        case 'browser.history':
+            for event in values:
+                values.append({ 'timeline_ts':event['ts'],'timeline_value':f"url: {event['url']} ; user:{event['username']}",'timeline_type':params['task_subtype'],'id':str(uuid.uuid4())})
+        case 'shellbags':
+            for event in values:
+                values.append({ 'timeline_ts':event['regfmtime'],'timeline_value':f"url: {event['path']} ; user:{event['username']}",'timeline_type':params['task_subtype'],'id':str(uuid.uuid4())})
+        case 'sam':
+            for event in values:
+                values.append({ 'timeline_ts':event['lastlogin'],'timeline_value':event['username'],'timeline_type':'lastlogin','id':str(uuid.uuid4())})
+                values.append({ 'timeline_ts':event['lastpasswordset'],'timeline_value':event['username'],'timeline_type':'lastpasswordset','id':str(uuid.uuid4())})
+                values.append({ 'timeline_ts':event['lastincorrectlogin'],'timeline_value':event['username'],'timeline_type':'lastincorrectlogin','id':str(uuid.uuid4())})
+    return values
+
 @shared_task(bind=True,base=CustomTask)
 def source_timeline(self,params):
     """Run a plugin to create the timeline.
@@ -112,41 +142,20 @@ def source_timeline(self,params):
     """
     task_src = Source.objects.get(id_source=params['task_source'])
     task_case = Case.objects.get(id_case=params['task_case'])
+    print(f"Running task {params['plugin']} on source {task_src.source_name} for case {task_case.case_name}")
 
+    # if Artefact.objects.filter(artefact_src=task_src, artefact_type=params['plugin']).exists():
+    #     artefact = Artefact.objects.get(artefact_src=task_src,artefact_type=params['plugin'])
+    # else:
     disk = DissectEngine(task_src)
-    res = disk.run_plugin({'name':params['task_subtype'],'params':''})
-    
-    values = []
-    match params['task_subtype']:
-        case 'usb': 
-            for usb in res:
-                values.append({ 'timeline_ts':usb['firstinsert'],'timeline_value':f"Serie: {usb['serial']}; Produit: {usb['product']}",'timeline_type':'usb_firstinsert','id':str(uuid.uuid4())})
-                values.append({ 'timeline_ts':usb['lastinsert'],'timeline_value':f"Serie: {usb['serial']}; Produit: {usb['product']}",'timeline_type':'usb_lastinsert','id':str(uuid.uuid4())})
-        case 'walkfs':
-            for fs in res:
-                values.append({ 'timeline_ts':fs['atime'],'timeline_value':fs['path'],'timeline_type':'atime','id':str(uuid.uuid4())})
-                values.append({ 'timeline_ts':fs['btime'],'timeline_value':fs['path'],'timeline_type':'btime','id':str(uuid.uuid4())})
-                values.append({ 'timeline_ts':fs['ctime'],'timeline_value':fs['path'],'timeline_type':'ctime','id':str(uuid.uuid4())})
-                values.append({ 'timeline_ts':fs['mtime'],'timeline_value':fs['path'],'timeline_type':'mtime','id':str(uuid.uuid4())})
-        case 'tasks':
-            for task in res:
-                values.append({ 'timeline_ts':task['date'],'timeline_value':task['taskpath'],'timeline_type':params['task_subtype'],'id':str(uuid.uuid4())})
-        case 'browser.history':
-            for event in res:
-                values.append({ 'timeline_ts':event['ts'],'timeline_value':f"url: {event['url']} ; user:{event['username']}",'timeline_type':params['task_subtype'],'id':str(uuid.uuid4())})
-        case 'shellbags':
-            for event in res:
-                values.append({ 'timeline_ts':event['regfmtime'],'timeline_value':f"url: {event['path']} ; user:{event['username']}",'timeline_type':params['task_subtype'],'id':str(uuid.uuid4())})
-        case 'sam':
-            for event in res:
-                values.append({ 'timeline_ts':event['lastlogin'],'timeline_value':event['username'],'timeline_type':'lastlogin','id':str(uuid.uuid4())})
-                values.append({ 'timeline_ts':event['lastpasswordset'],'timeline_value':event['username'],'timeline_type':'lastpasswordset','id':str(uuid.uuid4())})
-                values.append({ 'timeline_ts':event['lastincorrectlogin'],'timeline_value':event['username'],'timeline_type':'lastincorrectlogin','id':str(uuid.uuid4())})
+    artefact = disk.run_plugin({'name':params['plugin'],'params':''})
+    values = create_timeline_values(params['plugin'],artefact)
+       
     for value in values:
         timeline_params = {
             'timeline_type':value['timeline_type'],
             'timeline_ts':value['timeline_ts'],
-            'timeline_source':task_src,
+            'timeline_src':task_src,
             'timeline_case':task_case,
             'timeline_value':value['timeline_value'],
         }
@@ -282,6 +291,7 @@ def source_directory(self,params):
     directory = params['directory']
     volume = params['volume']
     disk = DissectEngine(task_src)
+    
     try:
         Artefact.objects.get(artefact_type=params['task_type'], artefact_src=task_src, artefact_case=task_case)
     except Artefact.DoesNotExist:

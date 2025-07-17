@@ -9,7 +9,8 @@ def main():
     path = "/mnt/disk/TEST/c-drive/c-drive.vmdk"
     d = DissectEngine(path=path)
     #d.plugin('sam',['-j'])
-    #v = d.getDisqueVolume()
+    v = d.get_volumes()
+    f_d = d.get_directory_content('',1)
     #d.plugin('authlog',[''])
     #print(d.getPlugins('authlog'))
     plugins = d.run_plugin({'name':'prefetch','params':['--grouped']})

@@ -36,13 +36,12 @@ def add_registry(params):
         return True
 
 def add_timeline(params):
-    if params['timeline_ts'] != 'None_':
-        timeline = Timeline(
-            timeline_source = params['timeline_source'],
-            timeline_ts = params['timeline_ts'],
-            timeline_value = params['timeline_value'],
-            timeline_type = params['timeline_type'],
-            timeline_case = params['timeline_case'],
-        )
-        timeline.save()
+    timeline = Timeline(
+        timeline_src = params['timeline_src'],
+        timeline_ts = params['timeline_ts'],
+        timeline_value = params['timeline_value'],
+        timeline_type = params['timeline_type'],
+        timeline_case = params['timeline_case'],
+    )
+    timeline.save()
 

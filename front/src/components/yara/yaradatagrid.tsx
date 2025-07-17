@@ -16,6 +16,7 @@ export default function YaraDataGrid(props: any){
     const [currentYaraRule, setCurrentYaraRule] = React.useState({yararule_name:'',id_yararule:''})
     const [currentYaraRuleStatus, setCurrentYaraRuleStatus] = React.useState({task_status:''})
     const [currentYaraRuleResults, setCurrentYaraRuleResults] = React.useState<any>([])
+    const [currentYaraRuleSize, setCurrentYaraRuleSize] = React.useState(0)
     const notification = useNotifications()
 
     const [columns,setColumns] = React.useState([
@@ -65,7 +66,7 @@ export default function YaraDataGrid(props: any){
     return(
         <Box sx={{height:830,width:'inherit',flex:1,display:'flex',flexDirection:'column'}}>
             <Grid container sx={{justifyContent: "flex-start",alignItems: "center",}}>
-                <Grid size={11}>
+                <Grid size={10}>
                     <TextField id="select-yara-rules" select label="Select Yara Rule"  sx={{minWidth:200}}>
                         {JSON.parse(listYaraRules || '[]').map((rule: any) => 
                             <MenuItem key={rule.id_yararule} value={rule.id_yararule} onClick={()=>setCurrentYaraRule(rule)} >
@@ -73,6 +74,9 @@ export default function YaraDataGrid(props: any){
                             </MenuItem>
                         )}
                     </TextField>
+                </Grid>
+                <Grid size={1}>
+                        <TextField label="Size of the files to scan in octect" value={currentYaraRuleSize}/>
                 </Grid>
                 <Grid size={1}>
                     <Box>

@@ -202,8 +202,6 @@ MEDIA_URL = "/media/"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-
 # CELERY CONFIGURATION:
 
 CELERY_BROKER_URL = f"{CeleryWorker.CELERY_BROKER_URL}"

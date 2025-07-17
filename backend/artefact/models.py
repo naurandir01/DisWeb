@@ -1,7 +1,6 @@
 from django.db import models
 from case.models import Case
 from source.models import Source
-
 import uuid
 
 class Artefact(models.Model):

@@ -96,14 +96,14 @@ class DissectEngine:
         Retrieves the content of a specified directory on a given volume.
         Args:
             path (str): The path to the directory.
-            volume (str): The name of the volume.
+            volume (str): The number of the volume.
         Returns:
             list: A list of dictionaries containing metadata about files and directories in the specified path.
         """
         fs = self.target.filesystems
         fs_drc =[]
         for f in fs:
-            if f.volume.name == volume:
+            if f.volume.number == int(volume):
                 try:
                     content = f.listdir(path)
                 except Exception:
@@ -167,13 +167,13 @@ class DissectEngine:
         Retrieves the hexadecimal dump of a specified file on a given volume.
         Args:
             file_path (str): The path to the file.
-            volume (str): The name of the volume.
+            volume (str): The number of the volume.
         Returns:
             list: A list of dictionaries containing the address, hex value, and string representation of each line in the hex dump.
         """
         fs = self.target.filesystems
         for f in fs:
-            if f.volume.name == volume:
+            if f.volume.number == int(volume):
                 hex_dump =  hexdump(f.get(file_path).open().read(),output="string")
                 lines = hex_dump.split('\n')
                 result = []
@@ -195,13 +195,13 @@ class DissectEngine:
         Retrieves the content of a specified file on a given volume.
         Args:
             file_path (str): The path to the file.
-            volume (str): The name of the volume.
+            volume (str): The number of the volume.
         Returns:
             str: The content of the file as a string.
         """
         fs = self.target.filesystems
         for f in fs:
-            if f.volume.name == volume:
+            if f.volume.number == int(volume):
                 try:
                     return f.get(file_path).open()
                 except Exception as e:
@@ -219,7 +219,7 @@ class DissectEngine:
         """
         fs = self.target.filesystems
         for f in fs:
-            if f.volume.name == volume:
+            if f.volume.number == int(volume):
                 try:
                     return f.get(file_path)
                 except Exception as e:
@@ -231,12 +231,12 @@ class DissectEngine:
         """
         Retrieves a list of volumes available in the target disk image.
         Returns:
-            list: A list of dictionaries containing volume names and their respective file systems.
+            list: A list of dictionaries containing volume name, number and size.
         """
         volumes = []
         fs = self.target.filesystems
         for f in fs:
-            volumes.append({'name':f.volume.name})
+            volumes.append({'name':f.volume.name,'number':f.volume.number,'size':f.volume.size})
         return volumes
 
     def run_hayabusa(self):
