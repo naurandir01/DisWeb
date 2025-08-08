@@ -1,19 +1,29 @@
 'use client'
 import { Box,Grid, Typography,Card, CardHeader, CardContent, IconButton } from '@mui/material';
-import { DataGrid, GridColDef, GridSlotsComponentsProps, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridFilterModel, GridPaginationModel, GridRowModel, GridSortModel } from '@mui/x-data-grid';
 import * as React from 'react';
 import API from '../api/axios'
+import meiliClient from '../api/meili';
 import useSWR from 'swr';
-import { CheckCircle,Details,Error,EventNote,NotStarted} from '@mui/icons-material';
+import { CheckCircle,Error,EventNote,NotStarted} from '@mui/icons-material';
 import {  CircularProgress} from '@mui/material';
+import {  SearchResponse } from "meilisearch";
+import { useSessionStorageState } from '@toolpad/core';
+
 const fetcher = (url: string) => API.get(url).then(res => res.data)
 
 export default function Events(props: any){
+    const [currentCas,setCurrentCas] = useSessionStorageState('cas','')
     const [source,setSource] = React.useState(props.source)
-    const {data,error,isLoading} = useSWR('/api/sources/'+source.id_source+'/artefacts/evtx',fetcher)
+    //const {data,error,isLoading} = useSWR('/api/sources/'+source.id_source+'/artefacts/evtx',fetcher)
     const [taskStatus,setTaskStatus] = React.useState({task_status:'NOT FOUND'})
     const [selectedRow,setSelectedRow] = React.useState<any>({});
 
+    const [paginationModel,setPaginationModel] = React.useState<GridPaginationModel>({page:0,pageSize:100})
+    const [filterModel,setfilterModel] = React.useState<GridFilterModel>({items:[]})
+    const [sortModel,setSortModel] = React.useState<GridSortModel>([])
+    const [searchQuery,setSearchQuery] = React.useState<SearchResponse>({hits:[],offset:0,limit:100,processingTimeMs:0,query:'',totalHits:0})
+    
     const columns: GridColDef[] = [
         {field:'ts',headerName:'Timestamp',flex:1},
         {field:'Channel',headerName:'Channel',flex:1},
@@ -34,6 +44,22 @@ export default function Events(props: any){
         };
         fechData();
     },[])
+
+    React.useEffect(()=>{
+        const fetchSource = async () => {
+            try{
+                const res = await meiliClient.index(JSON.parse(currentCas ||'{}').case_name+'_artefacts').search('',
+                    {
+                        filter:"source = '"+source.id_source+"' AND plugin = 'evtx'",
+                        limit: paginationModel.pageSize,
+                        offset: paginationModel.page * paginationModel.pageSize,
+                    })
+                setSearchQuery(res)
+            } catch (error) {
+                console.error("Erreur lors de la récupération de la source", error)
+            }
+        };fetchSource()
+    },[paginationModel])
 
     return(
         <Card sx={{height:1100,width:'inherit'}}>
@@ -62,13 +88,24 @@ export default function Events(props: any){
                         <div style={{height: 820, width:820}}>
                             <DataGrid
                                 columns={columns}
-                                rows={isLoading ? []:data.values}
+                                rows={searchQuery.hits}
                                 getRowHeight={()=>'auto'}
-                                initialState={{
-                                    pagination: {paginationModel:{pageSize:25}}
-                                }}
+                                
                                 onRowClick={(params:any)=>{setSelectedRow(params.row)}}
                                 showToolbar
+
+                                paginationMode='server'
+                                paginationModel={paginationModel}
+                                onPaginationModelChange={setPaginationModel}
+                                rowCount={-1}
+
+                                filterMode='server'
+                                onFilterModelChange={setfilterModel}
+                                filterModel={filterModel}
+
+                                sortingMode='server'
+                                onSortModelChange={setSortModel}
+                                sortModel={sortModel}
                             />
                         </div>
                     </Grid>

@@ -38,7 +38,7 @@ export default function FileContent(props: any){
             setCurrentFileMetadata(props.currentFile)
             if(props.currentFile.type === 'fls'){
                 const fechData = async ()=>{
-                    const res = await API.get('/api/sources/'+props.id_source+'/fs/get_file?volume='+props.currentFile.volume+'&file_path='+props.currentFile.path)
+                    const res = await API.get('/api/sources/'+props.id_source+'/fs/get_file?file_path='+props.currentFile.path)
                     if (res.data !== 'Not Found'){
                         setCurrentFileType(res.headers['content-type'])
                         setCurrentFile(res.data)
@@ -52,7 +52,7 @@ export default function FileContent(props: any){
         if(props.currentFile.path !== currentFileProps.path){
             if(props.currentFile.type === 'fls'){
                 const fechData = async ()=>{
-                    const res = await API.get('/api/sources/'+props.id_source+'/fs/get_file_hexdump?volume='+props.currentFile.volume+'&file_path='+props.currentFile.path)
+                    const res = await API.get('/api/sources/'+props.id_source+'/fs/get_file_hexdump?file_path='+props.currentFile.path)
                     if (res.data !== 'Not Found'){
                         setCurrentFileHexDump(res.data)
                     }

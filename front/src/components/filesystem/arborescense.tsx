@@ -13,7 +13,7 @@ const fetcher = (url: string) => API.get(url).then(res => res.data)
 function CustomeTreeViews(props: any){
     const [item,setItem] = React.useState(props.item)
     const [children,setChildren] = React.useState([])
-    const {data,error,isLoading} = useSWR('/api/sources/'+props.src.id_source+'/fs/get_directory?volume='+props.volume.number+'&directory='+item.path,fetcher)
+    const {data,error,isLoading} = useSWR('/api/sources/'+props.src.id_source+'/fs/get_directory?directory='+item.path,fetcher)
 
     const handleChildren=()=>{
         props.setDirectorySrc(props.src.id_source)
@@ -21,7 +21,7 @@ function CustomeTreeViews(props: any){
 
     return(
         <TreeItem 
-            itemId={'/api/sources/'+props.src.id_source+'/fs/get_directory?volume='+props.volume.number+'&directory='+item.path} 
+            itemId={'/api/sources/'+props.src.id_source+'/fs/get_directory?directory='+item.path} 
             label={data !== undefined ? 
                     data.pending ? 
                         item.name
@@ -34,9 +34,11 @@ function CustomeTreeViews(props: any){
             {
                 data === undefined ? null: data.values
                     .sort((a: any,b:any)=>a.name.localeCompare(b.name,undefined,{sensivity:'base'}))
+                    .filter((item: any)=>item.type === 'drc')
                     .map((child: any,index: any)=>{
                     return(
-                        child.type === 'drc' ? <CustomeTreeViews item={child} volume={props.volume} src={props.src} onLoading={props.onLoading} onDirectoryContent={props.onDirectoryContent} setDirectorySrc={props.setDirectorySrc}/>:null
+                        
+                         <CustomeTreeViews item={child} volume={props.volume} src={props.src} onLoading={props.onLoading} onDirectoryContent={props.onDirectoryContent} setDirectorySrc={props.setDirectorySrc}/>
                     )
                 })
             }
@@ -47,7 +49,7 @@ function CustomeTreeViews(props: any){
 export default function Arboresence(props: any){
     const [listVolumes,setListVolumes] = React.useState([])
     const [currentDirectory,setCurrentDirectory] = React.useState('')
-    const {data,error,isLoading} = useSWR('/api/sources/'+props.src.id_source+'/fs/volumes',fetcher)
+    const {data,error,isLoading} = useSWR('/api/sources/'+props.src.id_source+"/fs/get_directory?directory="+'/',fetcher)
 
     const handleItelSelection = (event: React.SyntheticEvent | null,itemId: string,isSelected:boolean)=>{
         if(isSelected){
@@ -71,15 +73,16 @@ export default function Arboresence(props: any){
                 </AccordionSummary>
                 <AccordionDetails>
                     <SimpleTreeView slots={{collapseIcon:Folder,expandIcon:CreateNewFolder,endIcon:Folder}} sx={{marginTop:1.5}} onItemSelectionToggle={handleItelSelection}>
-                        {
-                            data !== undefined ? data
+                        { 
+                            data !== undefined ? data.values
                                 .sort((a: any,b:any)=>a.name.localeCompare(b.name,undefined,{sensivity:'base'}))
-                                .map((volume: any,index: any)=>{
+                                .filter((item: any)=>item.type === 'drc')
+                                .map((dir: any,index: any)=>{
                                     return(
-                                        <CustomeTreeViews item={{name:volume.name,path:'',type:'drc'}} src={props.src} volume={volume} onLoading={props.onLoading} onDirectoryContent={props.onDirectoryContent} key={'custom-tree-'+volume.name} setDirectorySrc={props.setDirectorySrc}/>
+                                        <CustomeTreeViews item={{name:dir.name,path:dir.path,type:'drc'}} src={props.src} onLoading={props.onLoading} onDirectoryContent={props.onDirectoryContent} key={'custom-tree-'+dir.name} setDirectorySrc={props.setDirectorySrc}/>
                                     )
                                 }):null
-                        }
+                        } 
                     </SimpleTreeView>
                 </AccordionDetails>
             </Accordion>

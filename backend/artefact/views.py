@@ -18,7 +18,13 @@ def add_artefact(params):
         artefact_src = params['artefact_src'],
         artefact_values = params['artefact_values'],
     )
-    artefact.save()
+    try:
+        artefact.save()
+    except Exception as e:
+        print(f"Error saving artefact type: {artefact.artefact_type}")
+        print(f"Error saving artefact value: {artefact.artefact_values}")
+        raise e
+        
     
 
 def add_registry(params):

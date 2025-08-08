@@ -12,6 +12,7 @@ from back.database import convertOperator
 from task.tasks import source_directory,source_hayabusa,source_photorec,source_plugin,source_regf,source_timeline,source_yara
 import json
 import ast
+import meilisearch
 
 class SourcesView(TemplateView):
     def get(self,request):
@@ -59,6 +60,14 @@ class SourceView(TemplateView):
         """
         Delete a source by its ID
         """
+        src = Source.objects.get(id_source=id_source)
+        
+        case = Case.objects.get(id_case=src.source_case.id_case)
+
+        meili_client = meilisearch.Client('http://disweb_meilisearch:7700', '2HMCrPPjfhtm8U0aqRcJhCAe52L28n5VM5CfVzfz330')
+        artefacts_index = meili_client.index(case.case_name+'_artefacts')
+        artefacts_index.delete_documents(filter='source="'+str(src.id_source)+'"')
+
         Source.objects.get(id_source=id_source).delete()
         return HttpResponse(status=200,content="Source deleted successfully")
 
@@ -78,14 +87,12 @@ class SourceDirectoryContent(TemplateView):
         Get the content of a directory in a source
         """
         src = Source.objects.get(id_source=id_source)
-        volume = request.GET.get('volume')
         directory= request.GET.get('directory')
         task_params = {
-            'volume': volume,
             'directory': directory,
             'task_source': src.id_source,
             'task_case':src.source_case.id_case,
-            'task_type': 'directory_'+volume+'_'+directory,
+            'task_type': 'directory_'+directory,
             'tast_status': 'PENDING',
             'task_values':[]
         }
@@ -110,10 +117,9 @@ class SourceFile(TemplateView):
         :return: A JsonResponse with the content of the file
         """
         src = Source.objects.get(id_source=id_source)
-        volume = request.GET.get('volume')
         file_path= request.GET.get('file_path')
         disk = DissectEngine(source=src)
-        file = disk.get_file(file_path,volume)
+        file = disk.get_file(file_path)
         if file != '404':
             return FileResponse(file,filename=file_path.split('/')[-1])
         else:
@@ -122,10 +128,9 @@ class SourceFile(TemplateView):
 class SourceFileContent(TemplateView):
     def get(self,request,id_source):
         src = Source.objects.get(id_source=id_source)
-        volume = request.GET.get('volume')
         file_path= request.GET.get('file_path')
         disk = DissectEngine(src)
-        file = disk.get_file(file_path,volume)
+        file = disk.get_file(file_path)
         if file != '404':
             return FileResponse(file,filename=file_path.split('/')[-1],as_attachment=True)
         else:
@@ -134,10 +139,9 @@ class SourceFileContent(TemplateView):
 class SourceFileHexDump(TemplateView):
     def get(self,request,id_source):
         src = Source.objects.get(id_source=id_source)
-        volume = request.GET.get('volume')
         file_path= request.GET.get('file_path')
         disk = DissectEngine(src)
-        file = disk.get_file_hexdump(file_path,volume)
+        file = disk.get_file_hexdump(file_path)
         if file != '404':
             return JsonResponse(file,safe=False)
         else:

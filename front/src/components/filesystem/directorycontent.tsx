@@ -41,7 +41,7 @@ export default function DirectoryContent(props: any){
         (row: any,id_source: any)=> ()=>{
             try{
                 notification.show("Download of the file "+row.path,{autoHideDuration:3000,severity:'success'})
-                API.get('/api/sources/'+id_source+'/fs/get_file?volume='+row.volume+'&file_path='+row.path,{responseType:'blob'}).then(
+                API.get('/api/sources/'+id_source+'/fs/get_file?file_path='+row.path,{responseType:'blob'}).then(
                     async res=>{
                         const file_blob = new Blob([res.data], {type: res.headers['content-type']})
                         const zip = new JSZip()

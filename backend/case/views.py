@@ -13,6 +13,7 @@ from django.db.models.functions import ExtractYear,ExtractMonth,ExtractDay,Extra
 from django.db.models import Count
 import os
 import re
+import meilisearch
 
 operator_mapping = {
     'startsWith': 'startswith',
@@ -71,7 +72,13 @@ class CaseView(TemplateView):
         return JsonResponse(case,safe=False)
     
     def delete(self,request,id_case):
-        query = Case.objects.all().filter(id_case=id_case).delete()
+        case = Case.objects.get(id_case=id_case)
+        
+        meili_client = meilisearch.Client('http://disweb_meilisearch:7700', '2HMCrPPjfhtm8U0aqRcJhCAe52L28n5VM5CfVzfz330')
+        artefacts_index = meili_client.index(case.case_name+'_artefacts')
+        artefacts_index.delete()
+        
+        Case.objects.all().filter(id_case=id_case).delete()
         return HttpResponse("Supprésion du cas: %s." % id_case)
 
 class CaseTaskView(TemplateView):

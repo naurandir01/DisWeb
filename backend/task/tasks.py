@@ -9,6 +9,8 @@ from .models import Task
 from artefact.views import add_artefact,add_timeline,add_registry
 from django.core.exceptions import ObjectDoesNotExist
 from celery.exceptions import Ignore
+import meilisearch
+
 import datetime
 import json
 import uuid
@@ -234,16 +236,24 @@ def source_plugin(self,params):
     task_case = Case.objects.get(id_case=params['task_case'])
 
     disk = DissectEngine(task_src)
-    res = disk.run_plugin({'name':params['task_type'],'params':params['params']})
+    res = disk.run_plugin({'name':params['task_type'],'params':params['params'],'case':task_case.id_case,'source':task_src.id_source})
 
-    artefact_params = {
-        'artefact_type':params['task_type'],
-        'artefact_ts':datetime.datetime.now(),
-        'artefact_case':task_case,
-        'artefact_src':task_src,
-        'artefact_values':res
-    }
-    add_artefact(artefact_params)
+    # #artefact_params = {
+    #     'artefact_type':params['task_type'],
+    #     'artefact_ts':datetime.datetime.now(),
+    #     'artefact_case':task_case,
+    #     'artefact_src':task_src,
+    #     'artefact_values':res
+    # }
+    # #add_artefact(artefact_params)
+    meili_client = meilisearch.Client('http://disweb_meilisearch:7700', '2HMCrPPjfhtm8U0aqRcJhCAe52L28n5VM5CfVzfz330')
+    artefacts_index = meili_client.index(task_case.case_name+'_artefacts')
+    
+    artefacts_index.add_documents(res, primary_key='id')
+    artefacts_index.update_filterable_attributes(['**'])
+    artefacts_index.update_sortable_attributes(['**'])
+    
+
     return self.request.id
 
 
@@ -289,13 +299,13 @@ def source_directory(self,params):
     task_case = Case.objects.get(id_case=params['task_case'])
 
     directory = params['directory']
-    volume = params['volume']
+    
     disk = DissectEngine(task_src)
     
     try:
         Artefact.objects.get(artefact_type=params['task_type'], artefact_src=task_src, artefact_case=task_case)
     except Artefact.DoesNotExist:
-        directoryContent = disk.get_directory_content(directory,volume)
+        directoryContent = disk.get_directory_content(directory)
         artefact_params = {
             'artefact_type':params['task_type'],
             'artefact_ts':datetime.datetime.now(),

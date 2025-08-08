@@ -134,3 +134,4 @@ zope.interface==7.2
 zstandard==0.23.0
 yara-python
 docutils
+meilisearch

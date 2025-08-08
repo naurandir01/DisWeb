@@ -13,7 +13,7 @@ const fetcher2 = async (url:string)=>{
 }
 
 export default function FileDisplay(props: any){
-    const {data,error,isLoading} = useSWR('/api/sources/'+props.id_source+'/fs/get_file?volume='+props.file.volume+'&file_path='+props.file.path,fetcher2)
+    const {data,error,isLoading} = useSWR('/api/sources/'+props.id_source+'/fs/get_file?file_path='+props.file.path,fetcher2)
     const fileExtension = props.file.path.split('.').pop().toLowerCase();
 
     const convertToUrl=(file_data:any)=>{

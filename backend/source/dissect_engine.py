@@ -2,6 +2,8 @@ from dissect.target import Target
 from dissect.target.tools.utils import execute_function_on_target,find_functions,keychain
 from dissect.target.helpers.keychain import KeyType
 from dissect.cstruct import hexdump
+import uuid
+
 import os
 import magic
 import subprocess
@@ -65,9 +67,9 @@ class DissectEngine:
         if output_type == "default":
             return value
         elif output_type == "record":
-            return self.record_to_json(value)
+            return self.record_to_json(records=value,case=plugin['case'],source=plugin['source'],plugin=plugin['name'])
     
-    def record_to_json(self,records:list)-> list:
+    def record_to_json(self,records:list,case=None,source=None,plugin:str=None)-> list:
         """
         Converts a list of records into a JSON-compatible format.
         Args:
@@ -75,7 +77,6 @@ class DissectEngine:
         Returns:
             list: A list of dictionaries, each representing a record with keys as field names and values as strings.
         """
-        count = 0
         records_json=[]
         for rec in records:
             rdict = rec._asdict()
@@ -86,12 +87,17 @@ class DissectEngine:
                         record[key.replace('_','')]=str(value)
                 else:
                     record[key.replace('_','')]="None_"
-            record['id']=count
-            count += 1
+            record['id']=str(uuid.uuid4())
+            if case is not None:
+                record['case']=str(case)
+            if source is not None:
+                record['source']=str(source)
+            if plugin is not None:
+                record['plugin']=plugin
             records_json.append(record)
         return records_json
     
-    def get_directory_content(self,path:str,volume:str)->list:
+    def get_directory_content(self,path:str)->list:
         """
         Retrieves the content of a specified directory on a given volume.
         Args:
@@ -100,69 +106,74 @@ class DissectEngine:
         Returns:
             list: A list of dictionaries containing metadata about files and directories in the specified path.
         """
-        fs = self.target.filesystems
+        fs = self.target.fs
         fs_drc =[]
-        for f in fs:
-            if f.volume.number == int(volume):
-                try:
-                    content = f.listdir(path)
-                except Exception:
-                    return []
-                for c in content:
-                    try:
-                        state = f.lstat(path+'/'+c)
-                        file = f.get(path+'/'+c)
-                        try:
-                            sha256 = f.sha256(path+'/'+c)
-                            sha1 = f.sha1(path+'/'+c)
-                            md5 = f.md5(path+'/'+c)
-                        except Exception:
-                            sha256 = ''
-                    except Exception:
-                        pass
-                    if f.is_dir(path+'/'+c):
-                        fs_drc.append({'name':c,'type':'drc','path':path+'/'+c,
-                                        'atime':state.st_atime_ns,
-                                        'btime':state.st_birthtime_ns,
-                                        'ctime':state.st_ctime_ns,
-                                        'mtime':state.st_mtime_ns,
-                                        'size':state.st_size,
-                                        'volume':volume,})
-                    if f.is_file(path+'/'+c):
-                        try: 
-                            file = magic.from_buffer(f.get(path+'/'+c).open().read(2048))
-                        except:
-                            file =''
-                        fs_drc.append({'name':c,'type':'fls','path':path+'/'+c,'volume':volume,'subtype':file,
-                                        'atime':state.st_atime_ns,
-                                        'btime':state.st_birthtime_ns,
-                                        'ctime':state.st_ctime_ns,
-                                        'mtime':state.st_mtime_ns,
-                                        'size':state.st_size,
-                                        'sha256':sha256,
-                                        'sha1':sha1,
-                                        'md5':md5,
-                                        'fstype':state.st_fstype,
-                                        'uid':state.st_uid,
-                                        'gid':state.st_gid,
-                                        'attribute':state.st_file_attributes
-                                        })
-                        
-                    if f.is_symlink(path+'/'+c):
-                        fs_drc.append({'name':c,'type':'link','path':path+'/'+c,'volume':volume,
-                                        'atime':state.st_atime_ns,
-                                        'btime':state.st_birthtime_ns,
-                                        'ctime':state.st_ctime_ns,
-                                        'mtime':state.st_mtime_ns,
-                                        'size':state.st_size,
-                                        'sha256':sha256,
-                                        'uid':state.st_uid,
-                                        'gid':state.st_gid,
-                                        'attribute':state.st_file_attributes
-                                        })
+        try:
+            contents = fs.scandir(path)
+        except Exception:
+            return []
+        for c in contents:
+            try:
+                state = c.lstat()
+                #attr = c.lattr()
+            except Exception:
+                pass
+            if c.is_dir():
+                fs_drc.append({'name':c.name,'type':'drc','path':c.path,
+                                'atime':state.st_atime_ns,
+                                'btime':state.st_birthtime_ns,
+                                'ctime':state.st_ctime_ns,
+                                'mtime':state.st_mtime_ns,
+                                'size':state.st_size,
+                                })
+            elif c.is_file():
+                try: 
+                    file_magic = magic.from_buffer(fs.get(c.path).open().read(2048))
+                    sha256 = c.sha256()
+                    md5 = c.md5()
+                    sha1 = c.sha1()
+                except:
+                    file_magic =''
+                fs_drc.append({'name':c.name,'type':'fls','path':c.path,'subtype':file_magic,
+                                'atime':state.st_atime_ns,
+                                'btime':state.st_birthtime_ns,
+                                'ctime':state.st_ctime_ns,
+                                'mtime':state.st_mtime_ns,
+                                'size':state.st_size,
+                                'sha256':sha256,
+                                'sha1':sha1,
+                                'md5':md5,
+                                'fstype':state.st_fstype,
+                                'uid':state.st_uid,
+                                'gid':state.st_gid,
+                                'attribute':state.st_file_attributes
+                                })
+            elif c.is_symlink():
+                try: 
+                    
+                    sha256 = c.sha256()
+                    md5 = c.md5()
+                    sha1 = c.sha1()
+                except:
+                    sha256 = ''
+                    md5 = ''
+                    sha1 = ''
+                fs_drc.append({'name':c.name,'type':'link','path':c.path,
+                                'atime':state.st_atime_ns,
+                                'btime':state.st_birthtime_ns,
+                                'ctime':state.st_ctime_ns,
+                                'mtime':state.st_mtime_ns,
+                                'size':state.st_size,
+                                'sha256':sha256,
+                                'sha1':sha1,
+                                'md5':md5,
+                                'uid':state.st_uid,
+                                'gid':state.st_gid,
+                                'attribute':state.st_file_attributes
+                                })
         return fs_drc
 
-    def get_file_hexdump(self,file_path:str,volume:str)->list:
+    def get_file_hexdump(self,file_path:str)->list:
         """
         Retrieves the hexadecimal dump of a specified file on a given volume.
         Args:
@@ -171,26 +182,25 @@ class DissectEngine:
         Returns:
             list: A list of dictionaries containing the address, hex value, and string representation of each line in the hex dump.
         """
-        fs = self.target.filesystems
-        for f in fs:
-            if f.volume.number == int(volume):
-                hex_dump =  hexdump(f.get(file_path).open().read(),output="string")
-                lines = hex_dump.split('\n')
-                result = []
-                for line in lines:
-                    string = line.split('   ')[-1]
-                    address_HexValue = line.split('   ')[0].split(' ')
+        fs = self.target.fs
+       
+        hex_dump =  hexdump(fs.get(file_path).open().read(),output="string")
+        lines = hex_dump.split('\n')
+        result = []
+        for line in lines:
+            string = line.split('   ')[-1]
+            address_HexValue = line.split('   ')[0].split(' ')
 
-                    entry = {
-                        'address': address_HexValue[0],
-                        'hexvalue': ' '.join(address_HexValue[1:10]) +' '+ ' '.join(address_HexValue[11:19]),
-                        'string': string
-                    }
-                    result.append(entry)
-                return result
-        return []
+            entry = {
+                'address': address_HexValue[0],
+                'hexvalue': ' '.join(address_HexValue[1:10]) +' '+ ' '.join(address_HexValue[11:19]),
+                'string': string
+            }
+            result.append(entry)
+        return result
+
     
-    def get_file(self,file_path:str,volume:str)->str:
+    def get_file(self,file_path:str)->str:
         """
         Retrieves the content of a specified file on a given volume.
         Args:
@@ -199,16 +209,15 @@ class DissectEngine:
         Returns:
             str: The content of the file as a string.
         """
-        fs = self.target.filesystems
-        for f in fs:
-            if f.volume.number == int(volume):
-                try:
-                    return f.get(file_path).open()
-                except Exception as e:
-                    return e
-        return False
+        fs = self.target.fs
+        
+        try:
+            return fs.get(file_path).open()
+        except Exception as e:
+            return e
+        
     
-    def get_file_no_open(self,file_path:str,volume:str):
+    def get_file_no_open(self,file_path:str):
         """
         Retrieves the content of a specified file on a given volume without opening it.
         Args:
@@ -217,14 +226,13 @@ class DissectEngine:
         Returns:
             str: The content of the file as a string.
         """
-        fs = self.target.filesystems
-        for f in fs:
-            if f.volume.number == int(volume):
-                try:
-                    return f.get(file_path)
-                except Exception as e:
-                    return e
-        return False
+        fs = self.target.fs
+        
+        try:
+            return fs.get(file_path)
+        except Exception as e:
+            return e
+        
     
     
     def get_volumes(self)->list:

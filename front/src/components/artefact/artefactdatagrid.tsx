@@ -1,61 +1,77 @@
 'use client'
 import {  Card, Typography } from '@mui/material';
-import { DataGrid, GridColDef} from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridFilterModel, GridPaginationModel, GridRowModel, GridSortModel} from '@mui/x-data-grid';
 import * as React from 'react';
-import API from '../api/axios'
-import useSWR from 'swr';
+import meiliClient from '../api/meili';
+import { useSessionStorageState } from '@toolpad/core';
 import { CheckCircle,Error,NotStarted} from '@mui/icons-material';
-import {  CircularProgress} from '@mui/material';
-import MuiPagination from '@mui/material/Pagination';
-
-const fetcher = (url: string) => API.get(url).then(res => res.data)
-
+import { CircularProgress} from '@mui/material';
+import { SearchResponse } from "meilisearch";
 
 export default function ArtefactDataGrid(props: any){
+    const [currentCas,setCurrentCas] = useSessionStorageState('cas','')
     const [source,setSource] = React.useState(props.source)
-    const [artefactName,setArtefactName] = React.useState(props.id)
-    const {data,error,isLoading} = useSWR('/api/sources/'+source.id_source+'/artefacts/'+props.artefact.name,fetcher)
+    const [searchQuery,setSearchQuery] = React.useState<SearchResponse>({hits:[],offset:0,limit:100,processingTimeMs:0,query:'',totalHits:0})
     const [taskStatus,setTaskStatus] = React.useState({task_status:'NOT FOUND'})
-
+    const [paginationModel,setPaginationModel] = React.useState<GridPaginationModel>({page:0,pageSize:100})
+    const [filterModel,setfilterModel] = React.useState<GridFilterModel>({items:[]})
+    const [sortModel,setSortModel] = React.useState<GridSortModel>([])
+ 
     const columns: GridColDef[] = React.useMemo(()=>{
-        return isLoading ? []:
-            data.pending ? []:
-                data.values.length === 0 ? []:
-                    Object.keys(data.values[0]).
-                        filter((key)=> key !== 'domain' && key!== 'generated' && key !== 'classification' && key !== 'version' && key !== 'source' && key !== 'id')
-                        .map((key)=>(
-                            {
-                                field: key,
-                                headerName: key,
-                                flex:1
-                            }
-                        )
-                    )
-    }, [data])
+        return searchQuery.hits.length > 0 ? Object.keys(searchQuery.hits[0])
+                .filter((key)=> key !== 'domain' && key!== 'generated' && key !== 'classification' && key !== 'version' && key !== 'source' && key !== 'id' && key !== 'case' && key !== 'plugin' && key !== 'hostname')
+                .map((key)=>(
+                    {field:key,headerName:key,flex:1}
+                ))
+        :[]
+                
+    }, [searchQuery])
 
     React.useEffect(()=>{
-        const fechData = async () =>{
-          try {
-            const res = await  API.get('/api/sources/'+source.id_source+'/tasks/'+props.artefact.name)
-            setTaskStatus(res.data)
-          } catch (error){
-            console.error("Erreur lors de la récupération de la tache "+props.artefact.name, error)
-          }
-        };
-        fechData();
-      },[])
+        const fetchSource = async () => {
+            try{
+                const res = await meiliClient.index(JSON.parse(currentCas ||'{}').case_name+'_artefacts').search('',
+                    {
+                        filter:"source = '"+source.id_source+"' AND plugin = '"+props.artefact.name+"'",
+                        limit: paginationModel.pageSize,
+                        offset: paginationModel.page * paginationModel.pageSize,
+                    })
+                setSearchQuery(res)
+            } catch (error) {
+                console.error("Erreur lors de la récupération de la source", error)
+            }
+        };fetchSource()
+    },[paginationModel])
 
+    React.useEffect(()=>{
+        (
+            async ()=>{
+                console.log('Sort model changed',sortModel)
+            }
+        )();
+    },[sortModel])
 
+    
     return(
         <Card sx={{height:820,width:'inherit',flex:1,display:'flex',flexDirection:'column'}}>
-            <DataGrid columns={columns} rows={isLoading ? []:data.values}
+             <DataGrid columns={columns} rows={searchQuery.hits}
                 getRowHeight={()=>'auto'}
                 showToolbar
-                loading={isLoading ? true : data.pending}
-                initialState={{
-                    pagination: {paginationModel:{pageSize:25}}
-                }}
                 key={'artefact-data-grid-'+props.source.id_source+'-'+props.id}
+
+                paginationMode='server'
+                paginationModel={paginationModel}
+                onPaginationModelChange={setPaginationModel}
+                rowCount={searchQuery.estimatedTotalHits}
+
+                filterMode='server'
+                onFilterModelChange={setfilterModel}
+                filterModel={filterModel}
+
+                sortingMode='server'
+                onSortModelChange={setSortModel}
+                sortModel={sortModel}
+
                 />
                 {
                     taskStatus.task_status === 'NOT FOUND' ? 
@@ -69,7 +85,7 @@ export default function ArtefactDataGrid(props: any){
                     : 
                     null
                 }
-                <Typography>{props.artefact.doc}</Typography>
+                <Typography>{props.artefact.doc}</Typography> 
         </Card>
 
     )
