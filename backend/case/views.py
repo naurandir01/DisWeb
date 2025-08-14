@@ -11,9 +11,9 @@ from .serializers import CaseSerializer
 from back.database import convertOperator
 from django.db.models.functions import ExtractYear,ExtractMonth,ExtractDay,ExtractHour,ExtractMinute,ExtractSecond
 from django.db.models import Count
+from back.meilisearch_engine import MeiliSearchClient
 import os
 import re
-import meilisearch
 
 operator_mapping = {
     'startsWith': 'startswith',
@@ -50,8 +50,28 @@ class CasesViews(APIView):
             case_name=request.POST['case_name'],
             )
         case.save()
-        cache.delete(f'cases')
-        return HttpResponse("Creation du cas")
+        meili_client = MeiliSearchClient.client
+        meili_client.create_index(case.case_name+'_artefacts',{'primaryKey':'id'})
+        artefacts_index = meili_client.index(case.case_name+'_artefacts')
+        artefacts_index.update_settings({
+            'sortableAttributes': [
+                "*",
+            ],
+            'filterableAttributes': [
+                "*",{
+                    'attributePatterns': ["*"],
+                    'features':{
+                        'facetSearch':True,
+                        'filter':{'equality':True,'comparison':False},
+                    }
+                }
+            ],
+            
+        })
+        
+        
+        settings = artefacts_index.get_settings()
+        return JsonResponse(settings,safe=False)
 
 class CaseView(TemplateView):
     """
@@ -74,7 +94,7 @@ class CaseView(TemplateView):
     def delete(self,request,id_case):
         case = Case.objects.get(id_case=id_case)
         
-        meili_client = meilisearch.Client('http://disweb_meilisearch:7700', '2HMCrPPjfhtm8U0aqRcJhCAe52L28n5VM5CfVzfz330')
+        meili_client = MeiliSearchClient.client
         artefacts_index = meili_client.index(case.case_name+'_artefacts')
         artefacts_index.delete()
         
@@ -92,6 +112,14 @@ class CaseSourceView(TemplateView):
     def get(self,request,id_case):
         query = Source.objects.all().filter(source_case=id_case)
         return JsonResponse(list(query.values()),safe=False)
+
+class CaseIndexSettingsView(TemplateView):
+    def get(self,request,id_case):
+        case = Case.objects.get(id_case=id_case)
+        meili_client = MeiliSearchClient.client
+        artefacts_index = meili_client.index(case.case_name+'_artefacts')
+        settings = artefacts_index.get_settings()
+        return JsonResponse(settings,safe=False)
 
 
 class CaseSourceNonLierView(TemplateView):

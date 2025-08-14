@@ -4,26 +4,46 @@ import { DataGrid, GridColDef, GridFilterModel, GridPaginationModel, GridRowMode
 import * as React from 'react';
 import API from '../api/axios'
 import meiliClient from '../api/meili';
-import useSWR from 'swr';
 import { CheckCircle,Error,EventNote,NotStarted} from '@mui/icons-material';
 import {  CircularProgress} from '@mui/material';
 import {  SearchResponse } from "meilisearch";
 import { useSessionStorageState } from '@toolpad/core';
 
-const fetcher = (url: string) => API.get(url).then(res => res.data)
+function  ConvertOperator(filterModel: GridFilterModel){
+    switch(filterModel.items[0].operator){
+        case 'contains':
+            return filterModel.items[0].field + ' CONTAINS '+filterModel.items[0].value ;
+        case 'doesNotContain':
+            return filterModel.items[0].field + ' NOT CONTAINS '+filterModel.items[0].value ;
+        case 'equals':
+            return filterModel.items[0].field + ' = ' +filterModel.items[0].value ;
+        case 'doesNotEqual':
+            return filterModel.items[0].field + ' != ' +filterModel.items[0].value ;
+        case 'startsWith':
+            return filterModel.items[0].field + ' STARTS WITH '+filterModel.items[0].value;
+        case 'isNotEmpty':
+            return filterModel.items[0].field + '  IS NOT EMPTY';
+        case 'isEmpty':
+            return filterModel.items[0].field + ' IS EMPTY';
+        case 'isAnyOf':
+            return filterModel.items[0].field + ' IN ['+ filterModel.items[0].value+']'; ;
+    }
+}
 
 export default function Events(props: any){
     const [currentCas,setCurrentCas] = useSessionStorageState('cas','')
     const [source,setSource] = React.useState(props.source)
-    //const {data,error,isLoading} = useSWR('/api/sources/'+source.id_source+'/artefacts/evtx',fetcher)
     const [taskStatus,setTaskStatus] = React.useState({task_status:'NOT FOUND'})
     const [selectedRow,setSelectedRow] = React.useState<any>({});
-
     const [paginationModel,setPaginationModel] = React.useState<GridPaginationModel>({page:0,pageSize:100})
-    const [filterModel,setfilterModel] = React.useState<GridFilterModel>({items:[]})
+    const [filterModel,setfilterModel] = React.useState<GridFilterModel>({items:[],quickFilterValues:[]})
     const [sortModel,setSortModel] = React.useState<GridSortModel>([])
-    const [searchQuery,setSearchQuery] = React.useState<SearchResponse>({hits:[],offset:0,limit:100,processingTimeMs:0,query:'',totalHits:0})
     
+    const [searchQuery,setSearchQuery] = React.useState([])
+    
+
+    const defaultfilter = "source = '"+source.id_source+"' AND plugin = 'evtx'"
+
     const columns: GridColDef[] = [
         {field:'ts',headerName:'Timestamp',flex:1},
         {field:'Channel',headerName:'Channel',flex:1},
@@ -46,20 +66,34 @@ export default function Events(props: any){
     },[])
 
     React.useEffect(()=>{
-        const fetchSource = async () => {
-            try{
-                const res = await meiliClient.index(JSON.parse(currentCas ||'{}').case_name+'_artefacts').search('',
-                    {
-                        filter:"source = '"+source.id_source+"' AND plugin = 'evtx'",
-                        limit: paginationModel.pageSize,
-                        offset: paginationModel.page * paginationModel.pageSize,
-                    })
-                setSearchQuery(res)
-            } catch (error) {
-                console.error("Erreur lors de la récupération de la source", error)
+        let active = true;
+        (
+            async ()=>{
+                const newsrows = await loadArtefacts(paginationModel,filterModel,sortModel);
+                if (!active) {
+                    return;
+                }
             }
-        };fetchSource()
-    },[paginationModel])
+        )();
+    },[paginationModel,filterModel])
+
+    function loadArtefacts(pagination: GridPaginationModel,filter: GridFilterModel,sort:GridSortModel): Promise<any> {
+            return new Promise((resolve) => {
+                setTimeout(
+                    ()=>{
+                        API.get('/api/sources/'+source.id_source+'/artefacts/evtx/meilisearch',{
+                            params:{
+                                filter:filter.items.length == 0 ? defaultfilter : defaultfilter +' AND ' + ConvertOperator(filter),
+                                q: filter.quickFilterValues !== undefined ? filter.quickFilterValues[0]:'',
+                                offset:pagination.page*pagination.pageSize,
+                                limit:pagination.pageSize}
+                        }).then(res=>{
+                            setSearchQuery(res.data.hits);
+                        })
+                    },
+                );
+            })
+        }
 
     return(
         <Card sx={{height:1100,width:'inherit'}}>
@@ -76,11 +110,11 @@ export default function Events(props: any){
                         : null
                     }
                 title="Events Logs"
-                action={
-                    <IconButton>
-                        <EventNote/>
-                    </IconButton>
-                }
+                //action={
+                //    <IconButton>
+                //        <EventNote/>
+                //    </IconButton>
+                //}
             />
             <CardContent>
                 <Grid container spacing={2}  sx={{justifyContent: "flex-start",alignItems: "flex-start",}}>
@@ -88,7 +122,7 @@ export default function Events(props: any){
                         <div style={{height: 820, width:820}}>
                             <DataGrid
                                 columns={columns}
-                                rows={searchQuery.hits}
+                                rows={searchQuery}
                                 getRowHeight={()=>'auto'}
                                 
                                 onRowClick={(params:any)=>{setSelectedRow(params.row)}}
@@ -126,6 +160,7 @@ export default function Events(props: any){
                     </Grid>
                 </Grid>
            </CardContent>
+           
         </Card>
     )
 

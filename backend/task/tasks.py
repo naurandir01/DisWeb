@@ -9,7 +9,7 @@ from .models import Task
 from artefact.views import add_artefact,add_timeline,add_registry
 from django.core.exceptions import ObjectDoesNotExist
 from celery.exceptions import Ignore
-import meilisearch
+from back.meilisearch_engine import MeiliSearchClient
 
 import datetime
 import json
@@ -221,7 +221,7 @@ def source_regf(self,params):
 
 @shared_task(bind=True,base=CustomTask)
 def source_plugin(self,params):
-    """Run a plugin on a disk and store the result in the table Artefact.
+    """Run a plugin on a disk and store the result in the index <case_name>_artefact of the meilisearch instance.
 
     Args:
         params (json): the parameters of the task: 
@@ -238,22 +238,10 @@ def source_plugin(self,params):
     disk = DissectEngine(task_src)
     res = disk.run_plugin({'name':params['task_type'],'params':params['params'],'case':task_case.id_case,'source':task_src.id_source})
 
-    # #artefact_params = {
-    #     'artefact_type':params['task_type'],
-    #     'artefact_ts':datetime.datetime.now(),
-    #     'artefact_case':task_case,
-    #     'artefact_src':task_src,
-    #     'artefact_values':res
-    # }
-    # #add_artefact(artefact_params)
-    meili_client = meilisearch.Client('http://disweb_meilisearch:7700', '2HMCrPPjfhtm8U0aqRcJhCAe52L28n5VM5CfVzfz330')
+    meili_client = MeiliSearchClient.client
     artefacts_index = meili_client.index(task_case.case_name+'_artefacts')
-    
     artefacts_index.add_documents(res, primary_key='id')
-    artefacts_index.update_filterable_attributes(['**'])
-    artefacts_index.update_sortable_attributes(['**'])
-    
-
+   
     return self.request.id
 
 

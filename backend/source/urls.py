@@ -11,6 +11,7 @@ urlpatterns = [
     path("sources/<uuid:id_source>/fs/get_file_content",csrf_exempt(views.SourceFileContent.as_view()),name="get_source_file_content"),
     path("sources/<uuid:id_source>/fs/get_file_hexdump",csrf_exempt(views.SourceFileHexDump.as_view()),name="get_source_file_hexdump"),
     path("sources/<uuid:id_source>/artefacts/<plugin>",csrf_exempt(views.SourceArtefact.as_view()),name="get_source_artefact"),
+    path("sources/<uuid:id_source>/artefacts/<plugin>/meilisearch",csrf_exempt(views.SourceArtefactMeiliSearch.as_view()),name="get_source_artefact_meilisearch"),
     path("sources/<uuid:id_source>/list_artefeacts/",csrf_exempt(views.SourcePluginsList.as_view()),name="get_source_list_artefact"),
     path('sources/<uuid:id_source>/regf',csrf_exempt(views.SourceRegistryRun.as_view()),name="get_source_registry_run"),
     path("sources/<uuid:id_source>/registry/<int:start>/<int:end>",csrf_exempt(views.SourceRegistry.as_view()),name="get_source_registry"),

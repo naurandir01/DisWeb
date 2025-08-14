@@ -10,9 +10,10 @@ from yaras.models import YaraRule
 from .dissect_engine import DissectEngine
 from back.database import convertOperator
 from task.tasks import source_directory,source_hayabusa,source_photorec,source_plugin,source_regf,source_timeline,source_yara
+from back.meilisearch_engine import MeiliSearchClient
 import json
 import ast
-import meilisearch
+
 
 class SourcesView(TemplateView):
     def get(self,request):
@@ -64,7 +65,7 @@ class SourceView(TemplateView):
         
         case = Case.objects.get(id_case=src.source_case.id_case)
 
-        meili_client = meilisearch.Client('http://disweb_meilisearch:7700', '2HMCrPPjfhtm8U0aqRcJhCAe52L28n5VM5CfVzfz330')
+        meili_client = MeiliSearchClient.client
         artefacts_index = meili_client.index(case.case_name+'_artefacts')
         artefacts_index.delete_documents(filter='source="'+str(src.id_source)+'"')
 
@@ -347,3 +348,21 @@ class SourceTask(TemplateView):
             return JsonResponse({'task_status':task.task_status},safe=False)
         except Task.DoesNotExist:
             return JsonResponse({'task_status':'NOT FOUND'},safe=False)
+
+class SourceArtefactMeiliSearch(TemplateView):
+    def get(self, request, id_source, plugin):
+        src = Source.objects.get(id_source=id_source)
+        filter = request.GET.get('filter')
+        offset = request.GET.get('offset')
+        limit = request.GET.get('limit')
+        q = request.GET.get('q')
+        meili_client = MeiliSearchClient.client
+        case = src.source_case.case_name
+        index = meili_client.index(case + '_artefacts')
+        query = index.search(q,{
+            'filter':filter,
+            'offset':int(offset),
+            'limit':int(limit),
+        })
+        return JsonResponse(query, safe=False)
+

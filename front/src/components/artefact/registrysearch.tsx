@@ -1,8 +1,7 @@
 'use client'
 import * as React from 'react';
 import API from '../api/axios'
-import { Box, Grid } from '@mui/material';
-import { useSessionStorageState, useNotifications } from '@toolpad/core';
+import { useSessionStorageState } from '@toolpad/core';
 import { DataGrid, GridColDef, GridFilterModel, GridPaginationModel, GridRowModel, GridSortModel, GridToolbar} from '@mui/x-data-grid';
 
 export default function RegistrySearch(props: any){

@@ -5,6 +5,7 @@ from django.http import HttpResponse,JsonResponse
 from django.db.models.functions import ExtractYear,ExtractMonth,ExtractDay,ExtractHour,ExtractMinute
 from django.db.models import Count
 from django.views.generic import TemplateView
+from back.meilisearch_engine import MeiliSearchClient
 
 class ArtefactsView(TemplateView):
     def get(request):
@@ -50,4 +51,3 @@ def add_timeline(params):
         timeline_case = params['timeline_case'],
     )
     timeline.save()
-

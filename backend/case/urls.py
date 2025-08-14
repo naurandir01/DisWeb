@@ -9,6 +9,7 @@ urlpatterns = [
     path("cases/<uuid:id_case>/",csrf_exempt(views.CaseView.as_view()),name="get_delete_case"),
     path("cases/<uuid:id_case>/task",views.CaseTaskView.as_view(),name="get_case_task"),
     path("cases/<uuid:id_case>/ioc",views.CaseIOCView.as_view(),name="get_case_ioc"),
+    path("cases/<uuid:id_case>/meili",views.CaseIndexSettingsView.as_view(),name="get_case_meili_settings"),
     path("cases/<uuid:id_case>/sources",views.CaseSourceView.as_view(),name="get_case_source"),
     path("cases/<uuid:id_case>/sources/add",views.CaseSourceNonLierView.as_view(),name="get_case_source_non_lier"), 
     path("cases/<uuid:id_case>/timeline",views.CaseTimeline.as_view(),name='get_case_timeline'),

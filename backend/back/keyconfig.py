@@ -20,3 +20,7 @@ class Redis:
 
 class CRSF:
     ORIGINS = os.getenv("ORIGINS", "http://0.0.0.0:3000")
+
+class MeiliSearch:
+    MEILI_HOST = os.getenv("MEILI_HOST", "http://disweb_meilisearch:7700")
+    MEILI_MASTER_KEY = os.getenv("MEILI_MASTER_KEY", "2HMCrPPjfhtm8U0aqRcJhCAe52L28n5VM5CfVzfz330")

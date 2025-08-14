@@ -3,7 +3,7 @@ import * as React from 'react';
 import { DataGrid, GridActionsCellItem, GridRowId } from '@mui/x-data-grid';
 import { useSessionStorageState,useNotifications, PageContainer} from '@toolpad/core';
 import API from "../components/api/axios"
-import { Delete } from '@mui/icons-material';
+import { Delete, Settings } from '@mui/icons-material';
 import CustomToolBar from '../components/case/customtoolbarcase'
 import { Card, CardHeader, Grid } from '@mui/material';
 import { FaLinux, FaWindows } from 'react-icons/fa';
@@ -12,6 +12,7 @@ export default function CasPage() {
   const [listCas,setListCas] = useSessionStorageState('listeCas','[]')
   const [currentCas,setCurrentCas] = useSessionStorageState('cas','')
   const [listSources,setListSources] = useSessionStorageState('listsources','')
+  
 
   const notifications = useNotifications()
 
@@ -23,6 +24,12 @@ export default function CasPage() {
         label='Delete'
         onClick={deleteCas(params.id)}
         key={'delete-cas'}
+      />,
+      <GridActionsCellItem
+        icon={<Settings/>}
+        label='Meili Settings'
+        onClick={getMeiliIndexSettings(params.id)}
+        key={'meili-settings-cas'}
       />
     ]}
   ]
@@ -42,6 +49,16 @@ export default function CasPage() {
               setListCas(JSON.stringify(res.data))
             }
           )
+        }
+      )
+    },[]
+  )
+
+  const getMeiliIndexSettings = React.useCallback(
+    (id:GridRowId)=> () =>{
+      API.get('/api/cases/'+id+'/meili').then(
+        res=>{
+         console.log('Meili index settings:', res.data)
         }
       )
     },[]

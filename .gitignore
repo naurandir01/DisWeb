@@ -22,3 +22,4 @@ front/node_modules/*
 .venv/*
 backend/source/__pycache__/dissect_engine.cpython-311.pyc
 backend/source/tests.py
+meili_data/
