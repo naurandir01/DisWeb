@@ -85,14 +85,16 @@ def source_hayabusa(self, params):
     json_artefact = []
     for art in hayabusa_res:
         json_artefact.append(json.loads(art))
-    artefact_params = {
-                'artefact_type':'hayabusa',
-                'artefact_ts':datetime.datetime.now(),
-                'artefact_case':task_case,
-                'artefact_src':task_src,
-                'artefact_values':json_artefact
-            }
-    add_artefact(artefact_params)
+
+    for json_art in json_artefact:
+        json_art['plugin'] = 'hayabusa'
+        json_art['source'] = str(task_src.id_source)
+        json_art['case'] = str(task_case.id_case)
+        json_art['id'] = str(uuid.uuid4())
+    
+    meili_client = MeiliSearchClient.client
+    artefacts_index = meili_client.index(task_case.case_name+'_artefacts')
+    artefacts_index.add_documents(json_artefact, primary_key='id')
     return self.request.id  
 
 @shared_task(bind=True,base=CustomTask)
@@ -190,9 +192,12 @@ def source_regf(self,params):
         UUID: id of the task
     """
     task_src = Source.objects.get(id_source=params['task_source'])
+    task_case = Case.objects.get(id_case=params['task_case'])
 
     disk = DissectEngine(task_src)
     regf_res = disk.run_plugin({'name':'regf','params':['']})
+    meili_client = MeiliSearchClient.client
+    artefacts_index = meili_client.index(task_case.case_name+'_artefacts')
 
     for reg in regf_res:
         path = reg['path']
@@ -239,11 +244,35 @@ def source_plugin(self,params):
     res = disk.run_plugin({'name':params['task_type'],'params':params['params'],'case':task_case.id_case,'source':task_src.id_source})
 
     meili_client = MeiliSearchClient.client
-    artefacts_index = meili_client.index(task_case.case_name+'_artefacts')
+    try:
+        meili_client.create_index(task_case.id_case+'_'+params['task_type'])
+    except Exception as e:
+        print(f"Index {task_case.case_name+'_artefacts'} already exists. Error: {e}")
+    artefacts_index = meili_client.index(task_case.id_case+'_'+params['task_type'])
+    # Update the index settings
+    list_of_attributes = []
+    for key in res[0].keys():
+        if key not in ['id','case','source']:
+            list_of_attributes.append(key)
+    artefacts_index.update_settings({
+            'sortableAttributes': [
+                list_of_attributes,
+            ],
+            'filterableAttributes': [
+                "*",{
+                    'attributePatterns': ["*"],
+                    'features':{
+                        'facetSearch':True,
+                        'filter':{'equality':True,'comparison':False},
+                    }
+                }
+            ],
+            
+        })
+    
     artefacts_index.add_documents(res, primary_key='id')
    
     return self.request.id
-
 
 @shared_task(bind=True,base=CustomTask)
 def source_yara(self,params):
@@ -255,6 +284,7 @@ def source_yara(self,params):
             task_case: id of the case,
             task_type: the name of the task, 
             yara_rule: id of the yara rule to execute,
+            yara_size: size of the files to scan in octect
 
     Returns:
         UUID: id of the task
@@ -262,25 +292,23 @@ def source_yara(self,params):
     task_src = Source.objects.get(id_source=params['task_source'])
     task_case = Case.objects.get(id_case=params['task_case'])
     task_yara = YaraRule.objects.get(id_yararule=params['yara_rule'])
+    size = params['yara_size'] # Default size if not provided
 
     disk = DissectEngine(source=task_src)
+    plugin = {'name':'yara',
+              'params':['-r',task_yara.yararule_path,'-m',size],
+              'case':task_case.id_case,
+              'source':task_src.id_source
+              }
+    res = disk.run_plugin({'name':'yara','params':['-r',task_yara.yararule_path,'-m',size]})
+    
+    meili_client = MeiliSearchClient.client
+    artefacts_index = meili_client.index(task_case.case_name+'_artefacts')
 
-    res = disk.run_plugin({'name':'yara','params':['-r',task_yara.yararule_path,'-m','9999999999999']})
-
-    artefact_params = {
-        'artefact_type':params['task_type'],
-        'artefact_ts':datetime.datetime.now(),
-        'artefact_case':task_case,
-        'artefact_src':task_src,
-        'artefact_values':res
-    }
-    try:
-        add_artefact(artefact_params)
-    except Exception as e:
-        print(f"Error when saving the yara rule results: {artefact_params['artefact_type']} : {e}")
+    artefacts_index.add_documents(res, primary_key='id')
+   
     return self.request.id
  
-
 @shared_task(bind=True,base=CustomTask)
 def source_directory(self,params):
     task_src = Source.objects.get(id_source=params['task_source'])

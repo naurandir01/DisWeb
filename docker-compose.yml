@@ -103,12 +103,20 @@ services:
     env_file:
       - .env
     environment:
-      #- discovery.type=single-node
-      #- index.mapping.total_fields.limit=20000
       - MEILI_MASTER_KEY
       - MEILI_NO_ANALYTICS=true
       - MEILI_EXPERIMENTAL_CONTAINS_FILTER=true
-      #- xpack.security.enabled='true'
+    #  - MEILI_EXPERIMENTAL_CHAT_COMPLETION=true
+  
+  # disweb-es:
+  #   image: docker.elastic.co/elasticsearch/elasticsearch:${ES_VERSION}
+  #   container_name: disweb-es
+  #   ports:
+  #     - ${ES_PORT}:9200
+  #   environment:
+  #     - xpack.security.enabled='true'
+  #     - discovery.type=single-node
+  #     - ELASTIC_PASSWORD=${ES_PASSWORD} 
 
 volumes:
   disweb_data:

@@ -5,6 +5,27 @@ import { DataGrid, GridColDef, GridFilterModel, GridPaginationModel, GridRowMode
 import API from '../api/axios'
 import { Box, Typography } from '@mui/material';
 
+function  ConvertOperator(filterModel: GridFilterModel){
+    switch(filterModel.items[0].operator){
+        case 'contains':
+            return filterModel.items[0].field + ' CONTAINS '+filterModel.items[0].value ;
+        case 'doesNotContain':
+            return filterModel.items[0].field + ' NOT CONTAINS '+filterModel.items[0].value ;
+        case 'equals':
+            return filterModel.items[0].field + ' = ' +filterModel.items[0].value ;
+        case 'doesNotEqual':
+            return filterModel.items[0].field + ' != ' +filterModel.items[0].value ;
+        case 'startsWith':
+            return filterModel.items[0].field + ' STARTS WITH '+filterModel.items[0].value;
+        case 'isNotEmpty':
+            return filterModel.items[0].field + '  IS NOT EMPTY';
+        case 'isEmpty':
+            return filterModel.items[0].field + ' IS EMPTY';
+        case 'isAnyOf':
+            return filterModel.items[0].field + ' IN ['+ filterModel.items[0].value+']'; ;
+    }
+}
+
 export default function ChronologieDataGrid(props: any){
     const [currentCas,setCurrentCas] = useSessionStorageState('cas','')
     const [listSources,setListSources] = useSessionStorageState('listsources','[]')
@@ -18,95 +39,66 @@ export default function ChronologieDataGrid(props: any){
     const [filterModel,setfilterModel] = React.useState<GridFilterModel>({items:[]})
     const [sortModel,setSortModel] = React.useState<GridSortModel>([])
 
+    const defaultfilter = "case = '"+JSON.parse(currentCas||"{'id_case':'0'}").id_case+"' AND ts EXISTS"
     
-    const chronologie_coulumn: GridColDef[] = [
-        {field:'timeline_src_id',headerName:'Source',flex:1,
+    const columns: GridColDef[] = [
+        {field:'source',headerName:'Source',flex:1,
             renderCell:(params:any)=>{return <Typography>{JSON.parse(listSources || '[]').find((item: any)=>item.id_source === params.value).source_name}</Typography>}},
-        {field:'timeline_ts',headerName:'Timestamp',flex:1,type:'dateTime',valueGetter:(value: string)=>new Date(value)},
-        {field:'timeline_type',headerName:'Type',flex:1},
-        {field:'timeline_value',headerName:'Value',flex:1},
-        
+        {field:'ts',headerName:'Timestamp',flex:1,type:'dateTime',valueGetter:(value: string)=>new Date(value)},
+        {field:'plugin',headerName:'Type',flex:1},
     ]
 
-    function loadServerRows(page: number,size: number,filter: any,sort:any): Promise<any> {
-        return new Promise((resolve) => {
-            setTimeout(
-                () => {
-                    API.get('/api/cases/'+JSON.parse(currentCas||'{}').id_case+'/timeline/'+(page*size)+'/'+(page+1)*size,{params:{filtermodel:filter,sortingmodel:sort,timerange:props.currentTimeStampGlobal}}).then(res=>{
-                    setRows(res.data)
-                    setIsLoading(false)
-                });
-                },
-            ); 
-        });
-      }
-    
-    React.useEffect(() => {
-    let active = true;
-    (
-        async () => {
-        setIsLoading(true)
-        const newsrows = await loadServerRows(paginationModel.page,paginationModel.pageSize,filterModel.items,sortModel);
-        if (!active) {
-            return;
-        }
-        setIsLoading(false)
-        }
-        
-    )();
-    },[paginationModel.page,paginationModel.pageSize,filterModel.items,sortModel])
+    React.useEffect(()=>{
+            let active = true;
+            (
+                async ()=>{
+                    const newsrows = await loadArtefacts(paginationModel,filterModel,sortModel);
+                    if (!active) {
+                        return;
+                    }
+                }
+            )();
+    },[paginationModel,filterModel,sortModel])
 
-    function getRowsLength(filter:any): Promise<any>{
+
+    function loadArtefacts(pagination: GridPaginationModel,filter: GridFilterModel,sort:GridSortModel): Promise<any> {
         return new Promise((resolve) => {
             setTimeout(
-                () => {
-                    API.get('/api/cases/'+JSON.parse(currentCas||'{}').id_case+'/timeline/size',{params:{filtermodel:filter,timerange:props.currentTimeStampGlobal}}).then(res=>{
-                    setRowsCount(res.data.size)
-                });
+                ()=>{
+                    API.get('/api/cases/'+JSON.parse(currentCas||"{'id_case':'0'}").id_case+'/timelinemeilisearch/',{
+                        params:{
+                            filter:filter.items.length == 0 ? defaultfilter : defaultfilter +' AND ' + ConvertOperator(filter),
+                            q: filter.quickFilterValues !== undefined ? filter.quickFilterValues[0]:'',
+                            offset:pagination.page*pagination.pageSize,
+                            limit:pagination.pageSize,
+                            sort:sort.length > 0 ? sort[0].field + ':' + sort[0].sort : ''
+                            
+                        }
+                    }).then(res=>{
+                        setRows(res.data.hits);
+                        setRowsCount(res.data.total);
+                        
+                    })
                 },
-            ); 
+            );
         })
     }
-    
-    React.useEffect(() => {
-        let active = true;
-        (
-            async () => {
-                const rowslength = await getRowsLength(filterModel.items);
-                if (!active) {
-                    return;
-                }
-            }
-        )()
-    },[filterModel.items,props.currentTimeStampGlobal])
 
-    React.useEffect(() => {
-        let active = true;
-        (
-            async () => {
-                const newsrows = await loadServerRows(paginationModel.page,paginationModel.pageSize,filterModel.items,sortModel);
-                if (!active) {
-                    return;
-                }
-            }
-        )()
-    },[props.currentTimeStampGlobal])
-
+   
     return(
         <Box sx={{height:1000}}>
             <DataGrid
-                columns={chronologie_coulumn}
+                columns={columns}
                 rows={rows}
-                loading={isLoading}
+                //loading={isLoading}
                 showToolbar
                 pagination
-                
-                pageSizeOptions={[100]}
                 rowCount={rowsCount}
 
                 paginationMode='server'
                 onPaginationModelChange={setPaginationModel}
                 paginationModel={paginationModel}
+                
                 
                 filterMode='server'
                 onFilterModelChange={setfilterModel}

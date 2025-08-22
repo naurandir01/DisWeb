@@ -185,9 +185,10 @@ class SourceTimeline(TemplateView):
             return HttpResponse('Nom incompatible')
 
 class SourceYara(TemplateView):
-    def get(self,request,id_source,rules):
+    def get(self,request,id_source,rules,size):
         src = Source.objects.get(id_source=id_source)
         task_yara = YaraRule.objects.get(id_yararule=rules)
+        size = request.GET.get('size')
         try:
             artefact = Artefact.objects.get(artefact_src=src,artefact_type='yara_'+task_yara.yararule_name)
             return JsonResponse(artefact.artefact_values,safe=False)
@@ -197,7 +198,9 @@ class SourceYara(TemplateView):
                 'task_case':src.source_case.id_case,
                 'task_type':'yara_'+task_yara.yararule_name,
                 'task_status':'PENDING',
-                'yara_rule':rules}
+                'yara_size':size,
+                'yara_rule':rules
+                }
             try:
                 task = Task.objects.get(task_src=src,task_type='yara_'+task_yara.yararule_name)
                 if task.task_status == 'PENDING':
@@ -350,19 +353,47 @@ class SourceTask(TemplateView):
             return JsonResponse({'task_status':'NOT FOUND'},safe=False)
 
 class SourceArtefactMeiliSearch(TemplateView):
+    """
+        Get the content of an artefact from an index in MeiliSearch
+
+        :param request: The request object
+            
+        :param params filter: The filter to apply on the artefacts
+        :param params offset: The offset to apply on the results
+        :param params limit: The limit of results to return
+        
+        :param id_source: The id of the Source
+        :param plugin: The name of the plugin to filter the artefacts
+        
+        :return: A JsonResponse with the artefact 
+        """
     def get(self, request, id_source, plugin):
         src = Source.objects.get(id_source=id_source)
         filter = request.GET.get('filter')
         offset = request.GET.get('offset')
         limit = request.GET.get('limit')
-        q = request.GET.get('q')
+        sort = request.GET.get('sort')
+
         meili_client = MeiliSearchClient.client
-        case = src.source_case.case_name
-        index = meili_client.index(case + '_artefacts')
-        query = index.search(q,{
+        case = Case.objects.get(id_case=src.source_case.id_case)
+        index = meili_client.index(case.case_name + '_artefacts')
+
+        params = {
             'filter':filter,
             'offset':int(offset),
             'limit':int(limit),
-        })
-        return JsonResponse(query, safe=False)
+        }
+        if sort != '':
+            params['sort'] = [sort]
+        
+        query = index.get_documents(params)
+        
+        jsons = []
+        for res in query.results:
+            js = {}
+            for dict in res.__dict__:
+                js[dict] = res.__dict__[dict]
+            jsons.append(js)
+        
+        return JsonResponse({'total':query.total,'hits':jsons}, safe=False)
 

@@ -72,10 +72,10 @@ export default function SruNetwork(props: any){
         setSeriesByteReceived(seriebyterevcd)
     },[app])
 
-    React.useEffect(() => {
-        console.log(seriesByteRcevd)
-        console.log(seriesByteSend)
-    },[app])
+    // React.useEffect(() => {
+    //     console.log(seriesByteRcevd)
+    //     console.log(seriesByteSend)
+    // },[app])
 
     return(
         <Box sx={{width:2000,height:820}}>

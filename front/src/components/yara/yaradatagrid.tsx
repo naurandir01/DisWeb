@@ -16,7 +16,7 @@ export default function YaraDataGrid(props: any){
     const [currentYaraRule, setCurrentYaraRule] = React.useState({yararule_name:'',id_yararule:''})
     const [currentYaraRuleStatus, setCurrentYaraRuleStatus] = React.useState({task_status:''})
     const [currentYaraRuleResults, setCurrentYaraRuleResults] = React.useState<any>([])
-    const [currentYaraRuleSize, setCurrentYaraRuleSize] = React.useState(0)
+    const [currentYaraRuleSize, setCurrentYaraRuleSize] = React.useState(100000)
     const notification = useNotifications()
 
     const [columns,setColumns] = React.useState([
@@ -55,12 +55,16 @@ export default function YaraDataGrid(props: any){
 
     const handleStartYaraRule = ()=>{
         try {
-            API.get('/api/sources/'+source.id_source+'/yara/'+currentYaraRule.id_yararule).then(res=>{
+            API.get('/api/sources/'+source.id_source+'/yara/'+currentYaraRule.id_yararule+'/size/'+currentYaraRuleSize).then(res=>{
                 notification.show('Succes in starting the YaraRule ' + currentYaraRule.yararule_name,{autoHideDuration:3000,severity:'success'})
             })
         } catch (error){
             notification.show('Error in starting YaraRule ' + currentYaraRule.yararule_name,{autoHideDuration:3000,severity:'error'})
         }
+    }
+
+    const setYaraRuleSize = (event: any) => {
+        setCurrentYaraRuleSize(event.target.value)
     }
 
     return(
@@ -76,7 +80,11 @@ export default function YaraDataGrid(props: any){
                     </TextField>
                 </Grid>
                 <Grid size={1}>
-                        <TextField label="Size of the files to scan in octect" value={currentYaraRuleSize}/>
+                        <TextField label="Size of the files to scan in octect" 
+                            value={currentYaraRuleSize} 
+                            onChange={setYaraRuleSize}
+                            
+                        />
                 </Grid>
                 <Grid size={1}>
                     <Box>

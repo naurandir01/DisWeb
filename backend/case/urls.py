@@ -11,10 +11,11 @@ urlpatterns = [
     path("cases/<uuid:id_case>/ioc",views.CaseIOCView.as_view(),name="get_case_ioc"),
     path("cases/<uuid:id_case>/meili",views.CaseIndexSettingsView.as_view(),name="get_case_meili_settings"),
     path("cases/<uuid:id_case>/sources",views.CaseSourceView.as_view(),name="get_case_source"),
-    path("cases/<uuid:id_case>/sources/add",views.CaseSourceNonLierView.as_view(),name="get_case_source_non_lier"), 
+    path("cases/<uuid:id_case>/sources/add",views.CaseSourceNotLink.as_view(),name="get_case_source_non_lier"), 
     path("cases/<uuid:id_case>/timeline",views.CaseTimeline.as_view(),name='get_case_timeline'),
     path("cases/<uuid:id_case>/timeline/<int:start>/<int:end>",views.CaseTimelineStartEnd.as_view(),name='get_case_artefacts'),
     path("cases/<uuid:id_case>/timeline/size",views.CaseTimelineSize.as_view(),name='get_case_artefacts'),
     path("cases/<uuid:id_case>/timeline/timestamp/",views.CaseTimelineViewYears.as_view(),name='get_case_timeline_years'),
-    path("cases/<uuid:id_case>/timeline/timestamp/<timestamp>",views.CaseTimelineCountView.as_view(),name='get_case_timeline_years')
+    path("cases/<uuid:id_case>/timeline/timestamp/<timestamp>",views.CaseTimelineCountView.as_view(),name='get_case_timeline_years'),
+    path("cases/<uuid:id_case>/timelinemeilisearch/",views.CaseTimelineView.as_view(),name="get_case_timeline_meilisearch")
 ]

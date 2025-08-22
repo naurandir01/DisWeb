@@ -14,6 +14,7 @@ up:
 down:
 	docker compose -f docker-compose.yml down
 
+
 .PHONY: help
 help:
 	@echo "Available commands:"

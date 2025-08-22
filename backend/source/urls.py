@@ -21,7 +21,7 @@ urlpatterns = [
     path('sources/<uuid:id_source>/tasks',csrf_exempt(views.SourceTasks.as_view()),name="get_source_tasks"),
     path('sources/<uuid:id_source>/tasks/<task_type>',csrf_exempt(views.SourceTask.as_view()),name="get_source_task"),
     path('sources/<uuid:id_source>/yara',csrf_exempt(views.SourceYaras.as_view()),name="get_source_yaras"),
-    path('sources/<uuid:id_source>/yara/<uuid:rules>',csrf_exempt(views.SourceYara.as_view()),name="get_source_yara"),
+    path('sources/<uuid:id_source>/yara/<uuid:rules>/size/<int:size>',csrf_exempt(views.SourceYara.as_view()),name="get_source_yara"),
     path('sources/<uuid:id_source>/hayabusa',csrf_exempt(views.SourceHayabusa.as_view()),name="get_source_hayabusa"),
     path('sources/<uuid:id_source>/timeline',csrf_exempt(views.SourceTimeline.as_view()),name="get_source_timeline")
 ]

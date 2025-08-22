@@ -58,6 +58,7 @@ class DissectEngine:
         Executes a specified plugin on the target disk image with given parameters.
         Args:
             plugin (dict): A dictionary containing the plugin name and parameters.
+            {'name': 'plugin_name', 'params': ['param1', ....], 'case': 'case_uuid', 'source': 'src_uuid'}
         Returns:
             str or list: The output of the plugin execution, either as a string or a list of json records.
         """
@@ -94,6 +95,7 @@ class DissectEngine:
                 record['source']=str(source)
             if plugin is not None:
                 record['plugin']=plugin
+            record['id']=str(uuid.uuid4())
             records_json.append(record)
         return records_json
     
@@ -254,27 +256,25 @@ class DissectEngine:
         Returns:
             str: The output of the Hayabusa plugin execution.
         """
-        volumes = self.get_volumes()
-        evt_path = "/Windows/System32/winevt/Logs/"
-        for volume in volumes:
-            evtx_folder = self.get_directory_content(evt_path,volume['name'])
-            for evtx in evtx_folder:
-                try:
-                    os.rmdir('/tmp/hayabusa')
-                except OSError:
-                    pass
-                os.makedirs('/tmp/hayabusa', exist_ok=True)
-                
-                if len(evtx_folder) > 0:
-                    evtx_file = self.get_file_no_open(evt_path+'/'+evtx['name'],volume['name'])
-                    with open('/tmp/hayabusa/'+evtx['name'], 'wb') as f:
-                        open_file = evtx_file.open()
-                        f.write(open_file.readall())
-            cmd ='/backend/external/hayabusa/hayabusa json-timeline --no-wizard -d /tmp/hayabusa -A -D -n -u -C -L -o /tmp/hayabusa.json'
-            result = subprocess.check_output(cmd,shell=True)
-            result_json = []
-            with open('/tmp/hayabusa.json', 'r') as f:
-                for line in f:
-                    result_json.append(line)
-            return result_json
-        return []
+        evt_path = "C:/Windows/System32/winevt/Logs/"
+        evtx_folder = self.get_directory_content(evt_path)
+        for evtx in evtx_folder:
+            try:
+                os.rmdir('/tmp/hayabusa_'+self.target.name)
+            except OSError:
+                pass
+            os.makedirs('/tmp/hayabusa_'+self.target.name, exist_ok=True)
+            
+            if len(evtx_folder) > 0:
+                evtx_file = self.get_file_no_open(evt_path+'/'+evtx['name'])
+                with open('/tmp/hayabusa_'+self.target.name+'/'+evtx['name'], 'wb') as f:
+                    open_file = evtx_file.open()
+                    f.write(open_file.readall())
+        cmd =f"/backend/external/hayabusa/hayabusa json-timeline --no-wizard -d /tmp/hayabusa_{self.target.name} -A -D -n -u -C -L -o /tmp/hayabusa_{self.target.name}.json"
+        result = subprocess.check_output(cmd,shell=True)
+        result_json = []
+        with open(f"/tmp/hayabusa_{self.target.name}.json", 'r') as f:
+            for line in f:
+                result_json.append(line)
+        return result_json
+    

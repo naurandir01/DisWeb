@@ -29,9 +29,7 @@ function  ConvertOperator(filterModel: GridFilterModel){
 }
 
 export default function ArtefactDataGrid(props: any){
-    const [currentCas,setCurrentCas] = useSessionStorageState('cas','')
     const [source,setSource] = React.useState(props.source)
-    
     const [searchQuery,setSearchQuery] = React.useState([])
     
     const [taskStatus,setTaskStatus] = React.useState({task_status:'NOT FOUND'})
@@ -44,9 +42,10 @@ export default function ArtefactDataGrid(props: any){
     
     const [columns, setColumns] = React.useState<GridColDef[]>([])
     const [runOnce, setRunOnce] = React.useState(false)
+    const [rowCount, setRowCount] = React.useState(-1)
 
 
-    // Allow the generation of columns based on the result of the search query
+    // Allow the generation of columns based on the result of the search query. Only run once to avoid the rest of the filtermodel
     React.useEffect(()=>{
         searchQuery.length > 0 && runOnce === false ? 
            (setColumns(Object.keys(searchQuery[0])
@@ -58,23 +57,18 @@ export default function ArtefactDataGrid(props: any){
         :null       
     }, [searchQuery])
 
-    const columns2 = [
-        {field:'ts',headerName:'TimeStamp',flex:1},
-        {field:'path',headerName:'Path',flex:1},
-    ]
-
     React.useEffect(()=>{
         let active = true;
+        console.log("Sort Model",sortModel);
         (
             async ()=>{
-                console.log('Loading artefacts for source with filter Model: ',filterModel,' and pagination: ',paginationModel);
                 const newsrows = await loadArtefacts(paginationModel,filterModel,sortModel);
                 if (!active) {
                     return;
                 }
             }
         )();
-    },[paginationModel,filterModel])
+    },[paginationModel,filterModel,sortModel])
 
     React.useEffect(()=>{
         const fechData = async () =>{
@@ -97,10 +91,13 @@ export default function ArtefactDataGrid(props: any){
                             filter:filter.items.length == 0 ? defaultfilter : defaultfilter +' AND ' + ConvertOperator(filter),
                             q: filter.quickFilterValues !== undefined ? filter.quickFilterValues[0]:'',
                             offset:pagination.page*pagination.pageSize,
-                            limit:pagination.pageSize
+                            limit:pagination.pageSize,
+                            sort:sort.length > 0 ? sort[0].field + ':' + sort[0].sort : ''
+                            
                         }
                     }).then(res=>{
                         setSearchQuery(res.data.hits);
+                        setRowCount(res.data.total);
                         
                     })
                 },
@@ -120,7 +117,7 @@ export default function ArtefactDataGrid(props: any){
                 paginationMode='server'
                 paginationModel={paginationModel}
                 onPaginationModelChange={setPaginationModel}
-                rowCount={-1}
+                rowCount={rowCount}
 
                 filterMode='server'
                 onFilterModelChange={setFilterModel}

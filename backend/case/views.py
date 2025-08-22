@@ -55,7 +55,7 @@ class CasesViews(APIView):
         artefacts_index = meili_client.index(case.case_name+'_artefacts')
         artefacts_index.update_settings({
             'sortableAttributes': [
-                "*",
+                "ts",
             ],
             'filterableAttributes': [
                 "*",{
@@ -118,11 +118,11 @@ class CaseIndexSettingsView(TemplateView):
         case = Case.objects.get(id_case=id_case)
         meili_client = MeiliSearchClient.client
         artefacts_index = meili_client.index(case.case_name+'_artefacts')
-        settings = artefacts_index.get_settings()
+        settings = artefacts_index.get_stats()
         return JsonResponse(settings,safe=False)
 
 
-class CaseSourceNonLierView(TemplateView):
+class CaseSourceNotLink(TemplateView):
     def get(self,request,id_case):
         case = Case.objects.all().filter(id_case=id_case).values()[0]
         case_path = CASE_DIRECTORY +'/'+case['case_name']
@@ -242,7 +242,6 @@ class CaseTimelineSize(TemplateView):
             year,month,day = datetime.split('-')
             hour,minute = hour.split(':')
             return queryset.filter(timeline_ts__year=year,timeline_ts__month=month,timeline_ts__day=day,timeline_ts__hour=hour,timeline_ts__minute=minute)
-
 
 class CaseTimelineViewMinMax(TemplateView):
     def get(self,request,id_case):
@@ -374,3 +373,36 @@ class CaseTimelineCountView(TemplateView):
             event['ts'] = f"{year}-{month}-{day}T{hour}:{minute}:{event['ts']}"
             events_final.append(event)
         return list(event_by_minute)
+
+
+class CaseTimelineView(TemplateView):
+    def get(self,request,id_case):
+        case = Case.objects.get(id_case=id_case)
+        filter = request.GET.get('filter')
+        offset = request.GET.get('offset')
+        limit = request.GET.get('limit')
+        sort = request.GET.get('sort')
+
+        meili_client = MeiliSearchClient.client
+        index = meili_client.index(case.case_name + '_artefacts')
+
+        params = {
+            'filter':filter,
+            'offset':int(offset),
+            'limit':int(limit),
+        }
+        if sort != '':
+            params['sort'] = [sort]
+        
+        query = index.get_documents(params)
+        
+        jsons = []
+        for res in query.results:
+            js = {}
+            for dict in res.__dict__:
+                js[dict] = res.__dict__[dict]
+            jsons.append(js)
+        
+        return JsonResponse({'total':query.total,'hits':jsons}, safe=False)
+
+

@@ -5,8 +5,6 @@ from dissect.target.tools.utils import execute_function_on_target,find_functions
 from dissect.target.plugins.scrape.qfind import QFindPlugin,progress
 from dissect.target import Target
 from dissect.target.helpers.keychain import KeyType
-from elasticsearch import Elasticsearch
-from elasticsearch.helpers import bulk
 
 import meilisearch
 
@@ -15,31 +13,24 @@ def main():
     path = "/mnt/disk/TEST/c-drive/c-drive.vmdk"
     d = DissectEngine(path=path)
 
-    meili_client = meilisearch.Client('http://localhost:7700', 'masterKey')
+    meili_client = meilisearch.Client('http://localhost:7700', '2HMCrPPjfhtm8U0aqRcJhCAe52L28n5VM5CfVzfz330')
+    stats = meili_client.get_all_stats()
 
-    artefacts_index = meili_client.index('evtx')
-    timeline_index = meili_client.index('timeline')
-  
-    evtx = d.run_plugin({'name':'artefacts','params':[],'case':'case_uuid','source':'src_uuid'})
-    walkfs = d.run_plugin({'name':'walkfs','params':[],'case':'case_uuid','source':'src_uuid'})
-    try:
-        timeline_index.add_documents(walkfs, primary_key='id')
-    except Exception as e:
-        pass
-    #v = d.get_volumes()
-    #f_d = d.get_directory_content('',1)
-    #d.plugin('authlog',[''])
-    #print(d.getPlugins('authlog'))
-    #plugins = d.run_plugin({'name':'prefetch','params':['--grouped']})
+    #evtx = d.run_plugin({'name':'evtx','params':[],'case':'case_uuid','source':'src_uuid'})
+
+    # try:
+    #     es_client.indices.create(index='case_id_artefacts')
+    # except Exception as e:
+    #     print(f"Index creation failed: {e}")
+    # for evt in evtx:
+    #     es_client.index(index='case_id_artefacts', document=evt)
+
+    #d.run_hayabusa()
+    
+
 
     print("hex")
-   
-def main3():
-    path = "/mnt/disk/TEST/c-drive/c-drive.vmdk"
-    path_dir ='/c:'
-    d = DissectEngine(path=path)
-    drcs = d.get_directory_content(path_dir)
-    print("Iterating through files in the root directory:")
+
 
 if __name__ == "__main__":
     main()
