@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useSessionStorageState } from '@toolpad/core';
 import { DataGrid, GridColDef, GridFilterModel, GridPaginationModel, GridRowModel, GridSortModel} from '@mui/x-data-grid';
 import API from '../api/axios'
-import { Box, Typography } from '@mui/material';
+import { Box, Card, CardContent, CardHeader, Grid, Typography } from '@mui/material';
 
 function  ConvertOperator(filterModel: GridFilterModel){
     switch(filterModel.items[0].operator){
@@ -23,6 +23,18 @@ function  ConvertOperator(filterModel: GridFilterModel){
             return filterModel.items[0].field + ' IS EMPTY';
         case 'isAnyOf':
             return filterModel.items[0].field + ' IN ['+ filterModel.items[0].value+']'; ;
+        case 'is':
+            return filterModel.items[0].field + ' = ' +filterModel.items[0].value ;
+        case 'not':
+            return filterModel.items[0].field + ' != ' +filterModel.items[0].value ; 
+        case 'after':
+            return filterModel.items[0].field + ' > ' +filterModel.items[0].value ;
+        case 'before':
+            return filterModel.items[0].field + ' < ' +filterModel.items[0].value ;
+        case 'onOrAfter':
+            return filterModel.items[0].field + ' >= ' +filterModel.items[0].value ;
+        case 'onOrBefore':
+            return filterModel.items[0].field + ' <= ' +filterModel.items[0].value ;
     }
 }
 
@@ -48,8 +60,11 @@ export default function ChronologieDataGrid(props: any){
         {field:'plugin',headerName:'Type',flex:1},
     ]
 
+    const [event,setEvent] = React.useState<any>({})
+
     React.useEffect(()=>{
             let active = true;
+            console.log("Filter Model",filterModel);
             (
                 async ()=>{
                     const newsrows = await loadArtefacts(paginationModel,filterModel,sortModel);
@@ -84,31 +99,61 @@ export default function ChronologieDataGrid(props: any){
         })
     }
 
+    const notToDisplay = [
+        'id',
+        'source',
+        'case',
+        'generated',
+        'classification'
+    ]
+
    
     return(
         <Box sx={{height:1000}}>
-            <DataGrid
-                columns={columns}
-                rows={rows}
-                //loading={isLoading}
-                showToolbar
-                pagination
-                rowCount={rowsCount}
+            <Grid container spacing={2}>
+                <Grid size={4}>
+                    <DataGrid
+                        columns={columns}
+                        rows={rows}
+                        //loading={isLoading}
+                        showToolbar
+                        pagination
+                        rowCount={rowsCount}
+                        slotProps={{ toolbar: { showQuickFilter: false } }}
 
-                paginationMode='server'
-                onPaginationModelChange={setPaginationModel}
-                paginationModel={paginationModel}
-                
-                
-                filterMode='server'
-                onFilterModelChange={setfilterModel}
-                filterModel={filterModel}
+                        onRowClick={(params:any)=>{setEvent(params.row)}}
 
-                sortingMode='server'
-                onSortModelChange={setSortModel}
-                sortModel={sortModel}
-                
-                />
+                        paginationMode='server'
+                        onPaginationModelChange={setPaginationModel}
+                        paginationModel={paginationModel}
+                        
+                        
+                        filterMode='server'
+                        onFilterModelChange={setfilterModel}
+                        filterModel={filterModel}
+
+                        sortingMode='server'
+                        onSortModelChange={setSortModel}
+                        sortModel={sortModel}
+                    />
+                </Grid>
+                <Grid size={8}>
+                    <Card>
+                        <CardHeader title="Event Details"/>
+                        <CardContent>
+                            {
+                                Object.keys(event).filter((key)=>key !== 'id' && key !== 'domain' && key !== 'source' && key !== 'case')
+                                .map((key:any)=>{
+                                    return(
+                                        <Typography>{key}: {event[key]}</Typography>
+                                    )
+                                })
+                            }
+                        </CardContent>
+
+                    </Card>
+                </Grid>
+            </Grid>
         </Box>
     )
 }

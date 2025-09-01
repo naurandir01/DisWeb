@@ -242,33 +242,10 @@ def source_plugin(self,params):
 
     disk = DissectEngine(task_src)
     res = disk.run_plugin({'name':params['task_type'],'params':params['params'],'case':task_case.id_case,'source':task_src.id_source})
-
+    
     meili_client = MeiliSearchClient.client
-    try:
-        meili_client.create_index(task_case.id_case+'_'+params['task_type'])
-    except Exception as e:
-        print(f"Index {task_case.case_name+'_artefacts'} already exists. Error: {e}")
-    artefacts_index = meili_client.index(task_case.id_case+'_'+params['task_type'])
-    # Update the index settings
-    list_of_attributes = []
-    for key in res[0].keys():
-        if key not in ['id','case','source']:
-            list_of_attributes.append(key)
-    artefacts_index.update_settings({
-            'sortableAttributes': [
-                list_of_attributes,
-            ],
-            'filterableAttributes': [
-                "*",{
-                    'attributePatterns': ["*"],
-                    'features':{
-                        'facetSearch':True,
-                        'filter':{'equality':True,'comparison':False},
-                    }
-                }
-            ],
-            
-        })
+    
+    artefacts_index = meili_client.index(task_case.case_name+'_artefacts')
     
     artefacts_index.add_documents(res, primary_key='id')
    
@@ -300,7 +277,7 @@ def source_yara(self,params):
               'case':task_case.id_case,
               'source':task_src.id_source
               }
-    res = disk.run_plugin({'name':'yara','params':['-r',task_yara.yararule_path,'-m',size]})
+    res = disk.run_plugin({'name':'yara','params':['-r',task_yara.yararule_path,'-m',str(size)],'case':task_case.id_case,'source':task_src.id_source})
     
     meili_client = MeiliSearchClient.client
     artefacts_index = meili_client.index(task_case.case_name+'_artefacts')
@@ -318,16 +295,16 @@ def source_directory(self,params):
     
     disk = DissectEngine(task_src)
     
+    directoryContent = disk.get_directory_content(path=directory,case=task_case.id_case,source=task_src.id_source)
+
+    meili_client = MeiliSearchClient.client
+
+    artefacts_index = meili_client.index(task_case.case_name+'_artefacts')
     try:
-        Artefact.objects.get(artefact_type=params['task_type'], artefact_src=task_src, artefact_case=task_case)
-    except Artefact.DoesNotExist:
-        directoryContent = disk.get_directory_content(directory)
-        artefact_params = {
-            'artefact_type':params['task_type'],
-            'artefact_ts':datetime.datetime.now(),
-            'artefact_case':task_case,
-            'artefact_src':task_src,
-            'artefact_values':directoryContent
-        }
-        add_artefact(artefact_params)
+        artefacts_index.add_documents(directoryContent, primary_key='id')
+    except Exception as e:
+        print(f"Error adding documents to MeiliSearch: {e}")
+        print(f"Directory Path: {directory}")
+        print(f"Directory Content: {directoryContent}")
+        
     return self.request.id

@@ -112,6 +112,7 @@ export default function ArtefactDataGrid(props: any){
                 showToolbar
                 key={'artefact-data-grid-'+props.source.id_source+'-'+props.id}
                 //loading={loading}
+                slotProps={{ toolbar: { showQuickFilter: false } }}
 
                 pagination
                 paginationMode='server'

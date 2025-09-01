@@ -124,6 +124,7 @@ export default function Events(props: any){
                                 columns={columns}
                                 rows={searchQuery}
                                 getRowHeight={()=>'auto'}
+                                slotProps={{ toolbar: { showQuickFilter: false } }}
                                 
                                 onRowClick={(params:any)=>{setSelectedRow(params.row)}}
                                 showToolbar
@@ -140,6 +141,7 @@ export default function Events(props: any){
                                 sortingMode='server'
                                 onSortModelChange={setSortModel}
                                 sortModel={sortModel}
+
                             />
                         </div>
                     </Grid>

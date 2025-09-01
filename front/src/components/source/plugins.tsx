@@ -10,7 +10,7 @@ import API from '../api/axios'
 
 const plugins_not_to_show_list = [
     'mft_timeline','yara','mft','activity','os','ips','hostname','version','architecture',
-    'example_yield','example_none','example_record','example','loaders','plugins','walkfs',
+    'example_yield','example_none','example_record','example','loaders','plugins',
     'timezone','language','ntversion','domain','keys','pathenvironment','qfind',"_dpapi_keyprovider_keychain.keys",
     "_dpapi_keyprovider_lsa_defaultpassword.keys","_dpapi_keyprovider_credhist.keys","_dpapi_keyprovider_empty.keys",'regf'
 ]

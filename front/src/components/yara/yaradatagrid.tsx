@@ -11,12 +11,11 @@ const fetcher = (url: string) => API.get(url).then(res => res.data)
 
 export default function YaraDataGrid(props: any){
     const [source,setSource] = React.useState(props.source)
-    //const {data,error,isLoading} = useSWR('/api/sources/'+source.id_source+'/yara',fetcher)
     const [listYaraRules, setListYaraRules] = useSessionStorageState('listyararules','[]')
     const [currentYaraRule, setCurrentYaraRule] = React.useState({yararule_name:'',id_yararule:''})
     const [currentYaraRuleStatus, setCurrentYaraRuleStatus] = React.useState({task_status:''})
     const [currentYaraRuleResults, setCurrentYaraRuleResults] = React.useState<any>([])
-    const [currentYaraRuleSize, setCurrentYaraRuleSize] = React.useState(100000)
+    const [currentYaraRuleSize, setCurrentYaraRuleSize] = React.useState(100000000)
     const notification = useNotifications()
 
     const [columns,setColumns] = React.useState([
@@ -29,8 +28,8 @@ export default function YaraDataGrid(props: any){
         const fechData = async () =>{
             if(currentYaraRuleStatus.task_status === 'SUCCESS'){
                    try {
-                const res = await  API.get('/api/sources/'+source.id_source+'/yara/'+currentYaraRule.id_yararule)
-                setCurrentYaraRuleResults(res.data)
+                const res = await  API.get('/api/sources/'+source.id_source+'/yara/'+currentYaraRule.id_yararule+'/size/0')
+                setCurrentYaraRuleResults(res.data.values)
             
             } catch (error){
                     console.error("Error when getting yara results", error)
@@ -108,7 +107,6 @@ export default function YaraDataGrid(props: any){
                 <Grid size={12}>
                     <Box sx={{height:770,width:'inherit',flex:1,display:'flex',flexDirection:'column'}}>
                         <DataGrid
-                            //loading={isLoading}
                             rows={currentYaraRuleResults}
                             columns={columns}
                             showToolbar

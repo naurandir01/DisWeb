@@ -2,7 +2,6 @@ from django.shortcuts import render
 from django.http import HttpResponse,JsonResponse
 from .models import YaraRule
 from django.views.generic import TemplateView
-# Create your views here.
 
 class YaraRulesView(TemplateView):
     def get(self,request):

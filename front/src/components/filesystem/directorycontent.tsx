@@ -6,7 +6,6 @@ import * as React from 'react';
 import API from '../api/axios'
 import { useNotifications } from '@toolpad/core';
 import JSZip from 'jszip'
-import { v4 as uuidv4 } from 'uuid';
 
 export default function DirectoryContent(props: any){
     const notification = useNotifications()
@@ -16,6 +15,7 @@ export default function DirectoryContent(props: any){
             return <Button size='small' variant='text' onClick={()=>params.row.type === 'fls' ? props.onSetFile(params.row):null}>{params.row.name}</Button>
         }},
         {field:'type',headerName:'Type',width:60},
+        
         {field:'subtype',headerName:'Extension',flex:1},
         {field:'btime',headerName:'Creation (B)',flex:1, type: 'dateTime',valueGetter:(value: number)=> value && new Date(value/1000000)},
         {field:'ctime',headerName:'Modification (M)',flex:1, type: 'dateTime',valueGetter:(value: number)=> value && new Date(value/1000000)},
@@ -23,6 +23,7 @@ export default function DirectoryContent(props: any){
         {field:'mtime',headerName:'Metadata (C)',flex:1,type: 'dateTime',valueGetter:(value: number)=> value && new Date(value/1000000)},
         {field:'sha256',headerName:'SHA 256',flex:1},
         {field:'size',headerName:'Size',flex:1},
+        {field:'path',headerName:'Path',width:60},
         {field:'actions',type: 'actions',getActions:(params: any)=>[
             <GridActionsCellItem
                 icon={<Download/>}
@@ -32,10 +33,6 @@ export default function DirectoryContent(props: any){
             />,
         ]},
     ]
-
-    const getRowsId=(row: any)=>{
-        return uuidv4()
-    }
 
     const handleGetFile=React.useCallback(
         (row: any,id_source: any)=> ()=>{
@@ -69,8 +66,7 @@ export default function DirectoryContent(props: any){
             <DataGrid 
                 rows={props.rows} 
                 columns={columns} 
-                rowHeight={25} 
-                getRowId={getRowsId} 
+                rowHeight={25}  
                 showToolbar
                 loading={props.loading}
                 initialState={{

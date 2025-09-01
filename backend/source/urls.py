@@ -5,7 +5,6 @@ from . import views
 urlpatterns = [
     path("sources/",csrf_exempt(views.SourcesView.as_view()),name="get_add_sources"),
     path("sources/<uuid:id_source>/",csrf_exempt(views.SourceView.as_view()),name="get_delete_source"),
-    path("sources/<uuid:id_source>/fs/volumes",csrf_exempt(views.SourceVolumes.as_view()),name="get_source_volumes"),
     path("sources/<uuid:id_source>/fs/get_directory",csrf_exempt(views.SourceDirectoryContent.as_view()),name="get_source_directory"),
     path("sources/<uuid:id_source>/fs/get_file",csrf_exempt(views.SourceFile.as_view()),name="get_source_file"),
     path("sources/<uuid:id_source>/fs/get_file_content",csrf_exempt(views.SourceFileContent.as_view()),name="get_source_file_content"),

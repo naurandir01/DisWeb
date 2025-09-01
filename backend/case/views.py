@@ -62,7 +62,7 @@ class CasesViews(APIView):
                     'attributePatterns': ["*"],
                     'features':{
                         'facetSearch':True,
-                        'filter':{'equality':True,'comparison':False},
+                        'filter':{'equality':True,'comparison':True},
                     }
                 }
             ],

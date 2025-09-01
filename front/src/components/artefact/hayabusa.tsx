@@ -23,7 +23,7 @@ function  ConvertOperator(filterModel: GridFilterModel){
         case 'isEmpty':
             return filterModel.items[0].field + ' IS EMPTY';
         case 'isAnyOf':
-            return filterModel.items[0].field + ' IN ['+ filterModel.items[0].value+']'; ;
+            return filterModel.items[0].field + ' IN ['+ filterModel.items[0].value+']'; 
     }
 }
 export default function Hayabusa(props: any){

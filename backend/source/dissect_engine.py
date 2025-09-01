@@ -99,7 +99,7 @@ class DissectEngine:
             records_json.append(record)
         return records_json
     
-    def get_directory_content(self,path:str)->list:
+    def get_directory_content(self,path:str,case=None,source=None)->list:
         """
         Retrieves the content of a specified directory on a given volume.
         Args:
@@ -127,6 +127,11 @@ class DissectEngine:
                                 'ctime':state.st_ctime_ns,
                                 'mtime':state.st_mtime_ns,
                                 'size':state.st_size,
+                                'parent':path,
+                                'case':str(case),
+                                'source':str(source),
+                                'id':str(uuid.uuid4()),
+                                'plugin':'fs'
                                 })
             elif c.is_file():
                 try: 
@@ -148,7 +153,12 @@ class DissectEngine:
                                 'fstype':state.st_fstype,
                                 'uid':state.st_uid,
                                 'gid':state.st_gid,
-                                'attribute':state.st_file_attributes
+                                'attribute':state.st_file_attributes,
+                                'parent': path,
+                                'case':str(case),
+                                'source':str(source),
+                                'id':str(uuid.uuid4()),
+                                'plugin':'fs'
                                 })
             elif c.is_symlink():
                 try: 
@@ -171,7 +181,12 @@ class DissectEngine:
                                 'md5':md5,
                                 'uid':state.st_uid,
                                 'gid':state.st_gid,
-                                'attribute':state.st_file_attributes
+                                'attribute':state.st_file_attributes,
+                                'parent':path,
+                                'case':str(case),
+                                'source':str(source),
+                                'id':str(uuid.uuid4()),
+                                'plugin':'fs'
                                 })
         return fs_drc
 

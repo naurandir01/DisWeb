@@ -18,6 +18,7 @@ export default function FileSystem() {
   }
 
   const handleDirectoryContent=(content: any)=>{
+    console.log('Directory content updated:',content)
     setDirectoryContent(content)
   }
 
