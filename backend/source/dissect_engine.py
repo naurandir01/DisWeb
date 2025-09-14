@@ -99,7 +99,7 @@ class DissectEngine:
             records_json.append(record)
         return records_json
     
-    def get_directory_content(self,path:str,case=None,source=None)->list:
+    def get_directory_content(self,path:str,case:str=None,source:str=None)->list:
         """
         Retrieves the content of a specified directory on a given volume.
         Args:

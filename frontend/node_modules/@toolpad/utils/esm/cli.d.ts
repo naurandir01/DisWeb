@@ -1,0 +1,1 @@
+export declare function bashResolvePath(pathName: string): string;

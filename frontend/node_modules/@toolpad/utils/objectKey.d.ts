@@ -1,0 +1,4 @@
+/**
+ * Used to generate ids for object instances.
+ */
+export declare function getObjectKey(object: object): string;

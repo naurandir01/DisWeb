@@ -9,7 +9,7 @@ from task.models import Task
 from yaras.models import YaraRule
 from .dissect_engine import DissectEngine
 from back.database import convertOperator
-from task.tasks import source_directory,source_hayabusa,source_photorec,source_plugin,source_regf,source_timeline,source_yara
+from task.tasks import source_directory,source_hayabusa,source_timeline_fs,source_plugin,source_regf,source_timeline,source_yara
 from back.meilisearch_engine import MeiliSearchClient
 import json
 import ast
@@ -231,19 +231,13 @@ class SourceHayabusa(TemplateView):
 class SourceTimeline(TemplateView):
     def get(self,request,id_source):
         src = Source.objects.get(id_source=id_source)
-        if src.source_os == "windows":
-            list_plugins = ['evtx','usb','tasks','browser.history','shellbags','sam','walkfs']
-            for sub_plugin in list_plugins:
-                params = {'task_source':id_source,'task_case':src.source_case.id_case,'task_type':'timeline_'+sub_plugin,'plugin':sub_plugin,'task_status':'PENDING'}
-                try:
-                    task = Task.objects.get(task_src=id_source,task_type=params['task_type'])
-                except Task.DoesNotExist:
-                    source_timeline.delay(params)
-            return HttpResponse('Tache lancer')
-        elif src.source_os == "linux":
-                list_plugins = ['walkfs']
-        else:
-            return HttpResponse('Nom incompatible')
+        params = {'task_source':id_source,'task_case':src.source_case.id_case,'task_type':'timeline/','task_status':'PENDING','task_path':'/'}
+       
+        try:
+            task = Task.objects.get(task_src=id_source,task_type=params['task_type'])
+        except Task.DoesNotExist:
+            source_timeline_fs.delay(params)
+        return HttpResponse('Tache lancer')
 
 class SourceYara(TemplateView):
     def get(self,request,id_source,rules,size):

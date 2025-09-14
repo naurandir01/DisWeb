@@ -12,7 +12,7 @@ services:
     ports:
     - '6379:6379'
 
-  disweb-back:
+  disweb-backend:
     build:
       context: backend
     container_name: disweb-backend
@@ -81,10 +81,10 @@ services:
       - disweb_data:/var/lib/postgresql/data
       - "./database/postgresql.conf:/etc/postgresql/postgresql.conf"
 
-  disweb-front:
-    image: disweb_frontend:${APP_VERSION}
+  disweb-frontend:
+    image: disweb-frontend:${APP_VERSION}
     build:
-      context: front
+      context: frontend
     container_name: disweb-frontend
     volumes:
       - "./front/nginx.conf:/etc/nginx/conf.d/default.conf"

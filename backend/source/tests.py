@@ -13,7 +13,7 @@ def main():
     path = "/mnt/disk/TEST/c-drive/c-drive.vmdk"
     d = DissectEngine(path=path)
 
-    dir = d.get_directory_content("/")
+    #dir = d.get_directory_content("/")
 
     # meilisearch_client = meilisearch.Client("http://192.168.1.51:7700", "2HMCrPPjfhtm8U0aqRcJhCAe52L28n5VM5CfVzfz330")
 

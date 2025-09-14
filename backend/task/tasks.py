@@ -205,23 +205,29 @@ def source_regf(self,params):
         parent = path.split(key)[0]
         try:
             regf_params = {
-                'reg_source':task_src,
-                'reg_key':key,
-                'reg_path':path,
-                'reg_parent':remove_last_segment(path),
-                'reg_value':reg['value'],
-                'reg_ts':reg['ts'],
+                'source':str(task_src.id_source),
+                'case':str(task_case.id_case),
+                'key':key,
+                'path':path,
+                'parent':remove_last_segment(path),
+                'plugin':'regf',
+                'value':reg['value'],
+                'ts':reg['ts'],
+                'id':str(uuid.uuid4())
             }
         except:
              regf_params = {
-                'reg_source':task_src,
-                'reg_key':key,
-                'reg_path':path,
-                'reg_parent':remove_last_segment(path),
-                'reg_ts':reg['ts'],
-                'reg_value':'-',
+                'source':str(task_src.id_source),
+                'case':str(task_case.id_case),
+                'key':key,
+                'path':path,
+                'plugin':'regf',
+                'parent':remove_last_segment(path),
+                'ts':reg['ts'],
+                'value':'-',
+                'id':str(uuid.uuid4())
             }
-        add_registry(regf_params)
+        artefacts_index.add_documents([regf_params], primary_key='id')
     return self.request.id
 
 @shared_task(bind=True,base=CustomTask)
@@ -307,4 +313,60 @@ def source_directory(self,params):
         print(f"Directory Path: {directory}")
         print(f"Directory Content: {directoryContent}")
         
+    return self.request.id
+
+@shared_task(bind=True,base=CustomTask)
+def source_timeline_fs(self,params):
+    task_src = Source.objects.get(id_source=params['task_source'])
+    task_case = Case.objects.get(id_case=params['task_case'])
+    disk = DissectEngine(task_src)
+    meili_client = MeiliSearchClient.client
+    artefacts_index = meili_client.index(task_case.case_name+'_artefacts')
+
+    path= params['task_path']
+    fs = disk.get_directory_content(path=path,case=task_case.id_case,source=task_src.id_source)
+    
+    for entry in fs:
+        fs_entryA = {
+            'plugin':'A',
+            'ts':entry['atime'],
+            'source':str(task_src.id_source),
+            'case':str(task_case.id_case),
+            'path':entry['path'],
+            'id':str(uuid.uuid4())
+        }
+        fs_entryB = {
+            'plugin':'B',
+            'ts':entry['btime'],
+            'source':str(task_src.id_source),
+            'case':str(task_case.id_case),
+            'path':entry['path'],
+            'id':str(uuid.uuid4())
+        }
+        fs_entryC = {
+            'plugin':'C',
+            'ts':entry['ctime'],
+            'source':str(task_src.id_source),
+            'case':str(task_case.id_case),
+            'path':entry['path'],
+            'id':str(uuid.uuid4())
+        }
+        fs_entryM = {
+            'plugin':'M',
+            'ts':entry['mtime'],
+            'source':str(task_src.id_source),
+            'case':str(task_case.id_case),
+            'path':entry['path'],
+            'id':str(uuid.uuid4())
+        }
+        artefacts_index.add_documents([fs_entryA,fs_entryB,fs_entryC,fs_entryM], primary_key='id')
+        if entry['type'] == 'drc':
+            dir_params = {
+                'task_path':entry['path'],
+                'task_source':task_src.id_source,
+                'task_case':task_case.id_case,
+                'task_type':'timeline_'+entry['path'],
+            }
+            source_timeline_fs.delay(dir_params)
+
     return self.request.id

@@ -1,0 +1,38 @@
+/**
+ * Applies changes to an object in an immutable way. The `dest` object will adopt the properties of
+ * the `src` object. Object identity is preserved if the operation results in a no-op.
+ */
+export declare function update<T>(dest: T, src: Partial<T>): T;
+/**
+ * Applies changes to an object in an immutable way. The `dest` object will adopt the properties of
+ * the `src` object. If `dest` is undefined, `src` will be used. Object identity is preserved if
+ * the operation results in a no-op.
+ */
+export declare function updateOrCreate<T>(dest: T | null | undefined, src: NonNullable<T>): T;
+/**
+ * Inserts a value in an immutable array.
+ */
+export declare function insert<T>(array: readonly T[], value: T, index: number): T[];
+/**
+ * Updates a value in an immutable array.
+ */
+export declare function updateArray<T>(array: readonly T[], value: T, index: number): T[];
+/**
+ * Removes a value in an immutable array.
+ */
+export declare function remove<T>(array: readonly T[], index: number): T[];
+/**
+ * Removes a set of properties from an object in an immutable way. Object identity is preserved if
+ * the operation results in a no-op.
+ */
+export declare function omit<T, K extends keyof T>(obj: T, ...keys: readonly K[]): Omit<T, K>;
+/**
+ * Returns an object created from `obj` with only the specified `keys`. Object identity is preserved if
+ * the operation results in a no-op.
+ */
+export declare function take<K extends string, T extends Record<K, unknown>>(obj: T, ...keys: readonly K[]): Omit<T, Exclude<keyof T, K>>;
+/**
+ * Returns an array without any of its items equal to `value`. Object identity is preserved if
+ * the operation results in a no-op.
+ */
+export declare function without<T>(array: readonly T[], value: T): readonly T[];

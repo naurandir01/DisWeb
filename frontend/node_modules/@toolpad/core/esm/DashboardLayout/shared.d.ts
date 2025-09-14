@@ -1,0 +1,1 @@
+export declare const MINI_DRAWER_WIDTH = 84;

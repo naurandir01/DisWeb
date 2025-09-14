@@ -1,0 +1,14 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.seriesContextBuilder = void 0;
+const seriesContextBuilder = context => ({
+  type: 'series',
+  color: context.color,
+  label: context.label,
+  seriesId: context.seriesId,
+  itemId: context.itemId
+});
+exports.seriesContextBuilder = seriesContextBuilder;

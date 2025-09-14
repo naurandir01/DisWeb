@@ -1,0 +1,1 @@
+export declare const useChartsLocalization: () => import("../ChartsLocalizationProvider/ChartsLocalizationProvider.js").ChartsLocalizationContextValue;
