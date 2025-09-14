@@ -18,7 +18,7 @@ back/app/test.py
 */backend/logs
 logs/*
 external/yara
-front/node_modules/*
+frontend/node_modules/*
 .venv/*
 backend/source/__pycache__/dissect_engine.cpython-311.pyc
 backend/source/tests.py
