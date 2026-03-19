@@ -1,7 +1,9 @@
 from dissect.target import Target
-from dissect.target.tools.utils import execute_function_on_target,find_functions,keychain
+from dissect.target.tools.utils.cli import execute_function_on_target,find_functions, keychain
 from dissect.target.helpers.keychain import KeyType
+from dissect.target.plugins.os.windows.registry import RegistryPlugin
 from dissect.cstruct import hexdump
+
 import uuid
 
 import os
@@ -55,7 +57,7 @@ class DissectEngine:
     
     def run_plugin(self,plugin:dict)-> list | str:
         """
-        Executes a specified plugin on the target disk image with given parameters.
+        Executes a specified plugin on the target disk image with given parameters and return a list.
         Args:
             plugin (dict): A dictionary containing the plugin name and parameters.
             {'name': 'plugin_name', 'params': ['param1', ....], 'case': 'case_uuid', 'source': 'src_uuid'}
@@ -64,13 +66,45 @@ class DissectEngine:
         """
         functions = find_functions(target=self.target,patterns=plugin['name'])
         for function in functions[0]:
-            output_type,value,_ = execute_function_on_target(self.target,func=function,arguments=plugin['params'])
+            output_type,value = execute_function_on_target(self.target,func=function,args=plugin['params'])
         if output_type == "default":
             return value
         elif output_type == "record":
-            return self.record_to_json(records=value,case=plugin['case'],source=plugin['source'],plugin=plugin['name'])
+            return self.records_to_json(records=value,case=plugin['case'],source=plugin['source'],plugin=plugin['name'])
     
-    def record_to_json(self,records:list,case=None,source=None,plugin:str=None)-> list:
+
+    def plugin(self,plugin:dict):
+        """
+        Executes a specified plugin on the target disk image with given parameters and return a record.
+        Args:
+            plugin (dict): A dictionary containing the plugin name and parameters.
+            {'name': 'plugin_name', 'params': ['param1', ....], 'case': 'case_uuid', 'source': 'src_uuid'}
+        Returns:
+            str or list: The output of the plugin execution, either as a string or a list of json records.
+        """
+        functions = find_functions(target=self.target,patterns=plugin['name'])
+        for function in functions[0]:
+            return  execute_function_on_target(self.target,func=function,args=plugin['params'])
+       
+    
+    def run_plugin_generator(self,plugin:dict)-> iter:
+        """
+        Executes a specified plugin on the target disk image with given parameters and returns a generator.
+        Args:
+            plugin (dict): A dictionary containing the plugin name and parameters.
+            {'name': 'plugin_name', 'params': ['param1', ....], 'case': 'case_uuid', 'source': 'src_uuid'}
+        Returns:
+            generator: A generator that yields JSON-compatible records from the plugin execution.
+        """
+        functions = find_functions(target=self.target,patterns=plugin['name'])
+        for function in functions[0]:
+            output_type,value = execute_function_on_target(self.target,func=function,args=plugin['params'])
+        if output_type == "default":
+            return value
+        elif output_type == "record":
+            return self.records_to_generator(records=value,case=plugin['case'],source=plugin['source'],plugin=plugin['name'])
+    
+    def records_to_json(self,records:list,case=None,source=None,plugin:str=None)-> list:
         """
         Converts a list of records into a JSON-compatible format.
         Args:
@@ -80,24 +114,38 @@ class DissectEngine:
         """
         records_json=[]
         for rec in records:
-            rdict = rec._asdict()
-            record={}
-            for (key, value) in rdict.items():
-                if value != None:
-                    if key != 'linkefiles':
-                        record[key.replace('_','')]=str(value)
-                else:
-                    record[key.replace('_','')]="None_"
-            record['id']=str(uuid.uuid4())
-            if case is not None:
-                record['case']=str(case)
-            if source is not None:
-                record['source']=str(source)
-            if plugin is not None:
-                record['plugin']=plugin
-            record['id']=str(uuid.uuid4())
-            records_json.append(record)
+            records_json.append(self.convert_record_to_json(record=rec,case=case,source=source,plugin=plugin))
         return records_json
+    
+    def records_to_generator(self,records:list,case=None,source=None,plugin:str=None):
+        records_generator = (self.convert_record_to_json(record=rec,case=case,source=source,plugin=plugin) for rec in records)
+        return records_generator
+    
+    def convert_record_to_json(self,record,case=None,source=None,plugin:str=None)-> dict:
+        """
+        Converts a single record into a JSON-compatible format.
+        Args:
+            record: A single record, which is a named tuple.
+        Returns:
+            dict: A dictionary representing the record with keys as field names and values as strings.
+        """
+        rdict = record._asdict()
+        record_js={}
+        for (key, value) in rdict.items():
+            if value != None:
+                if key != 'linkefiles':
+                    record_js[key.replace('_','')]=str(value)
+            else:
+                record_js[key.replace('_','')]="None_"
+        record_js['id']=str(uuid.uuid4())
+        if case is not None:
+            record_js['case']=str(case)
+        if source is not None:
+            record_js['source']=str(source)
+        if plugin is not None:
+            record_js['plugin']=plugin
+        record_js['id']=str(uuid.uuid4())
+        return record_js
     
     def get_directory_content(self,path:str,case:str=None,source:str=None)->list:
         """
@@ -264,7 +312,7 @@ class DissectEngine:
             volumes.append({'name':f.volume.name,'number':f.volume.number,'size':f.volume.size})
         return volumes
 
-    def run_hayabusa(self):
+    def run_hayabusa(self)->None:
         """
         Executes the Hayabusa plugin on the target disk image.
 
@@ -292,4 +340,52 @@ class DissectEngine:
             for line in f:
                 result_json.append(line)
         return result_json
+    
+    def get_registry_subkeys(self,path:str)->list:
+        """
+        Retrieves the subkeys of a specified registry path.
+        Args:
+            path (str): The registry path.
+        Returns:
+            list: A list of dictionaries containing subkey paths.
+        """
+        reg = RegistryPlugin(self.target)
+        reg.load_user_hives()
+        root = reg.root()
+        key = root.get(path)
+        subkeys_list = []
+        subkeys = key.subkeys()
+        for sub in subkeys:
+            subkeys_list.append({
+                'path':path+'\\'+sub.name,
+                'name':sub.name,
+                'id':str(uuid.uuid4()),
+                'ts':sub.ts.timestamp()})
+        return subkeys_list
+    
+    def get_registry_values(self,path:str)->list:
+        """
+        Retrieves the values of a specified registry path.
+        Args:
+            path (str): The registry path.
+        Returns:
+            list: A list of dictionaries containing value names, types, ts, and value.
+        """
+        reg = RegistryPlugin(self.target)
+        reg.load_user_hives()
+        root = reg.root()
+        key = root.get(path)
+        values_list = []
+        values = key.values()
+        for val in values:
+            values_list.append({'name':val.name,'type':val.type,'value':str(val.value),'id':str(uuid.uuid4()),'ts':key.ts.timestamp()})
+        subkeys = key.subkeys()
+        for sub in subkeys:
+            values_list.append({
+                'type':'key',
+                'value':'-',
+                'name':sub.name,
+                'id':str(uuid.uuid4()),
+                'ts':sub.ts.timestamp()})
+        return values_list
     

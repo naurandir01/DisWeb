@@ -2,18 +2,18 @@
 import * as React from 'react';
 import { DataGrid, GridActionsCellItem, GridRowId } from '@mui/x-data-grid';
 import { useSessionStorageState,useNotifications, PageContainer} from '@toolpad/core';
-import API from "../components/api/axios"
 import { Delete, Settings } from '@mui/icons-material';
 import CustomToolBar from '../components/case/customtoolbarcase'
 import { Card, CardHeader, Grid } from '@mui/material';
 import { FaLinux, FaWindows } from 'react-icons/fa';
+import {useQuery} from '@tanstack/react-query';
+import { caseAPI } from '../components/api/api';
 
 export default function CasPage() {
   const [listCas,setListCas] = useSessionStorageState('listeCas','[]')
   const [currentCas,setCurrentCas] = useSessionStorageState('cas','')
   const [listSources,setListSources] = useSessionStorageState('listsources','')
   
-
   const notifications = useNotifications()
 
   const case_colummn: any = [
@@ -36,15 +36,18 @@ export default function CasPage() {
 
   const onSelectCas=(event: any)=>{
     setCurrentCas(JSON.stringify(event.row))
-    currentCas !== event.id ? API.get('/api/cases/'+event.id+'/sources').then(res=>{setListSources(JSON.stringify(res.data))}):null
+    currentCas !== event.id ? caseAPI.getCaseSources(event.id).then(
+      res=>{setListSources(JSON.stringify(res.data))}):null
     notifications.show(currentCas !== null ? 'CASE '+event.row.case_name+' selected':'',{autoHideDuration:3000,severity:'info'})
   }
 
+  
+
   const deleteCas = React.useCallback(
     (id:GridRowId)=> () =>{
-      API.delete('/api/cases/'+id+'/').then(
+      caseAPI.deleteCase(id).then(
         res=>{
-          API.get('/api/cases/').then(
+          caseAPI.getCases().then(
             res=>{
               setListCas(JSON.stringify(res.data))
             }
@@ -54,9 +57,12 @@ export default function CasPage() {
     },[]
   )
 
+  
+
+
   const getMeiliIndexSettings = React.useCallback(
     (id:GridRowId)=> () =>{
-      API.get('/api/cases/'+id+'/meili').then(
+      caseAPI.getCaseMeilliSettings(id).then(
         res=>{
          console.log('Meili index settings:', res.data)
         }

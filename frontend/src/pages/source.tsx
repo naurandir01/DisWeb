@@ -2,18 +2,11 @@
 import * as React from 'react';
 import { useDialogs, useSessionStorageState, useNotifications, PageContainer } from '@toolpad/core';
 import { DataGrid,GridActionsCellItem, GridRowId, GridRowParams } from '@mui/x-data-grid';
-import API from "../components/api/axios"
 import {Delete } from '@mui/icons-material';
 import CustomToolBarSource from '../components/source/customtoolbarsource';
 import SourceCustomPlugins from '../components/source/sourceCustomPlugins';
 import SourcePlugins from '../components/source/sourcePlugins';
-
-const plugins_not_to_show_list = [
-    'mft_timeline','yara','mft','activity','os','ips','hostname','version','architecture',
-    'example_yield','example_none','example_record','example','loaders','plugins','walkfs',
-    'timezone','language','ntversion','domain','keys','pathenvironment','qfind',"_dpapi_keyprovider_keychain.keys",
-    "_dpapi_keyprovider_lsa_defaultpassword.keys","_dpapi_keyprovider_credhist.keys","_dpapi_keyprovider_empty.keys",'regf'
-]
+import { sourceAPI,caseAPI } from '../components/api/api';
 
 export default function Sources() {
   const [currentCas,setCurrentCas] = useSessionStorageState('cas','')
@@ -40,10 +33,10 @@ export default function Sources() {
 
   const onDeleteSource = React.useCallback(
     (id:GridRowId)=> ()=>{
-      API.delete('/api/sources/'+id+'/').then(
+      sourceAPI.deleteSource(id).then(
         res=>{
           notification.show('Deleted the source ',{autoHideDuration:3000,severity:'success'})
-          API.get('/api/cases/'+JSON.parse(currentCas || "{id_case:''}").id_case+'/sources').then(res=>{
+          caseAPI.getCaseSources(JSON.parse(currentCas || "{id_case:''}").id_case).then(res=>{
             setListSources(JSON.stringify(res.data))
           }
           )

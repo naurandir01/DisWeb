@@ -1,13 +1,11 @@
 'use client'
-import { Box,Grid, Typography,Card, CardHeader, CardContent, IconButton } from '@mui/material';
-import { DataGrid, GridColDef, GridFilterModel, GridPaginationModel, GridRowModel, GridSortModel } from '@mui/x-data-grid';
+import { Grid, Typography,Card, CardHeader, CardContent } from '@mui/material';
+import { DataGrid, GridColDef, GridFilterModel, GridPaginationModel, GridSortModel } from '@mui/x-data-grid';
 import * as React from 'react';
-import API from '../api/axios'
-import meiliClient from '../api/meili';
-import { CheckCircle,Error,EventNote,NotStarted} from '@mui/icons-material';
+import { CheckCircle,Error,NotStarted} from '@mui/icons-material';
 import {  CircularProgress} from '@mui/material';
-import {  SearchResponse } from "meilisearch";
 import { useSessionStorageState } from '@toolpad/core';
+import { sourceAPI,taskAPI,artefactAPI } from '../api/api';
 
 function  ConvertOperator(filterModel: GridFilterModel){
     switch(filterModel.items[0].operator){
@@ -56,8 +54,8 @@ export default function Events(props: any){
     React.useEffect(()=>{
         const fechData = async () =>{
             try {
-            const res = await  API.get('/api/sources/'+source.id_source+'/tasks/evtx')
-            setTaskStatus(res.data)
+                const res = await  taskAPI.getSourceTask(source.id_source,'evtx')
+                setTaskStatus(res.data)
             } catch (error){
             console.error("Erreur lors de la récupération de la tache evtx", error)
             }
@@ -81,7 +79,7 @@ export default function Events(props: any){
             return new Promise((resolve) => {
                 setTimeout(
                     ()=>{
-                        API.get('/api/sources/'+source.id_source+'/artefacts/evtx/meilisearch',{
+                        artefactAPI.getSourceArtefact(source.id_source,'evtx',{
                             params:{
                                 filter:filter.items.length == 0 ? defaultfilter : defaultfilter +' AND ' + ConvertOperator(filter),
                                 q: filter.quickFilterValues !== undefined ? filter.quickFilterValues[0]:'',

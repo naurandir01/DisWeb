@@ -3,6 +3,7 @@ import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, D
 import React from 'react';
 import { useDialogs, useSessionStorageState,useNotifications, PageHeaderToolbar } from '@toolpad/core';
 import API from '../api/axios'
+import { sourceAPI,caseAPI } from '../api/api';
 
 function CasDialog({open,onClose= () => {}}:DialogProps){
     const [listSourceNotLink,setListSourceNotLink] = React.useState([])
@@ -21,8 +22,8 @@ function CasDialog({open,onClose= () => {}}:DialogProps){
             bodyformData.append('src_path',sourceToLink)
             bodyformData.append('crypt_key_type',key_type)
             bodyformData.append('crypt_key_value',key_value)
-            const res = await API.post('/api/sources/',bodyformData,{headers:{'Content-Type':'multipart/form-data'}})
-            const res_2 = await API.get('/api/cases/'+JSON.parse(currentCas|| '{}').id_case+'/sources').then(res=>{
+            const res = await sourceAPI.addSource(bodyformData)
+            const res_2 = await caseAPI.getCaseSources(JSON.parse(currentCas|| '{}').id_case).then(res=>{
                 setListSources(JSON.stringify(res.data))
             })
             notification.show('Source '+sourceToLink +' link',{autoHideDuration:3000,severity:'success'})
@@ -35,7 +36,7 @@ function CasDialog({open,onClose= () => {}}:DialogProps){
     React.useEffect(()=>{
         const fechData = async ()=>{
             try {
-                const res = await API.get('/api/cases/'+JSON.parse(currentCas|| '{}').id_case+'/sources/add')
+                const res = await caseAPI.getCaseSourceNotLink(JSON.parse(currentCas|| '{}').id_case)
                 setListSourceNotLink(res.data)
             } catch (error){
                 console.error("Erreur when getting sources not link:",error)

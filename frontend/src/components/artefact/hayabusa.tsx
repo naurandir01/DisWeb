@@ -5,6 +5,7 @@ import { DataGrid , GridFilterModel,GridPaginationModel, GridSortModel} from '@m
 import { Accordion, AccordionDetails, AccordionSummary, Box, Typography } from '@mui/material';
 import { ExpandMore,CheckCircle,Error,NotStarted } from '@mui/icons-material';
 import { CircularProgress} from '@mui/material';
+import { sourceAPI,artefactAPI,taskAPI } from '../api/api';
 
 function  ConvertOperator(filterModel: GridFilterModel){
     switch(filterModel.items[0].operator){
@@ -78,8 +79,8 @@ export default function Hayabusa(props: any){
     React.useEffect(()=>{
             const fechData = async () =>{
                 try {
-                const res = await  API.get('/api/sources/'+source.id_source+'/tasks/hayabusa')
-                setTaskStatus(res.data)
+                    const res = await  taskAPI.getSourceTask(source.id_source,'hayabusa')
+                    setTaskStatus(res.data)
                 } catch (error){
                 console.error("Erreur lors de la récupération de la tache hayabusa", error)
                 }
@@ -91,7 +92,7 @@ export default function Hayabusa(props: any){
         return new Promise((resolve) => {
             setTimeout(
                 ()=>{
-                    API.get('/api/sources/'+source.id_source+'/artefacts/hayabusa/meilisearch',{
+                    artefactAPI.getSourceArtefact(source.id_source,'hayabusa',{
                         params:{
                             filter:filter.items.length == 0 ? defaultfilter : defaultfilter +' AND ' + ConvertOperator(filter),
                             q: filter.quickFilterValues !== undefined ? filter.quickFilterValues[0]:'',

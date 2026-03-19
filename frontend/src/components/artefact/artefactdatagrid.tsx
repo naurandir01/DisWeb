@@ -1,11 +1,16 @@
 'use client'
 import * as React from 'react';
-import API from '../api/axios';
-import {  Card, Typography } from '@mui/material';
-import { DataGrid, GridColDef, GridFilterModel,GridPaginationModel, GridSortModel} from '@mui/x-data-grid';
-import { useSessionStorageState } from '@toolpad/core';
-import { CheckCircle,Error,NotStarted} from '@mui/icons-material';
+import {  Card, Divider, Tooltip, Typography } from '@mui/material';
+import { DataGrid, GridColDef, GridFilterModel,GridPaginationModel, GridSortModel,useGridApiContext,ToolbarButton,
+  ColumnsPanelTrigger,
+  FilterPanelTrigger,
+  Toolbar,} from '@mui/x-data-grid';
+import { CheckCircle,Error,MenuBook,NotStarted} from '@mui/icons-material';
 import { CircularProgress} from '@mui/material';
+import { taskAPI,artefactAPI } from '../api/api';
+import ViewColumnIcon from '@mui/icons-material/ViewColumn';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import Badge from '@mui/material/Badge';
 
 function  ConvertOperator(filterModel: GridFilterModel){
     switch(filterModel.items[0].operator){
@@ -27,6 +32,10 @@ function  ConvertOperator(filterModel: GridFilterModel){
             return filterModel.items[0].field + ' IN ['+ filterModel.items[0].value+']'; ;
     }
 }
+
+
+
+
 
 export default function ArtefactDataGrid(props: any){
     const [source,setSource] = React.useState(props.source)
@@ -59,7 +68,7 @@ export default function ArtefactDataGrid(props: any){
 
     React.useEffect(()=>{
         let active = true;
-        console.log("Sort Model",sortModel);
+        
         (
             async ()=>{
                 const newsrows = await loadArtefacts(paginationModel,filterModel,sortModel);
@@ -73,7 +82,7 @@ export default function ArtefactDataGrid(props: any){
     React.useEffect(()=>{
         const fechData = async () =>{
             try {
-            const res = await  API.get('/api/sources/'+source.id_source+'/tasks/'+props.artefact.name)
+            const res = await  taskAPI.getSourceTask(source.id_source,props.artefact.name)
             setTaskStatus(res.data)
             } catch (error){
             console.error("Erreur lors de la récupération de la tache "+props.artefact.name, error)
@@ -86,7 +95,7 @@ export default function ArtefactDataGrid(props: any){
         return new Promise((resolve) => {
             setTimeout(
                 ()=>{
-                    API.get('/api/sources/'+source.id_source+'/artefacts/'+props.artefact.name+'/meilisearch',{
+                    artefactAPI.getSourceArtefact(source.id_source,props.artefact.name,{ 
                         params:{
                             filter:filter.items.length == 0 ? defaultfilter : defaultfilter +' AND ' + ConvertOperator(filter),
                             q: filter.quickFilterValues !== undefined ? filter.quickFilterValues[0]:'',
@@ -104,6 +113,49 @@ export default function ArtefactDataGrid(props: any){
             );
         })
     }
+
+    function CustomToolbar(){
+    
+        const apiRef = useGridApiContext();
+
+        return(
+            <Toolbar>
+                <Tooltip title={props.artefact.doc}>
+                    <MenuBook fontSize="small"/>
+                </Tooltip>
+                {
+                        taskStatus.task_status === 'NOT FOUND' ? 
+                            <NotStarted fontSize="small" color="primary" />
+                        : taskStatus.task_status === 'PENDING' ? 
+                            <CircularProgress size="30px"/>
+                        : taskStatus.task_status === 'SUCCESS' ? 
+                            <CheckCircle fontSize="small" color="success" /> 
+                        : taskStatus.task_status === 'FAILED' ? 
+                            <Error fontSize="small" color="error"/>
+                        : 
+                        null
+                }
+                <Divider orientation="vertical" flexItem sx={{mx:1}}/>
+                <Tooltip title="Columns">
+                    <ColumnsPanelTrigger render={<ToolbarButton/>}>
+                        <ViewColumnIcon fontSize="small"/>
+                    </ColumnsPanelTrigger>
+                </Tooltip>
+                <Tooltip title="Filters">
+                    <FilterPanelTrigger
+                        render={(props, state) => (
+                            <ToolbarButton {...props} color="default">
+                                <Badge badgeContent={state.filterCount} color="primary" variant="dot">
+                                    <FilterListIcon fontSize="small" />
+                                </Badge>
+                            </ToolbarButton>
+                        )}
+                    />
+                </Tooltip>
+            </Toolbar>
+        )
+
+    }
     
     return(
         <Card sx={{height:820,width:'inherit',flex:1,display:'flex',flexDirection:'column'}}>
@@ -113,6 +165,7 @@ export default function ArtefactDataGrid(props: any){
                 key={'artefact-data-grid-'+props.source.id_source+'-'+props.id}
                 //loading={loading}
                 slotProps={{ toolbar: { showQuickFilter: false } }}
+                slots={{toolbar:CustomToolbar}}
 
                 pagination
                 paginationMode='server'
@@ -129,20 +182,6 @@ export default function ArtefactDataGrid(props: any){
                 sortModel={sortModel}
             
                 />
-                
-                {
-                    taskStatus.task_status === 'NOT FOUND' ? 
-                        <NotStarted fontSize="large" color="primary" />
-                    : taskStatus.task_status === 'PENDING' ? 
-                        <CircularProgress size="30px"/>
-                    : taskStatus.task_status === 'SUCCESS' ? 
-                        <CheckCircle fontSize="large" color="success" /> 
-                    : taskStatus.task_status === 'FAILED' ? 
-                        <Error fontSize="large" color="error"/>
-                    : 
-                    null
-                }
-                <Typography>{props.artefact.doc}</Typography> 
         </Card>
 
     )

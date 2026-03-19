@@ -4,6 +4,7 @@ import API from '../api/axios'
 import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';
 import { Box, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material';
 import { LineChart } from '@mui/x-charts/LineChart';
+import { sourceAPI,artefactAPI } from '../api/api';
 
 export default function SruNetwork(props: any){
     const [source,setSource] = React.useState(props.source)
@@ -29,7 +30,7 @@ export default function SruNetwork(props: any){
                 setTimeout(
                     () => {
                         setLoading(true)
-                        API.get('/api/sources/'+source.id_source+'/artefacts/sru.network_data').then(res=>{
+                        artefactAPI.getSourceArtefact(source.id_source,'sru.network_data',null).then(res=>{
                         setRows(res.data.values)
                         setLoading(false)
                     });

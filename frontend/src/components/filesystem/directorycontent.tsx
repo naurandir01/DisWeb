@@ -6,6 +6,7 @@ import * as React from 'react';
 import API from '../api/axios'
 import { useNotifications } from '@toolpad/core';
 import JSZip from 'jszip'
+import { fsAPI } from '../api/api';
 
 export default function DirectoryContent(props: any){
     const notification = useNotifications()
@@ -37,8 +38,8 @@ export default function DirectoryContent(props: any){
     const handleGetFile=React.useCallback(
         (row: any,id_source: any)=> ()=>{
             try{
-                notification.show("Download of the file "+row.path,{autoHideDuration:3000,severity:'success'})
-                API.get('/api/sources/'+id_source+'/fs/get_file?file_path='+row.path,{responseType:'blob'}).then(
+                
+                fsAPI.getFile(id_source,row.path).then(
                     async res=>{
                         const file_blob = new Blob([res.data], {type: res.headers['content-type']})
                         const zip = new JSZip()
@@ -54,7 +55,7 @@ export default function DirectoryContent(props: any){
                         URL.revokeObjectURL(url)
                         
                     }
-                )
+                ).then(()=>{notification.show("Download of the file "+row.path,{autoHideDuration:3000,severity:'success'})})
             } catch (error){
                 notification.show("Error when downloading the file",{autoHideDuration:3000,severity:'error'})
             }

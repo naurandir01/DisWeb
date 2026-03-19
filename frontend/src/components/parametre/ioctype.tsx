@@ -4,8 +4,7 @@ import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Button
 import { DataGrid, GridActionsCellItem, GridRowId } from '@mui/x-data-grid';
 import { useDialogs,useSessionStorageState,useNotifications } from '@toolpad/core';
 import * as React from 'react';
-import API from '../api/axios'
-
+import { iocAPI } from '../api/api';
 
 function AddIOC({open,onClose= ()=>{}}:DialogProps){
     const [newType,setNewType] = React.useState('')
@@ -18,9 +17,9 @@ function AddIOC({open,onClose= ()=>{}}:DialogProps){
             const bodyformData = new FormData()
             bodyformData.append('ioc_type_value',newType)
             bodyformData.append('ioc_type_description',newTypeDescription)
-            const res = await API.post('/api/iocs_types/',bodyformData,{headers:{'Content-Type':'multipart/form-data'}})
+            const res = await iocAPI.addIOCType(bodyformData)
             notification.show("Adding a new IOC type "+newType,{autoHideDuration:3000,severity:'success'})
-            const res_2 = await API.get('/api/iocs_types').then(res=>setListIocType(JSON.stringify(res.data)))
+            const res_2 = await iocAPI.getIOCtypes().then(res=>setListIocType(JSON.stringify(res.data)))
 
         } catch (error){
             notification.show("Error when adding a new ioc type"+newType,{autoHideDuration:3000,severity:'error'})
@@ -65,10 +64,10 @@ export default function IocTypes(props: any){
 
     const onDeleteSource = React.useCallback(
         (id:GridRowId)=> ()=>{
-          API.delete('/api/iocs_types/'+id).then(
+          iocAPI.deleteIOCType(id).then(
             res=>{
                 notification.show("Deletion of the IOC Type",{autoHideDuration:3000,severity:'success'})  
-              API.get('/api/iocs_types/').then(res=>{
+              iocAPI.getIOCtypes().then(res=>{
                 setListIocType(JSON.stringify(res.data))
               }
               )

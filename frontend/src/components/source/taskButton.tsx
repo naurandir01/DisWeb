@@ -5,6 +5,7 @@ import { Button, CircularProgress, Grid} from '@mui/material';
 import { useNotifications } from '@toolpad/core';
 import API from "../api/axios"
 import { CheckCircle, Error, NotStarted } from '@mui/icons-material';
+import { taskAPI } from '../api/api';
 
 export default function TaskButton(props:any){
     const notification = useNotifications()
@@ -13,8 +14,7 @@ export default function TaskButton(props:any){
     React.useEffect(()=>{
       const fechData = async () =>{
         try {
-          const res = await  API.get('/api/sources/'+props.id+'/tasks/'+props.task.type)
-          console.log('res',res.data)
+          const res = await  taskAPI.getSourceTask(props.id,props.task.type)
           setTaskStatus(res.data)
         } catch (error){
           console.error("Error when geting the task status "+props.task.type, error)

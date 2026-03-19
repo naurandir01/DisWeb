@@ -7,6 +7,7 @@ import { Details, Edit } from '@mui/icons-material';
 import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
 import { Delete, ExpandMore } from '@mui/icons-material';
 import {DialogProps } from '@toolpad/core/useDialogs';
+import { yaraAPI } from '../api/api';
 
 function AddYaraRules({open,onClose}:DialogProps){
     const [newYaraRuleName,setNewYaraRuleName] = React.useState('')
@@ -21,9 +22,9 @@ function AddYaraRules({open,onClose}:DialogProps){
             bodyformData.append('yararule_name',newYaraRuleName)
             bodyformData.append('yararule_description',newYaraRuleDescription)
             bodyformData.append('yararule_content',newYaraRuleContent)
-            const res = await API.post('/api/yara/',bodyformData,{headers:{'Content-Type':'multipart/form-data'}})
+            const res = await yaraAPI.addYaraRule(bodyformData)
             notification.show("Yara Rule Add "+newYaraRuleName,{autoHideDuration:3000,severity:'success'})
-            const res_2 = await API.get('/api/yara/').then(res=>setListYaraRules(JSON.stringify(res.data)))
+            const res_2 = await yaraAPI.getYaraRules().then(res=>setListYaraRules(JSON.stringify(res.data)))
 
         } catch (error){
             notification.show("Error in adding the new Yara Rule "+newYaraRuleName,{autoHideDuration:3000,severity:'error'})
@@ -54,7 +55,7 @@ function YaraRuleDetails({payload,open,onClose}:DialogProps<any>){
     React.useEffect(()=>{
             const fechData = async () =>{
               try {
-                const res = await  API.get('/api/yara/'+payload.id_yararule)
+                const res = await  yaraAPI.getYaraRule(payload.id_yararule)
                 setYaraRuleContent(res.data.yararule_content)
               } catch (error){
                 console.error("Error when get yara rule content", error)
@@ -67,7 +68,7 @@ function YaraRuleDetails({payload,open,onClose}:DialogProps<any>){
         try {
             const bodyformData = new FormData()
             bodyformData.append('yararule_content',yaraRuleContent)
-            const res = await API.post('/api/yara/'+payload.id_yararule,bodyformData,{headers:{'Content-Type':'multipart/form-data'}})
+            const res = await yaraAPI.modifyYaraRule(payload.id_yararule,bodyformData)
             onClose()
         } catch (error){
             console.error("Error when modifying yara rule", error)
@@ -121,10 +122,10 @@ export default function YaraRules(props: any){
 
     const onDeleteYaraRule = React.useCallback(
         (id:GridRowId)=> ()=>{
-            API.delete('/api/yara/'+id).then(
+            yaraAPI.deleteYaraRule(id).then(
             res=>{
                 notification.show("Delete of Yara Rule",{autoHideDuration:3000,severity:'success'})  
-                API.get('/api/yara/').then(res=>{
+                yaraAPI.getYaraRules().then(res=>{
                 setListYaraRules(JSON.stringify(res.data))
                 }
                 )

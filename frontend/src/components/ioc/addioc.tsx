@@ -1,7 +1,7 @@
 import React from 'react';
-import API from '../api/axios'
 import { useSessionStorageState,useNotifications } from '@toolpad/core';
 import {Button, Dialog, DialogActions, DialogContent, DialogProps, DialogTitle, MenuItem, TextField } from '@mui/material';
+import { iocAPI } from '../api/api';
 
 export function IocDialog({open,onClose= () => {}}:DialogProps){
     const [ioc_type,setIocType] = React.useState('')
@@ -19,7 +19,7 @@ export function IocDialog({open,onClose= () => {}}:DialogProps){
             bodyformData.append('ioc_type',ioc_type !== null ? ioc_type:'')
             bodyformData.append('ioc_value',ioc_value !== null ?ioc_value:'')
             bodyformData.append('ioc_src',ioc_src !== null ?ioc_src:'')
-            const res = await API.post('/api/iocs/',bodyformData,{headers:{'Content-Type':'multipart/form-data'}})
+            const res = await iocAPI.addIOC(bodyformData)
             notification.show("IOC add "+ioc_value,{autoHideDuration:3000,severity:'success'})
         }catch(error){
             notification.show("Error when adding "+ioc_value,{autoHideDuration:3000,severity:'error'})
@@ -30,7 +30,7 @@ export function IocDialog({open,onClose= () => {}}:DialogProps){
     React.useEffect(()=>{
         const fechData = async () =>{
           try {
-            const res = await  API.get('/api/iocs_types/')
+            const res = await  iocAPI.getIOCtypes()
             setListIocType(res.data)
           } catch (error){
             console.error("Error when getting the liste of IOC types :", error)

@@ -7,6 +7,7 @@ import API from '../api/axios'
 import FileString from './filestring';
 import FileMetadata from './filemetadata';
 import FileDisplay from './filedisplay';
+import { fsAPI } from '../api/api';
 
 function splitFile(file: string,taille: number){
     let sousFile = []
@@ -52,7 +53,7 @@ export default function FileContent(props: any){
         if(props.currentFile.path !== currentFileProps.path){
             if(props.currentFile.type === 'fls'){
                 const fechData = async ()=>{
-                    const res = await API.get('/api/sources/'+props.id_source+'/fs/get_file_hexdump?file_path='+props.currentFile.path)
+                    const res = await fsAPI.getFileHexdump(props.id_source,props.currentFile.path)
                     if (res.data !== 'Not Found'){
                         setCurrentFileHexDump(res.data)
                     }

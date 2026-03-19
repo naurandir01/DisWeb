@@ -5,14 +5,14 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid } from 
 import {DialogProps } from '@toolpad/core/useDialogs';
 import Plugin from './plugin';
 import { useSessionStorageState, useNotifications } from '@toolpad/core';
-import API from '../api/axios'
+import { artefactAPI } from '../api/api';
 
 
 const plugins_not_to_show_list = [
-    'mft_timeline','yara','mft','activity','os','ips','hostname','version','architecture',
+    'mft.timeline','yara','mft','activity','os','ips','hostname','version','architecture','mft.records',
     'example_yield','example_none','example_record','example','loaders','plugins',
     'timezone','language','ntversion','domain','keys','pathenvironment','qfind',"_dpapi_keyprovider_keychain.keys",
-    "_dpapi_keyprovider_lsa_defaultpassword.keys","_dpapi_keyprovider_credhist.keys","_dpapi_keyprovider_empty.keys",'regf'
+    "_dpapi_keyprovider_lsa_defaultpassword.keys","_dpapi_keyprovider_credhist.keys","_dpapi_keyprovider_empty.keys",'regf','walkfs'
 ]
 
 export default function Plugins({payload,open,onClose}:DialogProps<any>){ {
@@ -24,7 +24,7 @@ export default function Plugins({payload,open,onClose}:DialogProps<any>){ {
           JSON.parse(listSources || '[]').find((src:any)=> src.id_source === payload.src.row.id_source).source_plugins
           .filter((plugin: any) =>!plugins_not_to_show_list.includes(plugin.name))
           .map((plugin:any)=>{
-            API.get('/api/sources/'+payload.src.row.id_source+'/artefacts/'+plugin.name)
+            artefactAPI.runSourceArtefactPlugin(payload.src.row.id_source,plugin.name)
           })
           notification.show('All plugins that have not been run have started',{autoHideDuration:3000,severity:'info'})
       }

@@ -2,9 +2,9 @@
 "use client"
 import { Button, Tooltip } from '@mui/material';
 import * as React from 'react';
-import API from '../api/axios'
 import { CheckCircle,Error,NotStarted} from '@mui/icons-material';
 import { useNotifications } from '@toolpad/core';
+import { artefactAPI,taskAPI } from '../api/api';
 
 export default function Plugin(props:any){
     const [source,setSource] = React.useState(props.source)
@@ -16,7 +16,7 @@ export default function Plugin(props:any){
             const fechData = async () =>{
               try {
                 pluginStatus.task_status !== 'SUCCESS' ? pluginStatus.task_status !== 'FAILED' ?
-                    API.get('/api/sources/'+source.id_source+'/tasks/'+plugin.name).then(res=>{setPluginStatus(res.data)})
+                    taskAPI.getSourceTask(source.id_source,plugin.name).then(res=>{setPluginStatus(res.data)})
                 :null:null
               } catch (error){
                 console.error("Erreur lors de la récupération de la tache "+plugin.name, error)
@@ -29,7 +29,7 @@ export default function Plugin(props:any){
         let interval = setInterval(()=>{
             pluginStatus.task_status !== 'SUCCESS' ? 
                 pluginStatus.task_status !== 'FAILED' ? 
-                    API.get('/api/sources/'+source.id_source+'/tasks/'+plugin.name).then(res=>setPluginStatus(res.data))
+                    taskAPI.getSourceTask(source.id_source,plugin.name).then(res=>setPluginStatus(res.data))
                 :null
             :null
         },10000)
@@ -40,10 +40,10 @@ export default function Plugin(props:any){
 
     const onClickNotRun=()=>{
         pluginStatus.task_status === 'NOT FOUND' ?
-        API.get('/api/sources/'+source.id_source+'/artefacts/'+plugin.name)
+        artefactAPI.runSourceArtefactPlugin(source.id_source,plugin.name)
         .then(res=>{
             notification.show('Plugin '+plugin.name+' has not been run, starting it now',{autoHideDuration:3000,severity:'info'})
-            API.get('/api/sources/'+source.id_source+'/tasks/'+plugin.name)
+            taskAPI.getSourceTask(source.id_source,plugin.name)
             .then(res=>(setPluginStatus(res.data)))}):null
     }
 

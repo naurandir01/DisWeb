@@ -10,8 +10,6 @@ from artefact.views import add_artefact,add_timeline,add_registry
 from django.core.exceptions import ObjectDoesNotExist
 from celery.exceptions import Ignore
 from back.meilisearch_engine import MeiliSearchClient
-
-import datetime
 import json
 import uuid
 
@@ -101,7 +99,6 @@ def source_hayabusa(self, params):
 def source_photorec(self,params):
     return self.request.id
 
-
 def create_timeline_values(type,values):
     values = []
     match type:
@@ -166,19 +163,6 @@ def source_timeline(self,params):
         add_timeline(timeline_params)
     return self.request.id
 
-def remove_last_segment(path):
-    # Diviser le chemin en segments
-    segments = path.split('\\')
-
-    # Supprimer le dernier segment s'il n'est pas vide
-    if segments[-1]:
-        segments = segments[:-1]
-
-    # Rejoindre les segments restants avec '/'
-    new_path = '\\'.join(segments)
-
-    return new_path
-
 @shared_task(bind=True,base=CustomTask)
 def source_regf(self,params):
     """
@@ -195,23 +179,22 @@ def source_regf(self,params):
     task_case = Case.objects.get(id_case=params['task_case'])
 
     disk = DissectEngine(task_src)
-    regf_res = disk.run_plugin({'name':'regf','params':['']})
+    registry_content = disk.run_plugin_generator({'name':'regf','params':[''],'case':task_case,'source':task_src})
     meili_client = MeiliSearchClient.client
     artefacts_index = meili_client.index(task_case.case_name+'_artefacts')
 
-    for reg in regf_res:
-        path = reg['path']
-        key = reg['key']
-        parent = path.split(key)[0]
+    for reg in registry_content:
         try:
             regf_params = {
                 'source':str(task_src.id_source),
                 'case':str(task_case.id_case),
-                'key':key,
-                'path':path,
-                'parent':remove_last_segment(path),
+                'key':reg['key'],
+                'path':reg['path'],
+                'parent':'\\'.join(reg['path'].split('\\')[:-1]),
                 'plugin':'regf',
                 'value':reg['value'],
+                'name':reg['name'],
+                'datatype':reg['datatype'],
                 'ts':reg['ts'],
                 'id':str(uuid.uuid4())
             }
@@ -219,12 +202,14 @@ def source_regf(self,params):
              regf_params = {
                 'source':str(task_src.id_source),
                 'case':str(task_case.id_case),
-                'key':key,
-                'path':path,
+                'key':reg['key'],
+                'path':reg['path'],
                 'plugin':'regf',
-                'parent':remove_last_segment(path),
-                'ts':reg['ts'],
+                'parent':'\\'.join(reg['path'].split('\\')[:-1]),
                 'value':'-',
+                'name':'-',
+                'datatype':'-',
+                'ts':reg['ts'],
                 'id':str(uuid.uuid4())
             }
         artefacts_index.add_documents([regf_params], primary_key='id')
@@ -247,13 +232,13 @@ def source_plugin(self,params):
     task_case = Case.objects.get(id_case=params['task_case'])
 
     disk = DissectEngine(task_src)
-    res = disk.run_plugin({'name':params['task_type'],'params':params['params'],'case':task_case.id_case,'source':task_src.id_source})
+    plugin_resultat = disk.run_plugin_generator({'name':params['task_type'],'params':params['params'],'case':task_case.id_case,'source':task_src.id_source})
     
     meili_client = MeiliSearchClient.client
     
     artefacts_index = meili_client.index(task_case.case_name+'_artefacts')
-    
-    artefacts_index.add_documents(res, primary_key='id')
+    for record in plugin_resultat:
+        artefacts_index.add_documents([record], primary_key='id')
    
     return self.request.id
 

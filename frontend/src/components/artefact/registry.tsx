@@ -1,28 +1,26 @@
 'use client'
 import * as React from 'react';
 import API from '../api/axios'
-import { Box, Card, CardContent, CardHeader, Dialog, DialogContent, DialogProps, DialogTitle, Grid, IconButton } from '@mui/material';
+import { Box, Card, CardContent, CardHeader, Dialog, DialogContent, DialogProps, DialogTitle, Grid, IconButton, Typography } from '@mui/material';
 import { SimpleTreeView, TreeItem } from '@mui/x-tree-view';
 import { useSessionStorageState, useDialogs } from '@toolpad/core';
-import { DataGrid, GridColDef,GridRowModel,GridToolbar} from '@mui/x-data-grid';
+import { DataGrid, GridColDef,GridRowModel} from '@mui/x-data-grid';
 import { Search } from '@mui/icons-material';
 import RegistrySearch from './registrysearch';
+import { sourceAPI,artefactAPI } from '../api/api';
 
 function RegistryTreeView(props: any){
     const [item,setItem] = React.useState(props.item)
     const [childs,setChild] = React.useState<any>([])
 
-    const handleChildren=()=>{
-        props.onSelectedPath(item.reg_path)
-    }
 
     function getChild(item: any): Promise<any> {
         return new Promise((resolve) => {
             setTimeout(
                 () => {
-                    API.get('/api/sources/'+props.src.id_source+'/registry/parent/?path='+item.reg_path).then(res=>{
+                    artefactAPI.getSourceRegistryKeys(props.src.id_source,{params:{path:item.path}}).then(res=>{
                     setChild(res.data)
-                });
+                })
                 }
             )
         });
@@ -42,15 +40,15 @@ function RegistryTreeView(props: any){
 
     return(
         <TreeItem
-            itemId={'/api/sources/'+props.src.id_source+'/registry/parent/?path='+item.reg_path}
-            label={childs !== undefined ?  item.reg_path.split('\\')[item.reg_path.split('\\').length -1] +'('+childs.length+')':item.reg_path.split('\\')[item.reg_path.split('\\').length -1] }
-            onClick={handleChildren}
-            key={item.reg_path}
+            itemId={item.path}
+            label={item.name}
+           
+            key={item.path}
             id={item.id}
         >
             {
                 childs !== undefined ? childs
-                    .sort((a: any,b:any)=>a.reg_path.localeCompare(b.reg_path,undefined,{sensivity:'base'}))
+                    .sort((a: any,b:any)=>a.path.localeCompare(b.name,undefined,{sensivity:'base'}))
                     .map((child: any,index: any)=>{
                     return(
                             <RegistryTreeView 
@@ -58,7 +56,7 @@ function RegistryTreeView(props: any){
                                 src={props.src} 
                                 onLoading={props.onLoading} 
                                 onRegistryContent={props.onRegistryContent}
-                                onSelectedPath={props.onSelectedPath}
+                                
                             />
                     )
                 }):null
@@ -92,17 +90,15 @@ export default function Registry(props: any){
     const [loading,setLoading] = React.useState(false)
     
     const registry_coulumn: GridColDef[] = [
-        {field:'reg_ts',headerName:'Timestamp',flex:1, filterable: false},
-        {field:'reg_path',headerName:'Path',flex:1, filterable: false},
-        {field:'reg_key',headerName:'Key',flex:1, filterable: false},
-        {field:'reg_value',headerName:'Value',flex:1},
+        {field:'name',headerName:'Name',flex:1},
+        {field:'value',headerName:'Value',flex:1},
+        {field:'type',headerName:'Type',flex:1},
+        {field:'ts',headerName:'Timestamp',flex:1,valueGetter:(value: number)=> value && new Date(value)},
     ]
 
-
     const handelItemSelection =(event: React.SyntheticEvent | null,itemId: string,isSelected:boolean)=>{
-        API.get(itemId).then(res=>{
+        artefactAPI.getSourceRegistryValues(source.id_source,{params:{path:itemId}}).then(res=>{
             setRows(res.data)
-            setLoading(false)
         })
     }
 
@@ -113,15 +109,15 @@ export default function Registry(props: any){
                 <CardContent>
                     <Grid container spacing={1}>
                         <Grid size={2}>
-                            <Box sx={{overflowY:'scroll',maxHeight:1000}}>
+                            <Box sx={{overflowY:'scroll',maxHeight:1000,overflowX:'scroll'}}>
                                 <SimpleTreeView sx={{marginTop:1.5}} onItemSelectionToggle={handelItemSelection}>
                                     <RegistryTreeView
-                                        item={{reg_path:'HKEY_LOCAL_MACHINE',reg_key:'HKEY_LOCAL_MACHINE',id:'teazddad',reg_value:'zeafezf'}}
+                                        item={{path:'HKEY_LOCAL_MACHINE',name:'HKEY_LOCAL_MACHINE',id:'HKEY_LOCAL_MACHINE'}}
                                         src={source}
                                         
                                     />
                                     <RegistryTreeView
-                                        item={{reg_path:'HKEY_USERS',reg_key:'HKEY_USERS',id:'teazddzqdadzaad',reg_value:'zefzef'}}
+                                        item={{path:'HKEY_USERS',name:'HKEY_USERS',id:'HKEY_USERS'}}
                                         src={source}
                                         
                                     />
@@ -130,7 +126,7 @@ export default function Registry(props: any){
                         </Grid>
                         <Grid size={10}>
                             <Box sx={{height:1000}}>
-                                <DataGrid
+                                 <DataGrid
                                     rows={rows}
                                     columns={registry_coulumn}
                                     loading={loading}

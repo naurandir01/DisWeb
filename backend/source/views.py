@@ -12,8 +12,6 @@ from back.database import convertOperator
 from task.tasks import source_directory,source_hayabusa,source_timeline_fs,source_plugin,source_regf,source_timeline,source_yara
 from back.meilisearch_engine import MeiliSearchClient
 import json
-import ast
-
 
 class SourcesView(TemplateView):
     def get(self,request):
@@ -389,13 +387,37 @@ class SourceRegistrySize(TemplateView):
         size = queryset.count()
         return JsonResponse({'size':size},safe=False)
 
-class SourceRegistryPath(TemplateView):
+class SourceRegistryKeys(TemplateView):
     def get(self,request,id_source):
+        """
+        Get the subkeys of a registry key
+        
+        :param request: The request object
+        :param id_source: The id of the Source
+        :return: A JsonResponse with the subkeys
+        
+        """
         src = Source.objects.get(id_source=id_source)
         path = request.GET.get('path')
-        queryset = Registry.objects.filter(reg_source=src,reg_parent=path).order_by('reg_path').distinct('reg_path')
-        data = list(queryset.values())
-        return JsonResponse(data,safe=False)
+        case = Case.objects.get(id_case=src.source_case.id_case)
+        source = DissectEngine(src)
+        subkeys = source.get_registry_subkeys(path)
+        return JsonResponse(subkeys,safe=False)
+
+class SourceRegistryValues(TemplateView):
+    def get(self,request,id_source):
+        """
+        Get the values of a registry key
+        
+        :param request: The request object
+        :param id_source: The id of the Source
+        :return: A JsonResponse with the values
+        """
+        src = Source.objects.get(id_source=id_source)
+        path = request.GET.get('path')
+        source = DissectEngine(src)
+        values = source.get_registry_values(path)
+        return JsonResponse(values,safe=False)
 
 class SourceRegistryPathDataGrid(TemplateView):
     def get(self,request,id_source):

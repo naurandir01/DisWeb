@@ -4,6 +4,7 @@ import React from 'react';
 import { PageHeaderToolbar, useDialogs,useNotifications,useSessionStorageState } from '@toolpad/core';
 import API from '../api/axios'
 import Cookies from 'js-cookie';
+import { caseAPI } from '../api/api';
 
 
 
@@ -23,11 +24,11 @@ export default function CustomToolBar(){
                     const bodyformData = new FormData()
                     bodyformData.append('case_name',case_name)
                     bodyformData.append('case_description','')
-                    const res = await API.post('/api/cases/',bodyformData,{
+                    const res = await caseAPI.addCase(bodyformData,{
                         headers:{
                             'X-CSRFToken':crftOKEN,
                             'Content-Type':'multipart/form-data'}
-                      }).then(res => API.get('/api/cases/').then(res => setListCas(JSON.stringify(res.data))))
+                      }).then(res => caseAPI.getCases().then(res => setListCas(JSON.stringify(res.data))))
                     notifications.show('ADDING NEW CASE '+case_name,{autoHideDuration:3000,severity:'success'})
                 } catch (error){
                     notifications.show('ERROR IN CREATING NEW CASE '+case_name +' token: '+crftOKEN,{autoHideDuration:3000,severity:'error'})

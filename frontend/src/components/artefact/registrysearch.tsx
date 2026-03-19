@@ -3,6 +3,7 @@ import * as React from 'react';
 import API from '../api/axios'
 import { useSessionStorageState } from '@toolpad/core';
 import { DataGrid, GridColDef, GridFilterModel, GridPaginationModel, GridRowModel, GridSortModel, GridToolbar} from '@mui/x-data-grid';
+import { sourceAPI,artefactAPI } from '../api/api';
 
 export default function RegistrySearch(props: any){
     const [currentCas,setCurrentCas] = useSessionStorageState('cas','')
@@ -28,7 +29,7 @@ export default function RegistrySearch(props: any){
         return new Promise((resolve) => {
             setTimeout(
                 () => {
-                    API.get('/api/sources/'+source.id_source+'/registry/'+(page*size)+'/'+(page+1)*size,{params:{filtermodel:filter,sortingmodel:sort}}).then(res=>{
+                    artefactAPI.getSourceRegistryDataGrid(source.id_source,(page*size),(page+1)*size,{params:{filtermodel:filter,sortingmodel:sort}}).then(res=>{
                     setRows(res.data)
                     setIsLoading(false)
                 });
@@ -56,7 +57,7 @@ export default function RegistrySearch(props: any){
         return new Promise((resolve) => {
             setTimeout(
                 () => {
-                    API.get('/api/sources/'+source.id_source+'/registry/size',{params:{filtermodel:filter}}).then(res=>{
+                    artefactAPI.getSourceRegistrySize(source.id_source,{params:{filtermodel:filter}}).then(res=>{
                     setRowsCount(res.data.count)
                 });
                 }

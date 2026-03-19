@@ -87,14 +87,14 @@ services:
       context: frontend
     container_name: disweb-frontend
     volumes:
-      - "./front/nginx.conf:/etc/nginx/conf.d/default.conf"
+      - "./frontend/nginx.conf:/etc/nginx/conf.d/default.conf"
     ports:
       - 80:80
     depends_on:
-      - disweb-back
+      - disweb-backend
   
   disweb-meilisearch:
-    image: getmeili/meilisearch:v1.16
+    image: getmeili/meilisearch:v1.32.0
     container_name: disweb-meilisearch
     volumes:
       - meilidata:/meili_data

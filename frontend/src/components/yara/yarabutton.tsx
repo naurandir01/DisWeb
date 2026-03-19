@@ -4,6 +4,7 @@ import API from '../api/axios'
 import { useDialogs,useSessionStorageState,useNotifications } from '@toolpad/core';
 import {  Button,Checkbox, Dialog, DialogContent, DialogTitle, List, ListItem, ListItemButton, ListItemIcon, ListItemText, DialogActions } from '@mui/material';
 import {DialogProps } from '@toolpad/core/useDialogs';
+import { yaraAPI } from '../api/api';
 
 function RunYaraRules({payload,open,onClose}:DialogProps<any>){
     const [listYaraRules, setListYaraRules] = useSessionStorageState('listyararules','[]')
@@ -26,7 +27,7 @@ function RunYaraRules({payload,open,onClose}:DialogProps<any>){
     const executeYara=()=>{
         listYaraRulesToRun.map((rule: any) => {
             try {
-                API.get('/api/sources/'+payload.src.id_source+'/yara/'+rule).then(res=>{
+                yaraAPI.runYaraRuleOnSource(payload.src.id_source,rule).then(res=>{
                     notification.show('Succes in starting the YaraRule ' + rule,{autoHideDuration:3000,severity:'success'})
                 })
             } catch (error){

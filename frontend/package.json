@@ -17,6 +17,8 @@
     "@mui/x-charts": "latest",
     "@mui/x-data-grid": "latest",
     "@mui/x-tree-view": "latest",
+    "@svar-ui/react-grid": "^2.3.2",
+    "@tanstack/react-query": "^5.90.18",
     "@toolpad/core": "latest",
     "@xterm/xterm": "^5.5.0",
     "7zip": "^0.0.6",
