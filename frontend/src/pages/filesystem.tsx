@@ -42,9 +42,9 @@ export default function FileSystem() {
                       listSources !== null ? JSON.parse(listSources).map((src: any)=>{
                         return(
                           <Grid size={12} key={'grid-arboresence-'+src.source_name}>
-                            <Arboresence src={src} 
-                                setDirectoryContent={setDirectoryContent} 
-                                onLoading={handleLoading} 
+                            <Arboresence src={src}
+                                setDirectoryContent={setDirectoryContent}
+                                onLoading={handleLoading}
                                 onDirectoryContent={handleDirectoryContent}
                                 setDirectorySrc={handleSetDirectorySrc}
                                 key={'arboresence-'+src.source_name}
@@ -56,14 +56,14 @@ export default function FileSystem() {
                      </Grid>
                 </Box>
             </Grid>
-            <Grid size={10}> 
+            <Grid size={10}>
                 <DirectoryContent rows={directoryContent} loading={directoryLoading} onSetFile={handleSetFile} id_source={id_source}/>
                 <FileContent currentFile={currentFile}  id_source={id_source}/>
             </Grid>
-        </Grid>      
+        </Grid>
       </PageContainer>
-         
+
     </div>
-      
+
   );
 }

@@ -54,7 +54,7 @@ class DissectEngine:
             if name not in list_plugins:
                 list_plugins.append(pg)
         return list_plugins
-    
+
     def run_plugin(self,plugin:dict)-> list | str:
         """
         Executes a specified plugin on the target disk image with given parameters and return a list.
@@ -71,7 +71,7 @@ class DissectEngine:
             return value
         elif output_type == "record":
             return self.records_to_json(records=value,case=plugin['case'],source=plugin['source'],plugin=plugin['name'])
-    
+
 
     def plugin(self,plugin:dict):
         """
@@ -85,8 +85,8 @@ class DissectEngine:
         functions = find_functions(target=self.target,patterns=plugin['name'])
         for function in functions[0]:
             return  execute_function_on_target(self.target,func=function,args=plugin['params'])
-       
-    
+
+
     def run_plugin_generator(self,plugin:dict)-> iter:
         """
         Executes a specified plugin on the target disk image with given parameters and returns a generator.
@@ -103,7 +103,7 @@ class DissectEngine:
             return value
         elif output_type == "record":
             return self.records_to_generator(records=value,case=plugin['case'],source=plugin['source'],plugin=plugin['name'])
-    
+
     def records_to_json(self,records:list,case=None,source=None,plugin:str=None)-> list:
         """
         Converts a list of records into a JSON-compatible format.
@@ -116,11 +116,11 @@ class DissectEngine:
         for rec in records:
             records_json.append(self.convert_record_to_json(record=rec,case=case,source=source,plugin=plugin))
         return records_json
-    
+
     def records_to_generator(self,records:list,case=None,source=None,plugin:str=None):
         records_generator = (self.convert_record_to_json(record=rec,case=case,source=source,plugin=plugin) for rec in records)
         return records_generator
-    
+
     def convert_record_to_json(self,record,case=None,source=None,plugin:str=None)-> dict:
         """
         Converts a single record into a JSON-compatible format.
@@ -146,7 +146,7 @@ class DissectEngine:
             record_js['plugin']=plugin
         record_js['id']=str(uuid.uuid4())
         return record_js
-    
+
     def get_directory_content(self,path:str,case:str=None,source:str=None)->list:
         """
         Retrieves the content of a specified directory on a given volume.
@@ -166,9 +166,13 @@ class DissectEngine:
             try:
                 state = c.lstat()
                 #attr = c.lattr()
-            except Exception:
-                pass
-            if c.is_dir():
+            except Exception as lstat_e:
+                try:
+                    state = c.stat()
+                except Exception as state_e:
+                    print(state_e)
+                print(lstat_e)
+            if fs.is_dir(c.path):
                 fs_drc.append({'name':c.name,'type':'drc','path':c.path,
                                 'atime':state.st_atime_ns,
                                 'btime':state.st_birthtime_ns,
@@ -181,14 +185,18 @@ class DissectEngine:
                                 'id':str(uuid.uuid4()),
                                 'plugin':'fs'
                                 })
-            elif c.is_file():
-                try: 
+            elif fs.is_file(c.path):
+                try:
                     file_magic = magic.from_buffer(fs.get(c.path).open().read(2048))
-                    sha256 = c.sha256()
-                    md5 = c.md5()
-                    sha1 = c.sha1()
-                except:
+                    sha256 = fs.sha256(c.path)
+                    md5 = fs.md5(c.path)
+                    sha1 = fs.sha1(c.path)
+                except Exception as e:
+                    print(e)
                     file_magic =''
+                    sha256=''
+                    md5=''
+                    sha1=''
                 fs_drc.append({'name':c.name,'type':'fls','path':c.path,'subtype':file_magic,
                                 'atime':state.st_atime_ns,
                                 'btime':state.st_birthtime_ns,
@@ -209,8 +217,7 @@ class DissectEngine:
                                 'plugin':'fs'
                                 })
             elif c.is_symlink():
-                try: 
-                    
+                try:
                     sha256 = c.sha256()
                     md5 = c.md5()
                     sha1 = c.sha1()
@@ -248,7 +255,7 @@ class DissectEngine:
             list: A list of dictionaries containing the address, hex value, and string representation of each line in the hex dump.
         """
         fs = self.target.fs
-       
+
         hex_dump =  hexdump(fs.get(file_path).open().read(),output="string")
         lines = hex_dump.split('\n')
         result = []
@@ -264,7 +271,7 @@ class DissectEngine:
             result.append(entry)
         return result
 
-    
+
     def get_file(self,file_path:str)->str:
         """
         Retrieves the content of a specified file on a given volume.
@@ -275,13 +282,13 @@ class DissectEngine:
             str: The content of the file as a string.
         """
         fs = self.target.fs
-        
+
         try:
             return fs.get(file_path).open()
         except Exception as e:
             return e
-        
-    
+
+
     def get_file_no_open(self,file_path:str):
         """
         Retrieves the content of a specified file on a given volume without opening it.
@@ -292,14 +299,14 @@ class DissectEngine:
             str: The content of the file as a string.
         """
         fs = self.target.fs
-        
+
         try:
             return fs.get(file_path)
         except Exception as e:
             return e
-        
-    
-    
+
+
+
     def get_volumes(self)->list:
         """
         Retrieves a list of volumes available in the target disk image.
@@ -327,7 +334,7 @@ class DissectEngine:
             except OSError:
                 pass
             os.makedirs('/tmp/hayabusa_'+self.target.name, exist_ok=True)
-            
+
             if len(evtx_folder) > 0:
                 evtx_file = self.get_file_no_open(evt_path+'/'+evtx['name'])
                 with open('/tmp/hayabusa_'+self.target.name+'/'+evtx['name'], 'wb') as f:
@@ -340,7 +347,7 @@ class DissectEngine:
             for line in f:
                 result_json.append(line)
         return result_json
-    
+
     def get_registry_subkeys(self,path:str)->list:
         """
         Retrieves the subkeys of a specified registry path.
@@ -362,7 +369,7 @@ class DissectEngine:
                 'id':str(uuid.uuid4()),
                 'ts':sub.ts.timestamp()})
         return subkeys_list
-    
+
     def get_registry_values(self,path:str)->list:
         """
         Retrieves the values of a specified registry path.
@@ -388,4 +395,3 @@ class DissectEngine:
                 'id':str(uuid.uuid4()),
                 'ts':sub.ts.timestamp()})
         return values_list
-    

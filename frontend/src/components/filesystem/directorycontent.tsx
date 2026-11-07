@@ -1,5 +1,7 @@
 'use client'
 import { Download } from '@mui/icons-material';
+import 'react-data-grid/lib/styles.css';
+
 import { Button } from '@mui/material';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import * as React from 'react';
@@ -16,7 +18,7 @@ export default function DirectoryContent(props: any){
             return <Button size='small' variant='text' onClick={()=>params.row.type === 'fls' ? props.onSetFile(params.row):null}>{params.row.name}</Button>
         }},
         {field:'type',headerName:'Type',width:60},
-        
+
         {field:'subtype',headerName:'Extension',flex:1},
         {field:'btime',headerName:'Creation (B)',flex:1, type: 'dateTime',valueGetter:(value: number)=> value && new Date(value/1000000)},
         {field:'ctime',headerName:'Modification (M)',flex:1, type: 'dateTime',valueGetter:(value: number)=> value && new Date(value/1000000)},
@@ -38,7 +40,7 @@ export default function DirectoryContent(props: any){
     const handleGetFile=React.useCallback(
         (row: any,id_source: any)=> ()=>{
             try{
-                
+
                 fsAPI.getFile(id_source,row.path).then(
                     async res=>{
                         const file_blob = new Blob([res.data], {type: res.headers['content-type']})
@@ -53,7 +55,7 @@ export default function DirectoryContent(props: any){
                         a.click()
                         document.body.removeChild(a)
                         URL.revokeObjectURL(url)
-                        
+
                     }
                 ).then(()=>{notification.show("Download of the file "+row.path,{autoHideDuration:3000,severity:'success'})})
             } catch (error){
@@ -64,10 +66,10 @@ export default function DirectoryContent(props: any){
 
     return(
         <div style={{height:700}}>
-            <DataGrid 
-                rows={props.rows} 
-                columns={columns} 
-                rowHeight={25}  
+            <DataGrid
+                rows={props.rows}
+                columns={columns}
+                rowHeight={25}
                 showToolbar
                 loading={props.loading}
                 initialState={{
