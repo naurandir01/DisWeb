@@ -1,14 +1,18 @@
+# backend/source/dissect_engine.py
 from dissect.target import Target
 from dissect.target.tools.utils.cli import execute_function_on_target,find_functions, keychain
 from dissect.target.helpers.keychain import KeyType
 from dissect.target.plugins.os.windows.registry import RegistryPlugin
 from dissect.cstruct import hexdump
 
+import logging
 import uuid
 
 import os
 import magic
 import subprocess
+
+logger = logging.getLogger(__name__)
 
 class DissectEngine:
     """
@@ -32,6 +36,10 @@ class DissectEngine:
             if source.source_key['key_type'] == 'RECOVERY_KEY':
                 keychain.register_key(key_type=KeyType.RECOVERY_KEY,value=source.source_key['value'])
             self.target = Target.open(self.path)
+            # Sprint 3: integrity is now verified PERIODICALLY by the
+            # Celery Beat dispatcher (task.integrity_tasks) at an interval
+            # configured by the administrator — not on every engine open
+            # (hashing a large image on every access was too costly).
         elif path is not None:
             self.path = path
             if key_type == 'PASSPHRASE':
@@ -170,8 +178,15 @@ class DissectEngine:
                 try:
                     state = c.stat()
                 except Exception as state_e:
-                    print(state_e)
-                print(lstat_e)
+                    logger.warning(
+                        "FS scan: cannot stat entry %s (lstat: %s, stat: %s)",
+                        c.path, lstat_e, state_e,
+                    )
+                    continue
+                logger.warning(
+                    "FS scan: lstat failed on %s, fell back to stat (%s)",
+                    c.path, lstat_e,
+                )
             if fs.is_dir(c.path):
                 fs_drc.append({'name':c.name,'type':'drc','path':c.path,
                                 'atime':state.st_atime_ns,
@@ -192,7 +207,9 @@ class DissectEngine:
                     md5 = fs.md5(c.path)
                     sha1 = fs.sha1(c.path)
                 except Exception as e:
-                    print(e)
+                    # Forensic relevance: missing hashes on a file should be
+                    # visible in logs (analyst may need to know hashing failed)
+                    logger.warning("FS scan: hashing/magic failed for %s: %s", c.path, e)
                     file_magic =''
                     sha256=''
                     md5=''
@@ -319,33 +336,60 @@ class DissectEngine:
             volumes.append({'name':f.volume.name,'number':f.volume.number,'size':f.volume.size})
         return volumes
 
-    def run_hayabusa(self)->None:
+    def run_hayabusa(self) -> list:
         """
-        Executes the Hayabusa plugin on the target disk image.
+        Executes the Hayabusa tool on the Windows event logs of the image.
 
-        Returns:
-            str: The output of the Hayabusa plugin execution.
+        FIX (sprint 2): the original created/removed the temp dir INSIDE
+        the loop, so only the last EVTX survived; the JSONL output was also
+        returned unparsed while the caller expected parsed JSON objects.
+
+        Now:
+        - one temp dir per source, created ONCE before the loop
+        - all EVTX files extracted into it, then hayabusa runs once
+        - each JSONL line is json.loads()-ed into a dict
+        - unreadable EVTX files are skipped (partial results are better
+          than no results in forensic triage)
+        - the temp dir is removed afterwards (best effort)
         """
+        import json as _json
+        import shutil
+        import tempfile
+
         evt_path = "C:/Windows/System32/winevt/Logs/"
+        tmp_dir = os.path.join(tempfile.gettempdir(), f"hayabusa_{self.target.name}")
+        os.makedirs(tmp_dir, exist_ok=True)
+
         evtx_folder = self.get_directory_content(evt_path)
+        extracted = 0
         for evtx in evtx_folder:
             try:
-                os.rmdir('/tmp/hayabusa_'+self.target.name)
-            except OSError:
-                pass
-            os.makedirs('/tmp/hayabusa_'+self.target.name, exist_ok=True)
-
-            if len(evtx_folder) > 0:
-                evtx_file = self.get_file_no_open(evt_path+'/'+evtx['name'])
-                with open('/tmp/hayabusa_'+self.target.name+'/'+evtx['name'], 'wb') as f:
+                evtx_file = self.get_file_no_open(os.path.join(evt_path, evtx['name']))
+                out_path = os.path.join(tmp_dir, evtx['name'])
+                with open(out_path, 'wb') as f:
                     open_file = evtx_file.open()
                     f.write(open_file.readall())
-        cmd =f"/backend/external/hayabusa/hayabusa json-timeline --no-wizard -d /tmp/hayabusa_{self.target.name} -A -D -n -u -C -L -o /tmp/hayabusa_{self.target.name}.json"
-        result = subprocess.check_output(cmd,shell=True)
+                extracted += 1
+            except Exception:
+                continue
+
+        if extracted == 0:
+            shutil.rmtree(tmp_dir, ignore_errors=True)
+            return []
+
+        out_json = os.path.join(tmp_dir, f"{self.target.name}.json")
+        cmd = (f"/backend/external/hayabusa/hayabusa json-timeline --no-wizard "
+               f"-d {tmp_dir} -A -D -n -u -C -L -o {out_json}")
+        subprocess.check_output(cmd, shell=True)
+
         result_json = []
-        with open(f"/tmp/hayabusa_{self.target.name}.json", 'r') as f:
+        with open(out_json, 'r') as f:
             for line in f:
-                result_json.append(line)
+                line = line.strip()
+                if line:
+                    result_json.append(_json.loads(line))
+
+        shutil.rmtree(tmp_dir, ignore_errors=True)
         return result_json
 
     def get_registry_subkeys(self,path:str)->list:

@@ -1,10 +1,11 @@
 'use client'
 import { Delete, ExpandMore } from '@mui/icons-material';
-import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Button, Dialog, DialogActions, DialogContent, DialogProps, DialogTitle, Grid, TextField } from '@mui/material';
+import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Alert, Button, Dialog, DialogActions, DialogContent, DialogProps, DialogTitle, Grid, TextField } from '@mui/material';
 import { DataGrid, GridActionsCellItem, GridRowId } from '@mui/x-data-grid';
 import { useDialogs,useSessionStorageState,useNotifications } from '@toolpad/core';
 import * as React from 'react';
 import { iocAPI } from '../api/api';
+import useIsAdmin from '../api/useIsAdmin';
 
 function AddIOC({open,onClose= ()=>{}}:DialogProps){
     const [newType,setNewType] = React.useState('')
@@ -48,18 +49,19 @@ export default function IocTypes(props: any){
     const dialog = useDialogs()
     const [listIocType, setListIocType] = useSessionStorageState('listioctype','[]')
     const notification = useNotifications()
+    const [isAdmin] = useIsAdmin()
 
     const columns: any = [
         {field:'ioctype_value',headerName:'IOC Type',flex: 1},
         {field:'ioctype_description',headerName:'Description',flex: 1},
-        {field:'action',type:'actions',getActions: (params: any)=>[
+        {field:'action',type:'actions',getActions: (params: any)=> isAdmin ? [
             <GridActionsCellItem
                 icon={<Delete/>}
                 label='Delete'
                 onClick={onDeleteSource(params.id)}
                 key={'delete-ioc_type'}
             />
-        ]}
+        ] : []}
     ]
 
     const onDeleteSource = React.useCallback(
@@ -98,8 +100,13 @@ export default function IocTypes(props: any){
                 </div>
                 
             </AccordionDetails>
+            {!isAdmin && (
+                <Alert severity="info" sx={{mx:2}}>
+                    Administrator role required to add or delete IOC types.
+                </Alert>
+            )}
             <AccordionActions>
-                <Button onClick={async ()=>{ await dialog.open(AddIOC)}}>Add new IOC TYPE</Button>
+                <Button onClick={async ()=>{ await dialog.open(AddIOC)}} disabled={!isAdmin}>Add new IOC TYPE</Button>
             </AccordionActions>
         </Accordion>
     )

@@ -14,9 +14,9 @@ class IOCType(models.Model):
 
 class IOC(models.Model):
     id_ioc = models.UUIDField( primary_key = True, default = uuid.uuid4, editable = False)
-    ioc_type = models.ForeignKey(IOCType,editable=True,on_delete=models.CASCADE)
-    ioc_src = models.ForeignKey(Source,editable=True,on_delete=models.CASCADE)
-    ioc_case = models.ForeignKey(Case,editable=True,on_delete=models.CASCADE)
+    ioc_type = models.ForeignKey(IOCType,editable=True,on_delete=models.PROTECT)
+    ioc_src = models.ForeignKey(Source,editable=True,on_delete=models.PROTECT)
+    ioc_case = models.ForeignKey(Case,editable=True,on_delete=models.PROTECT)
     ioc_value = models.CharField(max_length=500,null=True)
     
     def __str__(self):

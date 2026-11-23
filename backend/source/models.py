@@ -1,3 +1,4 @@
+# backend/source/models.py
 import uuid
 
 from case.models import Case
@@ -11,11 +12,16 @@ class Source(models.Model):
     source_type = models.CharField(max_length=250, null=True)
     source_version = models.CharField(max_length=250, null=True)
     source_os = models.CharField(max_length=250, null=True)
-    source_case = models.ForeignKey(Case, editable=True, on_delete=models.CASCADE)
+    # FIX (sprint 3): PROTECT — deleting a case with linked evidence must be
+    # refused instead of cascading the destruction of all proof
+    source_case = models.ForeignKey(Case, editable=True, on_delete=models.PROTECT)
     source_plugins = models.JSONField(null=True)
     source_key = models.JSONField(
         default={"key_type": None, "value": None}
     )  # {"type":"bitlocker|luks","key_type":"recovery_key|passphrase","value":"<key_value>"}
+    # FIX (sprint 3): integrity of the evidence image
+    source_hash_sha256 = models.CharField(max_length=64, null=True, blank=True)
+    source_hash_verified_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.source_name

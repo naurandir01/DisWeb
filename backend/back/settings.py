@@ -22,13 +22,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'DEV_SECRET_2'
+# SECURITY: secrets/flags now come from environment variables.
+# dev defaults keep local workflows working; production MUST set real values.
+import os as _os
+
+SECRET_KEY = _os.environ.get("DJANGO_SECRET_KEY", "DEV_SECRET_2")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = _os.environ.get("DJANGO_DEBUG", "False").lower() == "true"
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = _os.environ.get(
+    "DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1"
+).split(",")
 
 
 # Application definition
@@ -41,6 +46,7 @@ INSTALLED_APPS = [
     "task.apps.TaskConfig",
     "yaras.apps.YarasConfig",
     "source.apps.SourceConfig",
+    "user.apps.UserConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -73,6 +79,12 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
+    # SECURITY: safety net — any DRF view forgetting permission_classes
+    # is protected by default. Views inheriting BaseApiView set the
+    # same requirement explicitly.
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
 }
 
 SIMPLE_JWT = {
@@ -91,7 +103,10 @@ CACHES = {
 }
 
 # - CORS
-CORS_ALLOW_ALL_ORIGINS = True
+# SECURITY: explicit origin instead of allow-all. Set FRONTEND_ORIGIN in env.
+CORS_ALLOWED_ORIGINS = [
+    _os.environ.get("FRONTEND_ORIGIN", "http://localhost:5173"),
+]
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -196,6 +211,43 @@ STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles/")
 MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 MEDIA_URL = "/media/"
+
+# LOGGING: forensic-grade visibility. Errors and warnings go to stderr
+# (visible via docker logs), task lifecycle info included.
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "{asctime} {levelname} {name} {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "INFO",
+    },
+    "loggers": {
+        # DisWeb modules
+        "back": {"level": "INFO"},
+        "task": {"level": "INFO"},
+        "source": {"level": "INFO"},
+        "artefact": {"level": "INFO"},
+        "case": {"level": "INFO"},
+        "ioc": {"level": "INFO"},
+        "yaras": {"level": "INFO"},
+        # Reduce noise from third-party libs at INFO level
+        "meilisearch": {"level": "WARNING"},
+        "celery": {"level": "INFO"},
+        "dissect": {"level": "WARNING"},
+    },
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

@@ -28,6 +28,7 @@ urlpatterns = [
     path("api/",include("artefact.urls")),
     path("api/",include("yaras.urls")),
     path("api/",include("source.urls")),
+    path("api/",include("user.urls")),
     path("api/token/", jwt_views.TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", jwt_views.TokenRefreshView.as_view(), name="token_refresh"),
 ] + static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)

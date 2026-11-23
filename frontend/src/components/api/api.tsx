@@ -1,5 +1,5 @@
 import axios from "axios";
-import { data } from "react-router";
+import Cookies from "js-cookie";
 
 const api = axios.create({
     baseURL: '/api',
@@ -7,7 +7,43 @@ const api = axios.create({
         'Content-Type': 'application/json',
     },
 });
+// --- JWT authentication (sprint 1) ---
 
+// Inject the JWT access token in every request
+api.interceptors.request.use((config) => {
+    // Legacy callers already use '/api/...' absolute paths while this
+    // instance has baseURL '/api'. Normalize to avoid '/api/api/...'.
+    if (config.url && config.url.startsWith('/api/')) {
+        config.url = config.url.slice(4);
+    }
+    const token = Cookies.get('access_token');
+    if (token) config.headers.Authorization = `Bearer ${token}`;
+    return config;
+});
+
+// On 401: refresh the expired access token once, then replay the request
+api.interceptors.response.use(undefined, async (error) => {
+    const original = error.config;
+    if (error.response?.status === 401 && !original._retry) {
+        original._retry = true;
+        const refresh = Cookies.get('refresh_token');
+        if (refresh) {
+            const res = await axios.post('/api/token/refresh/', { refresh });
+            Cookies.set('access_token', res.data.access);
+            // SIMPLE_JWT has ROTATE_REFRESH_TOKENS=True
+            Cookies.set('refresh_token', res.data.refresh);
+            return api(original);
+        }
+    }
+    return Promise.reject(error);
+});
+
+
+
+// Shared intercepted instance: injects the JWT on every request and
+// refreshes it automatically on 401. Exported as default so legacy
+// `import API from '../components/api/axios'` callers benefit from it too.
+export default api;
 
 export const caseAPI = {
     getCases : () => api.get('/cases/'),
@@ -59,4 +95,26 @@ export const yaraAPI = {
     getYaraRule : (id_yararule:any) => api.get(`/yara/${id_yararule}/`),
     modifyYaraRule : (id_yararule:any,data:FormData) => api.post(`/yara/${id_yararule}/`,data,{headers:{'Content-Type':'multipart/form-data'}}),
     runYaraRuleOnSource : (id_source:any,id_yararule:any) => api.get(`/sources/${id_source}/yara/${id_yararule}/`),
+}
+
+export const settingsAPI = {
+    getIntegritySettings : () => api.get('/settings/integrity/'),
+    updateIntegritySettings : (enabled:boolean,intervalMinutes:number) =>
+        api.put('/settings/integrity/',{enabled:enabled,interval_minutes:intervalMinutes}),
+    getIntegrityAudits : (limit:number=50) => api.get(`/audit/?action=SOURCE_HASH_VERIFY&limit=${limit}`),
+}
+
+export interface IntegritySettings {
+    enabled: boolean;
+    interval_minutes: number;
+    updated_at: string;
+}
+
+export interface AuditEntry {
+    timestamp: string;
+    user: string;
+    ip: string | null;
+    action: string;
+    target: string;
+    detail: Record<string, unknown> | null;
 }

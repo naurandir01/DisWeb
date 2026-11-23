@@ -17,7 +17,7 @@ services:
       context: backend
     container_name: disweb-backend
     image: disweb_backend:${APP_VERSION}
-    command: gunicorn back.wsgi --bind 0.0.0.0:5002 --timeout 10000 --worker-connections 1000 -w 4 -n disweb-back --log-level=info
+    command: gunicorn back.wsgi --bind 0.0.0.0:5002 --timeout 10000 --worker-connections 1000 -w 4 -n disweb-back --log-level=debug
     env_file:
       - .env
     ports:
@@ -36,11 +36,18 @@ services:
       - CASE_DIR
       - REDIS_HOST
       - REDIS_PORT
+      # -- SECURITY (sprint 1) : consumed by back/settings.py
+      - DJANGO_SECRET_KEY
+      - DJANGO_DEBUG
+      - DJANGO_ALLOWED_HOSTS
+      - FRONTEND_ORIGIN
+      - MEILI_HOST
+      - MEILI_MASTER_KEY
     depends_on:
       - disweb-worker
       - disweb-psql
       - disweb-redis
-  
+
   disweb-worker:
     image: disweb_backend:${APP_VERSION}
     build:
@@ -56,6 +63,13 @@ services:
       - POSTGRES_DB
       - POSTGRES_URL
       - CASE_DIR
+      # -- SECURITY (sprint 1) : consumed by back/settings.py
+      - DJANGO_SECRET_KEY
+      - DJANGO_DEBUG
+      - DJANGO_ALLOWED_HOSTS
+      - FRONTEND_ORIGIN
+      - MEILI_HOST
+      - MEILI_MASTER_KEY
     volumes:
       - $CASE_DIR:/mnt/disk:rw
       - "./backend/external:/backend/external:rw"
@@ -64,6 +78,29 @@ services:
     deploy:
       mode: replicated
       replicas: 1
+
+  disweb-beat:
+    image: disweb_backend:${APP_VERSION}
+    command: celery -A back.celery beat -l INFO
+    env_file:
+      - .env
+    environment:
+      - CELERY_BROKER_URL
+      - SQLALCHEMY_DATABASE_URI
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+      - POSTGRES_URL
+      - CASE_DIR
+      - DJANGO_SECRET_KEY
+      - DJANGO_DEBUG
+      - DJANGO_ALLOWED_HOSTS
+      - FRONTEND_ORIGIN
+      - MEILI_HOST
+      - MEILI_MASTER_KEY
+    depends_on:
+      - disweb-rabbitmq
+      - disweb-psql
   disweb-psql:
     image: postgres:16-alpine
     container_name: disweb-db
@@ -92,7 +129,7 @@ services:
       - 80:80
     depends_on:
       - disweb-backend
-  
+
   disweb-meilisearch:
     image: getmeili/meilisearch:v1.32.0
     container_name: disweb-meilisearch
@@ -107,7 +144,7 @@ services:
       - MEILI_NO_ANALYTICS=true
       - MEILI_EXPERIMENTAL_CONTAINS_FILTER=true
     #  - MEILI_EXPERIMENTAL_CHAT_COMPLETION=true
-  
+
   # disweb-es:
   #   image: docker.elastic.co/elasticsearch/elasticsearch:${ES_VERSION}
   #   container_name: disweb-es
@@ -116,7 +153,7 @@ services:
   #   environment:
   #     - xpack.security.enabled='true'
   #     - discovery.type=single-node
-  #     - ELASTIC_PASSWORD=${ES_PASSWORD} 
+  #     - ELASTIC_PASSWORD=${ES_PASSWORD}
 
 volumes:
   disweb_data:

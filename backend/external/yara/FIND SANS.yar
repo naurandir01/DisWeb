@@ -1,6 +1,6 @@
 rule find_SANS {
     meta:
-        description = "Recherche de SANS"
+        description = "Find SANS keyword"
     strings:
         $s0 = "SANS" fullword
     condition:

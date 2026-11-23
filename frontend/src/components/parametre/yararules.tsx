@@ -4,10 +4,11 @@ import API from '../api/axios'
 import { useDialogs,useSessionStorageState,useNotifications } from '@toolpad/core';
 import { DataGrid, GridActionsCellItem, GridRowId } from '@mui/x-data-grid';
 import { Details, Edit } from '@mui/icons-material';
-import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
+import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Alert, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
 import { Delete, ExpandMore } from '@mui/icons-material';
 import {DialogProps } from '@toolpad/core/useDialogs';
 import { yaraAPI } from '../api/api';
+import useIsAdmin from '../api/useIsAdmin';
 
 function AddYaraRules({open,onClose}:DialogProps){
     const [newYaraRuleName,setNewYaraRuleName] = React.useState('')
@@ -96,11 +97,12 @@ export default function YaraRules(props: any){
     const dialog = useDialogs()
     const [listYaraRules, setListYaraRules] = useSessionStorageState('listyararules','[]')
     const notification = useNotifications()
+    const [isAdmin] = useIsAdmin()
 
     const columns: any = [
         {field:'yararule_name',headerName:'Yara Rule Name',flex: 1},
         {field:'yararule_description',headerName:'Description',flex: 1},
-        {field:'action',type:'actions',getActions: (params: any)=>[
+        {field:'action',type:'actions',getActions: (params: any)=> isAdmin ? [
             <GridActionsCellItem
                 icon={<Delete/>}
                 label='Delete'
@@ -113,7 +115,7 @@ export default function YaraRules(props: any){
                 key={'detail-yararules-'+params.id}
                 onClick={async () => {await dialog.open(YaraRuleDetails,{id_yararule:params.id})}}
             />
-        ]}
+        ] : []}
     ]
 
     function rowsId(row: any){
@@ -148,8 +150,13 @@ export default function YaraRules(props: any){
                     showToolbar
                 />
             </AccordionDetails>
+            {!isAdmin && (
+                <Alert severity="info" sx={{mx:2}}>
+                    Administrator role required to add, edit or delete Yara rules.
+                </Alert>
+            )}
             <AccordionActions>
-                <Button onClick={async ()=>{ await dialog.open(AddYaraRules)}}>Add Yara Rule</Button>
+                <Button onClick={async ()=>{ await dialog.open(AddYaraRules)}} disabled={!isAdmin}>Add Yara Rule</Button>
             </AccordionActions>
         </Accordion>
     )

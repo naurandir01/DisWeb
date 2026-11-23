@@ -1,452 +1,565 @@
-from django.shortcuts import render
-from django.views.generic import TemplateView
-from django.http import HttpResponse,JsonResponse,FileResponse
-from django_celery_results.models import TaskResult
-from .models import Source
-from case.models import Case
-from artefact.models import Artefact,Registry
-from task.models import Task
-from yaras.models import YaraRule
-from .dissect_engine import DissectEngine
-from back.database import convertOperator
-from task.tasks import source_directory,source_hayabusa,source_timeline_fs,source_plugin,source_regf,source_timeline,source_yara
-from back.meilisearch_engine import MeiliSearchClient
+# backend/source/views.py
+import hashlib
 import json
+import uuid
 
-class SourcesView(TemplateView):
-    def get(self,request):
-        sources = Source.objects.all().values()
-        return JsonResponse(list(sources),safe=False)
-    
-    def post(self,request):
-        """
-        Create a new source from a path
-        """
-        src_case =  Case.objects.get(id_case=json.loads(request.POST['src_case'])['id_case'])
-        crypt_params = {}
+from django.http import FileResponse
+from django.utils import timezone
+from rest_framework.response import Response
+
+from back.apibase import BaseApiView
+from back.filters import apply_grid_filters
+from back.roles import IsAdminRole, IsAdminOrAnalyst
+from back.meilisearch_engine import MeiliSearchClient
+from case.models import Case
+from source.models import Source
+from source.dissect_engine import DissectEngine
+from artefact.models import Artefact, Registry
+from task.models import Task
+from task.tasks import (
+    source_directory, source_hayabusa, source_timeline_fs,
+    source_plugin, source_regf, source_timeline, source_yara,
+)
+from user.models import AuditLog, audit_from_request
+from yaras.models import YaraRule
+
+
+def compute_source_sha256(path: str, chunk_size: int = 8 * 1024 * 1024) -> str:
+    """Stream-hash the evidence image (never loads it fully in memory)."""
+    sha = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(chunk_size), b""):
+            sha.update(chunk)
+    return sha.hexdigest()
+
+
+def get_task_or_launch(delay_fn, params, src):
+    """FIX (bug #5): compare the FK to the Source *object*, not the raw UUID.
+
+    Returns the task if it exists, otherwise launches `delay_fn` and
+    returns the newly PENDING task.
+    """
+    try:
+        return Task.objects.get(task_src=src, task_type=params["task_type"])
+    except Task.DoesNotExist:
+        delay_fn.delay(params)
+        task = Task(
+            id_task=uuid.uuid4(),
+            task_src=src,
+            task_case=params["task_case"],
+            task_type=params["task_type"],
+            task_status="PENDING",
+        )
+        task.save()
+        return task
+
+
+def meili_records_to_dicts(query):
+    """Helper: convert MeiliSearch results to plain dicts (was duplicated 6x)."""
+    return [vars(res) for res in query.results]
+
+
+class SourcesView(BaseApiView):
+    def get(self, request):
+        return Response(list(Source.objects.all().values()))
+
+    def post(self, request):
         try:
-            crypt_params['key_type'] = request.POST['crypt_key_type']
-            crypt_params['value'] = request.POST['crypt_key_value']
-                
-            disk = DissectEngine(path=request.POST['src_path'],key_type=crypt_params['key_type'],key_value=crypt_params['value'])
-        
-        except Exception as e:
-            crypt_params = {"key_type":None,"value":None}
-            disk = DissectEngine(path=request.POST['src_path'])
+            case_payload = json.loads(request.POST["src_case"])
+            src_case = Case.objects.get(id_case=case_payload["id_case"])
+            src_path = request.POST["src_path"]
+        except (KeyError, json.JSONDecodeError, Case.DoesNotExist):
+            return self.bad_request("Invalid case or path")
+
+        crypt_params = {"key_type": None, "value": None}
+        try:
+            crypt_params["key_type"] = request.POST["crypt_key_type"]
+            crypt_params["value"] = request.POST["crypt_key_value"]
+            disk = DissectEngine(
+                path=src_path,
+                key_type=crypt_params["key_type"],
+                key_value=crypt_params["value"],
+            )
+        except Exception:
+            disk = DissectEngine(path=src_path)
 
         source = Source(
-            source_name = disk.target.name,
-            source_path = request.POST['src_path'],
-            source_type = request.POST['src_path'].split('.')[-1],
-            source_version = disk.target.version,
-            source_os = disk.target.os,
-            source_case = src_case ,
-            source_plugins = disk.get_plugins(),
-            source_key = crypt_params
+            source_name=disk.target.name,
+            source_path=src_path,
+            source_type=src_path.split(".")[-1],
+            source_version=disk.target.version,
+            source_os=disk.target.os,
+            source_case=src_case,
+            source_plugins=disk.get_plugins(),
+            source_key=crypt_params,
         )
+        # Integrity (sprint 3): hash the evidence at ingestion. A failure
+        # must not block the ingestion but must leave a visible trace.
+        try:
+            source.source_hash_sha256 = compute_source_sha256(src_path)
+        except Exception:
+            source.source_hash_sha256 = None
         source.save()
-        return HttpResponse(status=201,content="Source created successfully")
 
-class SourceView(TemplateView):
-    def get(self,request,id_source):
-        """
-        Get a source by its ID
-        """
-        src = Source.objects.get(id_source=id_source)
-        return JsonResponse(src,safe=False)
-    
-    def delete(self,request,id_source):
-        """
-        Delete a source by its ID
-        """
-        src = Source.objects.get(id_source=id_source)
-        
+        audit_from_request(
+            AuditLog.Action.SOURCE_CREATE, request,
+            target=str(source.id_source),
+            detail={
+                "case": str(src_case.id_case),
+                "path": src_path,
+                "sha256": source.source_hash_sha256,
+            },
+        )
+        return Response({"id_source": str(source.id_source)}, status=201)
+
+
+class SourceView(BaseApiView):
+    # Deleting a source destroys indexed evidence: administrative
+    permission_classes = BaseApiView.permission_classes + [IsAdminRole]
+
+    def get(self, request, id_source):
+        try:
+            src = Source.objects.get(id_source=id_source)
+        except Source.DoesNotExist:
+            return self.not_found()
+        return Response(dict(src.__dict__))
+
+    def delete(self, request, id_source):
+        try:
+            src = Source.objects.get(id_source=id_source)
+        except Source.DoesNotExist:
+            return self.not_found()
         case = Case.objects.get(id_case=src.source_case.id_case)
-
         meili_client = MeiliSearchClient.client
-        artefacts_index = meili_client.index(case.case_name+'_artefacts')
-        artefacts_index.delete_documents(filter='source="'+str(src.id_source)+'"')
+        artefacts_index = meili_client.index(case.case_name + "_artefacts")
+        artefacts_index.delete_documents(filter='source="' + str(src.id_source) + '"')
+        # Audit BEFORE deletion (sprint 3): who destroyed evidence and what it was
+        audit_from_request(
+            AuditLog.Action.SOURCE_DELETE, request,
+            target=str(id_source),
+            detail={"case": str(case.id_case), "path": src.source_path,
+                    "name": src.source_name},
+        )
+        src.delete()
+        return Response({"detail": "Source deleted successfully"})
 
-        Source.objects.get(id_source=id_source).delete()
-        return HttpResponse(status=200,content="Source deleted successfully")
 
-class SourceArtefactMeiliSearch(TemplateView):
+class SourceArtefactMeiliSearch(BaseApiView):
+    """Get the content of an artefact from an index in MeiliSearch.
+
+    :param params filter: The filter to apply on the artefacts
+    :param params offset: The offset to apply on the results
+    :param params limit: The limit of results to return
+    :param id_source: The id of the Source
+    :param plugin: The name of the plugin to filter the artefacts
+    :return: A Response with the artefacts
     """
-        Get the content of an artefact from an index in MeiliSearch
-
-        :param request: The request object
-            
-        :param params filter: The filter to apply on the artefacts
-        :param params offset: The offset to apply on the results
-        :param params limit: The limit of results to return
-        
-        :param id_source: The id of the Source
-        :param plugin: The name of the plugin to filter the artefacts
-        
-        :return: A JsonResponse with the artefact 
-        """
     def get(self, request, id_source, plugin):
-        src = Source.objects.get(id_source=id_source)
-        filter = request.GET.get('filter')
-        offset = request.GET.get('offset')
-        limit = request.GET.get('limit')
-        sort = request.GET.get('sort')
+        try:
+            src = Source.objects.get(id_source=id_source)
+        except Source.DoesNotExist:
+            return self.not_found()
+
+        filter_param = request.query_params.get("filter")
+        offset = request.query_params.get("offset", "0")
+        limit = request.query_params.get("limit", "100")
+        sort = request.query_params.get("sort", "")
 
         meili_client = MeiliSearchClient.client
         case = Case.objects.get(id_case=src.source_case.id_case)
-        index = meili_client.index(case.case_name + '_artefacts')
+        index = meili_client.index(case.case_name + "_artefacts")
 
         params = {
-            'filter':filter,
-            'offset':int(offset),
-            'limit':int(limit),
+            "filter": filter_param,
+            "offset": int(offset),
+            "limit": int(limit),
         }
-        if sort != '':
-            params['sort'] = [sort]
-        
-        query = index.get_documents(params)
-        
-        jsons = []
-        for res in query.results:
-            js = {}
-            for dict in res.__dict__:
-                js[dict] = res.__dict__[dict]
-            jsons.append(js)
-        
-        return JsonResponse({'total':query.total,'hits':jsons}, safe=False)
+        if sort:
+            params["sort"] = [sort]
 
-class SourceDirectoryContent(TemplateView):
-    def get(self,request,id_source):
-        """
-        Get the content of a directory in a source
-        """
-        src = Source.objects.get(id_source=id_source)
-        directory= request.GET.get('directory')
-        filter = request.GET.get('filter')
+        query = index.get_documents(params)
+        return Response({"total": query.total, "hits": meili_records_to_dicts(query)})
+
+
+class SourceDirectoryContent(BaseApiView):
+    def get(self, request, id_source):
+        """Get the content of a directory in a source"""
+        try:
+            src = Source.objects.get(id_source=id_source)
+        except Source.DoesNotExist:
+            return self.not_found()
+
+        directory = request.query_params.get("directory")
+        filter_param = request.query_params.get("filter")
 
         meili_client = MeiliSearchClient.client
         case = Case.objects.get(id_case=src.source_case.id_case)
-        index = meili_client.index(case.case_name + '_artefacts')
+        index = meili_client.index(case.case_name + "_artefacts")
 
         task_params = {
-            'directory': directory,
-            'task_source': src.id_source,
-            'task_case':src.source_case.id_case,
-            'task_type': 'directory_'+directory,
-            'tast_status': 'PENDING',
-            'task_values':[]
+            "directory": directory,
+            "task_source": str(src.id_source),
+            "task_case": str(src.source_case.id_case),
+            "task_type": "directory_" + str(directory),
+            "task_status": "PENDING",
+            "task_values": [],
         }
 
-        params = {
-            'filter':filter,
-        }
-
+        params = {"filter": filter_param}
         try:
-            task = Task.objects.get(task_src=src,task_type=task_params['task_type'])
-            if task.task_status == 'SUCCESS':
-                
+            task = Task.objects.get(task_src=src, task_type=task_params["task_type"])
+            if task.task_status == "SUCCESS":
                 query = index.get_documents(params)
-
-                new_params ={
-                    'filter':filter,
-                    'offset':0,
-                    'limit':query.total
-                }
-
+                new_params = {"filter": filter_param, "offset": 0, "limit": query.total}
                 query = index.get_documents(new_params)
-                
-                jsons = []
-                for res in query.results:
-                    js = {}
-                    for dict in res.__dict__:
-                        js[dict] = res.__dict__[dict]
-                    jsons.append(js)
-                return JsonResponse({'pending':False,'values':jsons,'total':query.total},safe=False)
+                return Response({
+                    "pending": False,
+                    "values": meili_records_to_dicts(query),
+                    "total": query.total,
+                })
         except Task.DoesNotExist:
-                source_directory.delay(task_params)
-        return JsonResponse({'pending':True,'values':[]},safe=False)
+            source_directory.delay(task_params)
+        return Response({"pending": True, "values": []})
 
-class SourceFile(TemplateView):
-    def get(self,request,id_source):
-        """
-        Get the content of a file
 
-        :param request: The request object
-        :param id_source: The id of the Source
-        
-        :return: A JsonResponse with the content of the file
-        """
-        src = Source.objects.get(id_source=id_source)
-        file_path= request.GET.get('file_path')
+class SourceFile(BaseApiView):
+    def get(self, request, id_source):
+        """Get the content of a file"""
+        try:
+            src = Source.objects.get(id_source=id_source)
+        except Source.DoesNotExist:
+            return self.not_found()
+
+        file_path = request.query_params.get("file_path")
+        if not file_path:
+            return self.bad_request("file_path is required")
+
         disk = DissectEngine(source=src)
         file = disk.get_file(file_path)
-        if file != '404':
-            return FileResponse(file,filename=file_path.split('/')[-1])
-        else:
-            return HttpResponse('Not Found')
+        if file != "404":
+            # Chain of custody: every evidence file consultation is traced
+            audit_from_request(
+                AuditLog.Action.FILE_ACCESS, request,
+                target=f"source={id_source};file={file_path}",
+            )
+            return FileResponse(file, filename=file_path.split("/")[-1])
+        return self.not_found()
 
-class SourceFileContent(TemplateView):
-    def get(self,request,id_source):
-        src = Source.objects.get(id_source=id_source)
-        file_path= request.GET.get('file_path')
+
+class SourceFileContent(BaseApiView):
+    def get(self, request, id_source):
+        try:
+            src = Source.objects.get(id_source=id_source)
+        except Source.DoesNotExist:
+            return self.not_found()
+
+        file_path = request.query_params.get("file_path")
+        if not file_path:
+            return self.bad_request("file_path is required")
+
         disk = DissectEngine(src)
         file = disk.get_file(file_path)
-        if file != '404':
-            return FileResponse(file,filename=file_path.split('/')[-1],as_attachment=True)
-        else:
-            return HttpResponse(status=404)
+        if file != "404":
+            audit_from_request(
+                AuditLog.Action.FILE_ACCESS, request,
+                target=f"source={id_source};file={file_path}",
+                detail={"mode": "attachment"},
+            )
+            return FileResponse(file, filename=file_path.split("/")[-1], as_attachment=True)
+        return self.not_found()
 
-class SourceFileHexDump(TemplateView):
-    def get(self,request,id_source):
-        src = Source.objects.get(id_source=id_source)
-        file_path= request.GET.get('file_path')
+
+class SourceFileHexDump(BaseApiView):
+    def get(self, request, id_source):
+        try:
+            src = Source.objects.get(id_source=id_source)
+        except Source.DoesNotExist:
+            return self.not_found()
+
+        file_path = request.query_params.get("file_path")
+        if not file_path:
+            return self.bad_request("file_path is required")
+
         disk = DissectEngine(src)
         file = disk.get_file_hexdump(file_path)
-        if file != '404':
-            return JsonResponse(file,safe=False)
-        else:
-            return HttpResponse(status=404)
+        if file != "404":
+            audit_from_request(
+                AuditLog.Action.HEXDUMP_ACCESS, request,
+                target=f"source={id_source};file={file_path}",
+            )
+            return Response(file)
+        return self.not_found()
 
-class SourceHayabusa(TemplateView):
-    def get(self,request,id_source):
-        src = Source.objects.get(id_source=id_source)
-        if src.source_os == 'windows':
-            try:
-                artefact = Artefact.objects.get(artefact_src=src,artefact_type='hayabusa')
-                return JsonResponse(artefact.artefact_values,safe=False)
-            except Artefact.DoesNotExist:
-                params = {'task_source':id_source,'task_case':src.source_case.id_case,'task_type':'hayabusa','task_status':'PENDING'}
-                try:
-                    task = Task.objects.get(task_src=id_source,task_type=params['task_type'])
-                    if task.task_status == 'PENDING':
-                        return JsonResponse({'pending':True},safe=False)
-                except Task.DoesNotExist:
-                    source_hayabusa.delay(params)
-                    return JsonResponse({'pending':True},safe=False)
-        else:
-            return HttpResponse(status=400,content="Hayabusa is only available for Windows sources")
 
-class SourceTimeline(TemplateView):
-    def get(self,request,id_source):
-        src = Source.objects.get(id_source=id_source)
-        params = {'task_source':id_source,'task_case':src.source_case.id_case,'task_type':'timeline/','task_status':'PENDING','task_path':'/'}
-       
+class SourceHayabusa(BaseApiView):
+    def get(self, request, id_source):
         try:
-            task = Task.objects.get(task_src=id_source,task_type=params['task_type'])
-        except Task.DoesNotExist:
-            source_timeline_fs.delay(params)
-        return HttpResponse('Tache lancer')
+            src = Source.objects.get(id_source=id_source)
+        except Source.DoesNotExist:
+            return self.not_found()
 
-class SourceYara(TemplateView):
-    def get(self,request,id_source,rules,size):
-        src = Source.objects.get(id_source=id_source)
+        if src.source_os != "windows":
+            return self.bad_request("Hayabusa is only available for Windows sources")
+
+        try:
+            artefact = Artefact.objects.get(artefact_src=src, artefact_type="hayabusa")
+            return Response(artefact.artefact_values)
+        except Artefact.DoesNotExist:
+            params = {
+                "task_source": str(src.id_source),
+                "task_case": str(src.source_case.id_case),
+                "task_type": "hayabusa",
+                "task_status": "PENDING",
+            }
+            task = get_task_or_launch(source_hayabusa, params, src)  # FIX bug #5
+            return Response({"pending": task.task_status == "PENDING"})
+
+
+class SourceTimeline(BaseApiView):
+    def get(self, request, id_source):
+        try:
+            src = Source.objects.get(id_source=id_source)
+        except Source.DoesNotExist:
+            return self.not_found()
+
+        params = {
+            "task_source": str(src.id_source),
+            "task_case": str(src.source_case.id_case),
+            "task_type": "timeline/",
+            "task_status": "PENDING",
+            "task_path": "/",
+        }
+        get_task_or_launch(source_timeline_fs, params, src)  # FIX bug #5
+        return Response({"detail": "Task launched"})
+
+
+class SourceYara(BaseApiView):
+    def get(self, request, id_source, rules, size):
+        try:
+            src = Source.objects.get(id_source=id_source)
+        except Source.DoesNotExist:
+            return self.not_found()
+
         case = Case.objects.get(id_case=src.source_case.id_case)
         task_yara = YaraRule.objects.get(id_yararule=rules)
         meili_client = MeiliSearchClient.client
-        index = meili_client.index(case.case_name + '_artefacts')
-        
+        index = meili_client.index(case.case_name + "_artefacts")
+
         params = {
-            'task_source':src.id_source,
-            'task_case':src.source_case.id_case,
-            'task_type':'yara_'+task_yara.yararule_name,
-            'task_status':'PENDING',
-            'yara_size':size,
-            'yara_rule':rules
+            "task_source": str(src.id_source),
+            "task_case": str(src.source_case.id_case),
+            "task_type": "yara_" + task_yara.yararule_name,
+            "task_status": "PENDING",
+            "yara_size": size,
+            "yara_rule": str(rules),
         }
         try:
-            task = Task.objects.get(task_src=src,task_type='yara_'+task_yara.yararule_name)
-            if task.task_status == 'SUCCESS':
-                params = {
-                    'filter':f"source ='{src.id_source}' AND plugin = 'yara' AND rule = '{task_yara.yararule_name}'"
-                }
-                query = index.get_documents(params)
-                
-                new_params ={
-                    'filter':f"source ='{src.id_source}' AND plugin = 'yara' AND rule = '{task_yara.yararule_name}'",
-                    'offset':0,
-                    'limit':query.total
-                }
-
-                query = index.get_documents(new_params)
-                
-                jsons = []
-                for res in query.results:
-                    js = {}
-                    for dict in res.__dict__:
-                        js[dict] = res.__dict__[dict]
-                    jsons.append(js)
-                return JsonResponse({'pending':False,'values':jsons,'total':query.total},safe=False)
-
-            if task.task_status == 'PENDING':
-                return JsonResponse({'pending':True,'values':[]},safe=False)
-            elif task.task_status == 'FAILED':
-                return JsonResponse({'pending':False,'values':[],'status':'FAILED'},safe=False)
+            task = Task.objects.get(task_src=src, task_type=params["task_type"])  # FIX bug #5
+            if task.task_status == "SUCCESS":
+                filter_expr = (
+                    f"source ='{src.id_source}' AND plugin = 'yara' "
+                    f"AND rule = '{task_yara.yararule_name}'"
+                )
+                query = index.get_documents({"filter": filter_expr})
+                query = index.get_documents(
+                    {"filter": filter_expr, "offset": 0, "limit": query.total}
+                )
+                return Response({
+                    "pending": False,
+                    "values": meili_records_to_dicts(query),
+                    "total": query.total,
+                })
+            if task.task_status == "PENDING":
+                return Response({"pending": True, "values": []})
+            # FAILED or unknown -> explicit response (was returning None)
+            return Response({"pending": False, "values": [], "status": task.task_status})
         except Task.DoesNotExist:
             source_yara.delay(params)
-            return JsonResponse({'pending':True,'values':[]},safe=False)
+            return Response({"pending": True, "values": []})
 
-class SourceYaras(TemplateView):
-    def get(self,request,id_source):
-        src = Source.objects.get(id_source=id_source)
+
+class SourceYaras(BaseApiView):
+    def get(self, request, id_source):
         try:
-            artefacts = Artefact.objects.all().filter(artefact_src=src,artefact_type='yara').values('artefact_values')
-            list_yara_output = []
-            for yara in artefacts:
-                list_yara_output = list_yara_output+ yara['artefact_values']
-            return JsonResponse(list_yara_output,safe=False)
+            src = Source.objects.get(id_source=id_source)
+        except Source.DoesNotExist:
+            return self.not_found()
+        artefacts = Artefact.objects.all().filter(
+            artefact_src=src, artefact_type="yara"
+        ).values("artefact_values")
+        list_yara_output = []
+        for yara in artefacts:
+            list_yara_output = list_yara_output + yara["artefact_values"]
+        return Response(list_yara_output)
+
+
+class SourceRegistryRun(BaseApiView):
+    def get(self, request, id_source):
+        try:
+            src = Source.objects.get(id_source=id_source)
+        except Source.DoesNotExist:
+            return self.not_found()
+        params = {
+            "task_source": str(src.id_source),
+            "task_case": str(src.source_case.id_case),
+            "task_type": "regf",
+            "task_status": "PENDING",
+        }
+        task = get_task_or_launch(source_regf, params, src)  # FIX bug #5
+        return Response([{"id": 1, "value": task.task_status}])
+
+
+class SourceArtefact(BaseApiView):
+    def get(self, request, id_source, plugin):
+        try:
+            src = Source.objects.get(id_source=id_source)
+        except Source.DoesNotExist:
+            return self.not_found()
+
+        try:
+            artefacts = Artefact.objects.get(artefact_src=src, artefact_type=plugin)
+            return Response({
+                "pending": False,
+                "values": artefacts.artefact_values,
+                "status": "SUCCESS",
+            })
         except Artefact.DoesNotExist:
-            return JsonResponse([],safe=False)
-
-class SourceRegistryRun(TemplateView):
-    def get(self,request,id_source):
-        src = Source.objects.get(id_source=id_source)
-        params = {'task_source':id_source,'task_case':src.source_case.id_case,'task_type':'regf','task_status':'PENDING'}
-        try:
-            task = Task.objects.get(task_src=id_source,task_type=params['task_type'])
-            return JsonResponse([{'id':1,'value':task.task_status}],safe=False)
-        except Task.DoesNotExist:
-            source_regf.delay(params)
-        return JsonResponse([{'id':1,'value':'PENDING'}],safe=False)
-
-class SourceArtefact(TemplateView):
-    def get(self,request,id_source,plugin):
-        src = Source.objects.get(id_source=id_source)
-        try:
-            artefacts = Artefact.objects.get(artefact_src=src,artefact_type=plugin)
-            return JsonResponse({'pending':False,'values':artefacts.artefact_values,'status':'SUCCESS'},safe=False)
-        except Artefact.DoesNotExist:
-            if plugin != 'yara':
+            if plugin != "yara":
                 params = {
-                    'task_source':id_source,
-                    'task_case':src.source_case.id_case,
-                    'task_type':plugin,
-                    'task_status':'PENDING',
-                    'params':['']}
-                try:
-                    task = Task.objects.get(task_src=id_source,task_type=params['task_type'])
-                    if task.task_status == 'PENDING':
-                        return JsonResponse({'pending':True,'values':[],'status':'PENDING'},safe=False)
-                    elif task.task_status == 'FAILED':
-                        return JsonResponse({'pending':False,'values':[],'status': 'FAILED'},safe=False)
-                except Task.DoesNotExist:
-                    source_plugin.delay(params)
-                    return JsonResponse({'pending':True,'values':[]},safe=False)
+                    "task_source": str(src.id_source),
+                    "task_case": str(src.source_case.id_case),
+                    "task_type": plugin,
+                    "task_status": "PENDING",
+                    "params": [""],
+                }
+                task = get_task_or_launch(source_plugin, params, src)  # FIX bug #5
+                # Analysis launch traced (sprint 3): plugin, source, case
+                audit_from_request(
+                    AuditLog.Action.TASK_LAUNCH, request,
+                    target=f"source={id_source};plugin={plugin}",
+                    detail={"case": str(src.source_case.id_case)},
+                )
+                return Response({
+                    "pending": task.task_status == "PENDING",
+                    "values": [],
+                    "status": task.task_status,
+                })
 
-class SourcePluginsList(TemplateView):
-    def get(self,request,id_source):
-        src = Source.objects.get(id_source=id_source)
-        source_disk = DissectEngine(src)
-        source_list_plugins = source_disk.get_plugins()
-        return JsonResponse(source_list_plugins,safe=False)
 
-class SourceRegistry(TemplateView):
-    def get(self,request,id_source,start,end):
-        src = Source.objects.get(id_source=id_source)
-
-        filter_field = request.GET.get('filtermodel[0][field]')
-        filter_operator = request.GET.get('filtermodel[0][operator]')
-        filter_value = request.GET.get('filtermodel[0][value]')
-
-        sort_field = request.GET.get('sortingmodel[0][field]')
-        sort_order = request.GET.get('sortingmodel[0][sort]')
-
-        queryset = Registry.objects.filter(reg_source=src)
-        
-        if filter_field:
-            kwargs = {
-                '{0}{1}'.format(filter_field,convertOperator(filter_operator)):filter_value
-            }
-            queryset = queryset.filter(**kwargs)
-        
-        if sort_field:
-            if sort_order == 'asc':
-                queryset = queryset.order_by(sort_field)
-            else:
-                queryset = queryset.order_by(f'-{sort_field}')
-        
-        queryset  = queryset[start:end]
-        data = list(queryset.values())
-        return JsonResponse(data,safe=False)
-    
-class SourceRegistrySize(TemplateView):
-    def get(self,request,id_source):
-        src = Source.objects.get(id_source=id_source)
-       
-        filter_field = request.GET.get('filtermodel[0][field]')
-        filter_operator = request.GET.get('filtermodel[0][operator]')
-        filter_value = request.GET.get('filtermodel[0][value]')
-
-        queryset = Registry.objects.filter(reg_source=src)
-        
-        if filter_field:
-            kwargs = {
-                '{0}{1}'.format(filter_field,convertOperator(filter_operator)):filter_value
-            }
-            queryset = queryset.filter(**kwargs)
-
-        size = queryset.count()
-        return JsonResponse({'size':size},safe=False)
-
-class SourceRegistryKeys(TemplateView):
-    def get(self,request,id_source):
-        """
-        Get the subkeys of a registry key
-        
-        :param request: The request object
-        :param id_source: The id of the Source
-        :return: A JsonResponse with the subkeys
-        
-        """
-        src = Source.objects.get(id_source=id_source)
-        path = request.GET.get('path')
-        case = Case.objects.get(id_case=src.source_case.id_case)
-        source = DissectEngine(src)
-        subkeys = source.get_registry_subkeys(path)
-        return JsonResponse(subkeys,safe=False)
-
-class SourceRegistryValues(TemplateView):
-    def get(self,request,id_source):
-        """
-        Get the values of a registry key
-        
-        :param request: The request object
-        :param id_source: The id of the Source
-        :return: A JsonResponse with the values
-        """
-        src = Source.objects.get(id_source=id_source)
-        path = request.GET.get('path')
-        source = DissectEngine(src)
-        values = source.get_registry_values(path)
-        return JsonResponse(values,safe=False)
-
-class SourceRegistryPathDataGrid(TemplateView):
-    def get(self,request,id_source):
-        src = Source.objects.get(id_source=id_source)
-        path = request.GET.get('path')
-        queryset = Registry.objects.filter(reg_source=src,reg_parent=path)
-        data = list(queryset.values())
-        return JsonResponse(data,safe=False)
-
-class SourceTasks(TemplateView):
-    def get(self,request,id_source):
-        src = Source.objects.get(id_source=id_source)
-        tasks = TaskResult.objects.filter(task_src=src)
-        data = list(tasks.values())
-        return JsonResponse(data,safe=False)
-
-class SourceTasksStatus(TemplateView):
-    def get(self,request,id_source,task_status):
-        src = Source.objects.get(id_source=id_source)
-        tasks = Task.objects.filter(task_src=src,task_status=task_status)
-        data = list(tasks.values())
-        return JsonResponse(data,safe=False)
-
-class SourceTask(TemplateView):
-    def get(self,request,id_source,task_type):
-        src = Source.objects.get(id_source=id_source)
+class SourcePluginsList(BaseApiView):
+    def get(self, request, id_source):
         try:
-            task = Task.objects.get(task_src=src,task_type=task_type)
-            return JsonResponse({'task_status':task.task_status},safe=False)
-        except Task.DoesNotExist:
-            return JsonResponse({'task_status':'NOT FOUND'},safe=False)
+            src = Source.objects.get(id_source=id_source)
+        except Source.DoesNotExist:
+            return self.not_found()
+        source_disk = DissectEngine(src)
+        return Response(source_disk.get_plugins())
 
+
+class SourceRegistry(BaseApiView):
+    # Whitelist : seuls ces champs peuvent être filtrés/triés (anti-injection ORM)
+    ALLOWED_FIELDS = {
+        "key": "reg_key",
+        "value": "reg_value",
+        "parent": "reg_parent",
+        "path": "reg_path",
+        "ts": "reg_ts",
+    }
+
+    def get(self, request, id_source, start, end):
+        try:
+            src = Source.objects.get(id_source=id_source)
+        except Source.DoesNotExist:
+            return self.not_found()
+        queryset = apply_grid_filters(
+            Registry.objects.filter(reg_source=src), request, self.ALLOWED_FIELDS
+        )
+        return Response(list(queryset[int(start):int(end)].values()))
+
+
+class SourceRegistrySize(BaseApiView):
+    ALLOWED_FIELDS = SourceRegistry.ALLOWED_FIELDS
+
+    def get(self, request, id_source):
+        try:
+            src = Source.objects.get(id_source=id_source)
+        except Source.DoesNotExist:
+            return self.not_found()
+        queryset = apply_grid_filters(
+            Registry.objects.filter(reg_source=src), request, self.ALLOWED_FIELDS
+        )
+        return Response({"size": queryset.count()})
+
+
+class SourceRegistryKeys(BaseApiView):
+    def get(self, request, id_source):
+        """Get the subkeys of a registry key"""
+        try:
+            src = Source.objects.get(id_source=id_source)
+        except Source.DoesNotExist:
+            return self.not_found()
+        path = request.query_params.get("path")
+        if not path:
+            return self.bad_request("path is required")
+        source = DissectEngine(src)
+        return Response(source.get_registry_subkeys(path))
+
+
+class SourceRegistryValues(BaseApiView):
+    def get(self, request, id_source):
+        """Get the values of a registry key"""
+        try:
+            src = Source.objects.get(id_source=id_source)
+        except Source.DoesNotExist:
+            return self.not_found()
+        path = request.query_params.get("path")
+        if not path:
+            return self.bad_request("path is required")
+        source = DissectEngine(src)
+        return Response(source.get_registry_values(path))
+
+
+class SourceRegistryPathDataGrid(BaseApiView):
+    def get(self, request, id_source):
+        try:
+            src = Source.objects.get(id_source=id_source)
+        except Source.DoesNotExist:
+            return self.not_found()
+        path = request.query_params.get("path")
+        if not path:
+            return self.bad_request("path is required")
+        queryset = Registry.objects.filter(reg_source=src, reg_parent=path)
+        return Response(list(queryset.values()))
+
+
+class SourceTasks(BaseApiView):
+    def get(self, request, id_source):
+        try:
+            src = Source.objects.get(id_source=id_source)
+        except Source.DoesNotExist:
+            return self.not_found()
+        tasks = Task.objects.filter(task_src=src)
+        return Response(list(tasks.values()))
+
+
+class SourceTasksStatus(BaseApiView):
+    def get(self, request, id_source, task_status):
+        try:
+            src = Source.objects.get(id_source=id_source)
+        except Source.DoesNotExist:
+            return self.not_found()
+        tasks = Task.objects.filter(task_src=src, task_status=task_status)
+        return Response(list(tasks.values()))
+
+
+class SourceTask(BaseApiView):
+    def get(self, request, id_source, task_type):
+        try:
+            src = Source.objects.get(id_source=id_source)
+        except Source.DoesNotExist:
+            return self.not_found()
+        try:
+            task = Task.objects.get(task_src=src, task_type=task_type)
+            return Response({"task_status": task.task_status})
+        except Task.DoesNotExist:
+            return Response({"task_status": "NOT FOUND"})
