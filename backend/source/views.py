@@ -14,7 +14,7 @@ from back.meilisearch_engine import MeiliSearchClient
 from case.models import Case
 from source.models import Source
 from source.dissect_engine import DissectEngine
-from artefact.models import Artefact, Registry
+from artefact.models import Artefact, Registry, Timeline
 from task.models import Task
 from task.tasks import (
     source_directory, source_hayabusa, source_timeline_fs,
@@ -133,12 +133,31 @@ class SourceView(BaseApiView):
         meili_client = MeiliSearchClient.client
         artefacts_index = meili_client.index(case.case_name + "_artefacts")
         artefacts_index.delete_documents(filter='source="' + str(src.id_source) + '"')
+
+        # Tasks are operational job records (Celery), NOT evidence: they must
+        # not block source deletion. Delete them explicitly BEFORE the source
+        # (their FK is PROTECT to prevent accidental orphan deletions), and
+        # keep a trace of what was removed in the audit entry.
+        task_types = list(Task.objects.filter(task_src=src).values_list(
+            "task_type", flat=True
+        ))
+        deleted_tasks = Task.objects.filter(task_src=src).delete()
+
+        # Artefacts / Registry / Timeline rows are derived analysis data,
+        # not the evidence image itself: they follow the source deletion.
+        # (Kept minimal here — Meili docs are already purged above.)
+        Registry.objects.filter(reg_source=src).delete()
+        Timeline.objects.filter(timeline_src=src).delete()
+        Artefact.objects.filter(artefact_src=src).delete()
+
         # Audit BEFORE deletion (sprint 3): who destroyed evidence and what it was
         audit_from_request(
             AuditLog.Action.SOURCE_DELETE, request,
             target=str(id_source),
             detail={"case": str(case.id_case), "path": src.source_path,
-                    "name": src.source_name},
+                    "name": src.source_name,
+                    "purged_tasks": task_types,
+                    "task_rows_deleted": deleted_tasks[0] if deleted_tasks else 0},
         )
         src.delete()
         return Response({"detail": "Source deleted successfully"})

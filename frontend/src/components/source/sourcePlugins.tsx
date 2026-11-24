@@ -1,24 +1,23 @@
-"use client"
+// frontend/src/components/source/sourcePlugins.tsx
+// and frontend/src/components/source/sourceCustomPlugins.tsx share the same
+// pattern — tooltip added, unused state removed.
+'use client'
 import * as React from 'react';
-import { useDialogs, useNotifications } from '@toolpad/core';
-import { IconButton } from '@mui/material';
-import SendTimeExtensionIcon from '@mui/icons-material/SendTimeExtension';
+import { useDialogs } from '@toolpad/core';
+import { IconButton, Tooltip } from '@mui/material';
+import { Biotech, SendTimeExtension } from '@mui/icons-material';
 import Plugins from './plugins';
-import { Biotech } from '@mui/icons-material';
 
 export default function SourcePlugins(props: any){
-    const [source,setSource] = React.useState(props.source)
-    const [openDialog,setOpenDialog] = React.useState(false)
-    const notification = useNotifications()
     const dialog = useDialogs()
-  
-    return(
-      <div>
-        <IconButton onClick={async ()=>{
-          await dialog.open(Plugins,{src:source})
-        }}>
-          <Biotech/>
-        </IconButton>
-      </div>
+
+    return (
+        <Tooltip title="Plugins — run and monitor every Dissect plugin on this source">
+            <IconButton onClick={async () => {
+                await dialog.open(Plugins, {src: props.source})
+            }}>
+                <Biotech/>
+            </IconButton>
+        </Tooltip>
     )
-  }
+}

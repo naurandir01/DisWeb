@@ -113,7 +113,20 @@ class CaseIndexSettingsView(BaseApiView):
         case = Case.objects.get(id_case=id_case)
         meili_client = MeiliSearchClient.client
         artefacts_index = meili_client.index(case.case_name + "_artefacts")
-        return Response(artefacts_index.get_stats())
+        stats = artefacts_index.get_stats()
+        try:
+            settings = artefacts_index.get_settings()
+        except Exception:
+            settings = {}
+        return Response({
+            "index_uid": case.case_name + "_artefacts",
+            "stats": {
+                "numberOfDocuments": stats.number_of_documents,
+                "isIndexing": stats.is_indexing,
+                "lastUpdate": str(getattr(stats, "last_update", "")),
+            },
+            "settings": settings,
+        })
 
 
 class CaseSourceNotLink(BaseApiView):

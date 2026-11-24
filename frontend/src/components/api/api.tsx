@@ -95,6 +95,9 @@ export const yaraAPI = {
     getYaraRule : (id_yararule:any) => api.get(`/yara/${id_yararule}/`),
     modifyYaraRule : (id_yararule:any,data:FormData) => api.post(`/yara/${id_yararule}/`,data,{headers:{'Content-Type':'multipart/form-data'}}),
     runYaraRuleOnSource : (id_source:any,id_yararule:any) => api.get(`/sources/${id_source}/yara/${id_yararule}/`),
+    // Full YARA endpoint: launches the scan (or fetches results at size 0
+    // once the task succeeded) — GET /sources/{id}/yara/{rule}/{size}
+    runYaraScanOnSource : (id_source:any,id_yararule:any,size:any) => api.get(`/sources/${id_source}/yara/${id_yararule}/size/${size}`),
 }
 
 export const settingsAPI = {
