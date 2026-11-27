@@ -5,6 +5,16 @@ from case.models import Case
 from django.db import models
 
 
+def empty_source_key():
+    """Default factory for Source.source_key.
+
+    A module-level function (not a lambda) so Django can serialize it in
+    migrations, and a factory (not a dict literal) so instances don't share
+    one mutable default (fields.E010).
+    """
+    return {"key_type": None, "value": None}
+
+
 class Source(models.Model):
     id_source = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     source_name = models.CharField(max_length=250, null=True)
@@ -17,7 +27,7 @@ class Source(models.Model):
     source_case = models.ForeignKey(Case, editable=True, on_delete=models.PROTECT)
     source_plugins = models.JSONField(null=True)
     source_key = models.JSONField(
-        default={"key_type": None, "value": None}
+        default=empty_source_key,
     )  # {"type":"bitlocker|luks","key_type":"recovery_key|passphrase","value":"<key_value>"}
     # FIX (sprint 3): integrity of the evidence image
     source_hash_sha256 = models.CharField(max_length=64, null=True, blank=True)

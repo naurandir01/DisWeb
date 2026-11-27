@@ -44,9 +44,12 @@ services:
       - MEILI_HOST
       - MEILI_MASTER_KEY
     depends_on:
-      - disweb-worker
-      - disweb-psql
-      - disweb-redis
+      disweb-worker:
+        condition: service_started
+      disweb-psql:
+        condition: service_healthy
+      disweb-redis:
+        condition: service_started
 
   disweb-worker:
     image: disweb_backend:${APP_VERSION}
@@ -56,6 +59,7 @@ services:
     env_file:
       - .env
     environment:
+      - RUN_MIGRATIONS=false
       - CELERY_BROKER_URL
       - SQLALCHEMY_DATABASE_URI
       - POSTGRES_USER
@@ -85,6 +89,7 @@ services:
     env_file:
       - .env
     environment:
+      - RUN_MIGRATIONS=false
       - CELERY_BROKER_URL
       - SQLALCHEMY_DATABASE_URI
       - POSTGRES_USER
@@ -117,6 +122,11 @@ services:
     volumes:
       - disweb_data:/var/lib/postgresql/data
       - "./database/postgresql.conf:/etc/postgresql/postgresql.conf"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-postgres}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
 
   disweb-frontend:
     image: disweb-frontend:${APP_VERSION}

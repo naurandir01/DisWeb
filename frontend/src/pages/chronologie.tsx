@@ -1,29 +1,37 @@
-"use client"
+// frontend/src/pages/chronologie.tsx
+'use client'
 import * as React from 'react';
 import ChronologieDataGrid from '../components/chronologie/chronologieDataGrid';
-import { Grid } from '@mui/material';
+import { Alert, Grid, Stack, Typography } from '@mui/material';
 import ChronologieGraph from '../components/chronologie/chronologieGraph';
 import { PageContainer } from '@toolpad/core';
 
 export default function Chronologie(){
-
-    const [min_max,setTimestamp] = React.useState<{min:Date,max:Date}>({min:new Date(),max:new Date()})
-    const [currentTimeStampGlobal,setCurrentTimeStampGlobal] = React.useState<string>('')
+    const [currentTimeStampGlobal, setCurrentTimeStampGlobal] = React.useState<string>('')
 
     return(
-        <div style={{flex:0,border:0}} className='Chronologie'>
+        <div style={{flex: 0, border: 0}} className='Chronologie'>
             <PageContainer>
+                <Stack sx={{ mb: 1 }}>
+                    <Typography variant="caption" color="text.secondary">
+                        Click a bar to drill down (years → months → days → hours → minutes);
+                        the grid below follows the selected period.
+                    </Typography>
+                </Stack>
                 <Grid container spacing={2}>
                     <Grid size={12}>
-                        <ChronologieGraph min_max={min_max} setTimeStampGlobal={setCurrentTimeStampGlobal}/>
+                        <ChronologieGraph
+                            setTimeStampGlobal={setCurrentTimeStampGlobal}
+                        />
                     </Grid>
                     <Grid size={12}>
-                        <ChronologieDataGrid min_max={min_max} currentTimeStampGlobal={currentTimeStampGlobal}/>
+                        <ChronologieDataGrid
+                            currentTimeStampGlobal={currentTimeStampGlobal}
+                            onClearTimeStampGlobal={() => setCurrentTimeStampGlobal('')}
+                        />
                     </Grid>
                 </Grid>
             </PageContainer>
-          
-        </div>  
-        
+        </div>
     )
 }

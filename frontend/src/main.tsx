@@ -15,6 +15,7 @@ import Chronologie from './pages/chronologie';
 import '../src/assets/App.css'
 import Yara from './pages/yara';
 import Audit from './pages/audit';
+import UsersPage from './pages/users';
 
 const router = createBrowserRouter([
   {
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
           {
             path: "/audit",
             Component: Audit,
+          },
+          {
+            path: '/users',
+            Component: UsersPage,
           },
           {
             path: '/parametre',

@@ -100,6 +100,18 @@ export const yaraAPI = {
     runYaraScanOnSource : (id_source:any,id_yararule:any,size:any) => api.get(`/sources/${id_source}/yara/${id_yararule}/size/${size}`),
 }
 
+export const usersAPI = {
+    getUsers : () => api.get('/users/'),
+    createUser : (username:string,password:string,email:string,role:string) =>
+        api.post('/users/',{username,password,email,role}),
+    updateUser : (username:string,data:{role?:string, groups?:string[], is_active?:boolean, password?:string}) =>
+        api.patch(`/users/${username}/`,data),
+    deleteUser : (username:string) => api.delete(`/users/${username}/`),
+    getGroups : () => api.get('/groups/'),
+    createGroup : (name:string) => api.post('/groups/',{name}),
+    deleteGroup : (name:string) => api.delete(`/groups/${name}/`),
+}
+
 export const settingsAPI = {
     getIntegritySettings : () => api.get('/settings/integrity/'),
     updateIntegritySettings : (enabled:boolean,intervalMinutes:number) =>
@@ -113,6 +125,17 @@ export interface IntegritySettings {
     updated_at: string;
 }
 
+export interface UserEntry {
+    username: string;
+    email: string;
+    is_active: boolean;
+    is_superuser: boolean;
+    last_login: string | null;
+    role: string;
+    organisation: string;
+    groups: string[];
+}
+
 export interface AuditEntry {
     timestamp: string;
     user: string;
@@ -120,4 +143,9 @@ export interface AuditEntry {
     action: string;
     target: string;
     detail: Record<string, unknown> | null;
+}
+
+export interface GroupEntry {
+    name: string;
+    members: string[];
 }

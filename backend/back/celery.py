@@ -19,3 +19,9 @@ app.conf.beat_schedule = {
     },
 }
 app.autodiscover_tasks()
+
+# autodiscover only registers `<app>/tasks.py` modules. integrity_tasks.py
+# is a non-standard module name (chosen to keep periodic integrity separate
+# from the heavy analysis tasks): register it explicitly or the worker
+# rejects its messages with "Received unregistered task".
+app.conf.imports = ("task.integrity_tasks",)

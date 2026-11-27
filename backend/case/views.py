@@ -44,7 +44,8 @@ class CasesViews(BaseApiView):
         meili_client.create_index(case.case_name + "_artefacts", {"primaryKey": "id"})
         artefacts_index = meili_client.index(case.case_name + "_artefacts")
         artefacts_index.update_settings({
-            "sortableAttributes": ["ts"],
+            # "*" makes every field sortable — dynamic plugin schemas need it
+            "sortableAttributes": ["*"],
             "filterableAttributes": [
                 "*",
                 {

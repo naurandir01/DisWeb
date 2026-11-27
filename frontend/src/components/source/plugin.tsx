@@ -83,7 +83,7 @@ export default function Plugin(props: any){
     }
 
   return (
-      
+        <Tooltip title={plugin.doc ?? plugin.name}>
             <Button
                 endIcon={
                     pluginStatus === 'NOT FOUND' ?

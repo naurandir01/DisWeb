@@ -33,17 +33,11 @@ FILTERABLE_ATTRIBUTES = [
     "id",
 ]
 
-# Attributes used with the `sort` query param (DataGrid server sorting)
-SORTABLE_ATTRIBUTES = [
-    "ts",
-    "size",
-    "name",
-    "btime",
-    "mtime",
-    "ctime",
-    "atime",
-    "sha256",
-]
+# Sortable attributes: "*" makes every document field sortable, which is
+# what the dynamic DataGrids need (plugin result schemas vary widely and
+# users expect to sort any column). Sorting on irrelevant fields costs a
+# bit of index size but keeps the UX uniform.
+SORTABLE_ATTRIBUTES = ["*"]
 
 # Per-process cache: indexes already configured during this worker lifetime.
 # Avoids re-sending update_settings on every task (each call costs a Meili

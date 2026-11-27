@@ -3,7 +3,7 @@ import { ReactRouterAppProvider } from '@toolpad/core/react-router';
 import { Outlet, useNavigate } from 'react-router';
 import type { Navigation, Session } from '@toolpad/core/AppProvider';
 import { SessionContext } from './SessionContext';
-import { BugReport, Extension, Settings, Timeline, Topic,DataObject, Cases, FolderCopy, AccountTree, FactCheck } from '@mui/icons-material';
+import { BugReport, Extension, Settings, Timeline, Topic,DataObject, Cases, FolderCopy, AccountTree, FactCheck, Group } from '@mui/icons-material';
 
 const NAVIGATION: Navigation = [
   {
@@ -56,6 +56,11 @@ const NAVIGATION: Navigation = [
     segment: 'audit',
     title: 'Audit Trail',
     icon: <FactCheck />,
+  },
+  {
+    segment: 'users',
+    title: 'Users & Groups',
+    icon: <Group />,
   },
   {
     segment: 'parametre',
